@@ -29,7 +29,7 @@ def calculate_substrate_mass(vol, tm):
     tm : str, int
         The target material of the detector. Can be passed as either
         the atomic symbol, the atomic number, or the full name of the
-        element. Default is 'Si'.
+        element.
 
     Returns
     -------
