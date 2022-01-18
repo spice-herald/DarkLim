@@ -79,7 +79,8 @@ def _sample_from_kde(data, xrange, kernel, bw_method, bandwidths, cv, npoints, p
     """
 
     if xrange is not None:
-        data = data[rp.inrange(data, xrange[0], xrange[1])]
+        xinds = (data > xrange[0]) & (data < xrange[1])
+        data = data[xinds]
 
     ndata = len(data)
 

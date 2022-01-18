@@ -13,7 +13,6 @@ import mendeleev
 
 
 __all__ = [
-    "inrange",
     "upper",
     "helmfactor",
     "drde",
@@ -21,42 +20,6 @@ __all__ = [
     "gauss_smear",
     "optimuminterval",
 ]
-
-
-def inrange(vals, lwrbnd, uprbnd, include_lwrbnd=True, include_uprbnd=True):
-    """
-    Function for returning a boolean mask that specifies which values
-    in an array are between the specified bounds (inclusive of the bounds).
-
-    Parameters
-    ----------
-    vals : ndarray
-        A 1-d ndarray of values.
-    lwrbnd : float
-        The lower bound of the range that we are checking if vals is between.
-    uprbnd : float
-        The upper bound of the range that we are checking if vals is between.
-    include_lwrbnd : bool, optional
-        Boolean flag for including or excluding the lower bound in the range. Default is
-        True, meaning that we include the lower bound in the specified range.
-    include_uprbnd : bool, optional
-        Boolean flag for including or excluding the upper bound in the range. Default is
-        True, meaning that we include the upper bound in the specified range.
-
-    Returns
-    -------
-    mask : ndarray
-        A boolean array of the same shape as vals. True means that the
-        value was between the bounds, False means that the value was not.
-
-    """
-
-    return (
-        vals >= lwrbnd if include_lwrbnd else vals > lwrbnd
-    ) & (
-        vals <= uprbnd if include_uprbnd else vals < uprbnd
-    )
-
 
 
 @contextlib.contextmanager
@@ -503,7 +466,7 @@ def optimuminterval(eventenergies, effenergies, effs, masslist, exposure,
 
     sigma0 = 1e-41
 
-    event_inds = inrange(eventenergies, elow, ehigh)
+    event_inds = (eventenergies > elow) & (eventenergies < ehigh)
 
     sigma = np.ones(len(masslist)) * np.inf
     oi_energy0 = np.zeros(len(masslist))
