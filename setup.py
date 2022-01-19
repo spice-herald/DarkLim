@@ -81,6 +81,7 @@ setup(
     install_requires=[
         'numpy',
         'scipy',
+        'matplotlib',
         'mendeleev',
         'scikit-learn',
     ],
