@@ -73,15 +73,16 @@ class CleanCommand(Command):
                 shutil.rmtree(path)
 
 setup(
-    name="darklim", 
-    version="0.1.1", 
-    description="DM Limit Setting and Sensitivity", 
+    name="darklim",
+    version="0.1.1",
+    description="DM Limit Setting and Sensitivity",
     long_description=long_description,
     long_description_content_type='text/markdown',
-    author="Samuel Watkins", 
-    author_email="samwatkins@berkeley.edu", 
-    url="https://github.com/slwatkins/darklim", 
-    packages=find_packages(), 
+    author="Samuel Watkins",
+    author_email="samwatkins@berkeley.edu",
+    url="https://github.com/slwatkins/darklim",
+    license_files = ('LICENSE', ),
+    packages=find_packages(),
     zip_safe=False,
     cmdclass={
         'clean': CleanCommand,
