@@ -1,6 +1,6 @@
 # DarkLim
 
-[![Python 3.6](https://img.shields.io/badge/python-3.6+-blue.svg)](https://www.python.org/downloads/release/python-360/)
+[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/slwatkins/DarkLim/Build%20and%20upload%20to%20PyPI)](https://github.com/slwatkins/DarkLim/actions) [![PyPI](https://img.shields.io/pypi/v/darklim)](https://pypi.org/project/darklim/) [![Python 3.6](https://img.shields.io/badge/python-3.6+-blue.svg)](https://www.python.org/downloads/release/python-360/)
 
 DarkLim provides statistical tools for calculating dark matter exclusion limits and sensitivity estimates.
 
