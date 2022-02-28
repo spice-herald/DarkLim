@@ -6,7 +6,7 @@ DarkLim provides statistical tools for calculating dark matter exclusion limits 
 
 To install the most recent release of DarkLim, type the following line into your command line
 
-`pip install darklim`
+`pip install darklim --upgrade`
 
 To install the most recent development version of DarkLim from source, clone this repo, then from the top-level directory of the repo, type the following line into your command line
 
