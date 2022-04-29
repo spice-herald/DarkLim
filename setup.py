@@ -80,7 +80,7 @@ setup(
     long_description_content_type='text/markdown',
     author="Samuel Watkins",
     author_email="samwatkins@berkeley.edu",
-    url="https://github.com/slwatkins/darklim",
+    url="https://github.com/spice-herald/darklim",
     license_files = ('LICENSE', ),
     packages=find_packages(),
     zip_safe=False,
