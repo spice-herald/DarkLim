@@ -74,7 +74,7 @@ class CleanCommand(Command):
 
 setup(
     name="darklim",
-    version="0.1.1",
+    version="0.1.2",
     description="DM Limit Setting and Sensitivity",
     long_description=long_description,
     long_description_content_type='text/markdown',
