@@ -350,6 +350,7 @@ class SensEst(object):
             )
 
         e_high = en_interp.max()
+        e_low = en_interp.min()
         npts = len(en_interp)
 
         tot_bkgd = np.zeros(npts)
@@ -367,7 +368,7 @@ class SensEst(object):
         nevts_sim = np.random.poisson(nevts_exp)
 
         evts_sim = pdf_sampling(
-            tot_bkgd_func, (0, e_high), npoints=npts, nsamples=nevts_sim,
+            tot_bkgd_func, (e_low, e_high), npoints=npts, nsamples=nevts_sim,
         )
 
         if plot_bkgd:
