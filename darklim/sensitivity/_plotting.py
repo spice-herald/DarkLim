@@ -206,15 +206,15 @@ class RatePlot(object):
         xvals = np.linspace(self._energy_range[0], self._energy_range[1], npoints)
 
         for m, sig in zip(masses, sigmas):
-            drde = drde(xvals, m, sig, tm=tm)
-            label = f"DM Mass = {m:.2f} GeV, σ = {sig:.2e} cm$^2$"
+            drde_plot = drde(xvals, m, sig, tm=tm)
+            label = f"DM Mass = {m:.2f} GeV, $\sigma$ = {sig:.2e} cm$^2$"
             if res is not None:
-                drde = gauss_smear(xvals, drde, res, gauss_width=gauss_width)
+                drde_plot = gauss_smear(xvals, drde_plot, res, gauss_width=gauss_width)
                 label += f"\nWith {gauss_width}$\sigma_E$ Smearing"
 
             self.ax.plot(
                 xvals,
-                drde,
+                drde_plot,
                 linestyle='--',
                 label=label,
                 **kwargs,
