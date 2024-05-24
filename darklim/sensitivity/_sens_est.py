@@ -300,7 +300,7 @@ class SensEst(object):
         return m_dms, sig
 
     def generate_background(self, e_high, e_low=1e-6, npts=1000,
-                            plot_bkgd=False):
+                            plot_bkgd=False, **kwargs):
         """
         Method for generating events based on the inputted background.
 
@@ -319,6 +319,9 @@ class SensEst(object):
             generated data, for diagnostic purposes. If `nexp` is
             greater than 1, then only the first generated dataset is
             plotted.
+        kwargs : optional
+            Options for plotting style. Currently supports xlim [a,b],
+            ylim [a,b], xscale 'log' or 'linear', yscale 'log'/'linear'.
 
         Returns
         -------
@@ -335,11 +338,11 @@ class SensEst(object):
         """
 
         en_interp = np.geomspace(e_low, e_high, num=npts)
-        evts_sim = self._generate_background(en_interp, plot_bkgd=plot_bkgd)
+        evts_sim = self._generate_background(en_interp, plot_bkgd=plot_bkgd, **kwargs)
 
         return evts_sim
 
-    def _generate_background(self, en_interp, plot_bkgd=False):
+    def _generate_background(self, en_interp, plot_bkgd=False, **kwargs):
         """
         Hidden method for generating events based on the inputted
         background.
@@ -354,6 +357,10 @@ class SensEst(object):
             generated data, for diagnostic purposes. If `nexp` is
             greater than 1, then only the first generated dataset is
             plotted.
+        kwargs : optional
+            Options for plotting style. Currently supports xlim [a,b],
+            ylim [a,b], xscale 'log' or 'linear', yscale 'log'/'linear'.
+
 
         Returns
         -------
@@ -398,11 +405,11 @@ class SensEst(object):
         )
 
         if plot_bkgd:
-            self._plot_bkgd(evts_sim, en_interp, tot_bkgd_func)
+            self._plot_bkgd(evts_sim, en_interp, tot_bkgd_func, **kwargs)
 
         return evts_sim
 
-    def _plot_bkgd(self, evts, en_interp, tot_bkgd_func):
+    def _plot_bkgd(self, evts, en_interp, tot_bkgd_func, **kwargs):
         """
         Hidden Method for plotting the generated events on top of the
         inputted backgrounds.
@@ -442,6 +449,15 @@ class SensEst(object):
             tot_bkgd_func(en_interp).min() * 0.1,
             tot_bkgd_func(en_interp).max() * 10,
         )
+
+        if 'xlim' in kwargs.keys():
+            ratecomp.ax.set_xlim(kwargs['xlim'])
+        if 'ylim' in kwargs.keys():
+            ratecomp.ax.set_ylim(kwargs['ylim'])
+        if 'xscale' in kwargs.keys():
+            ratecomp.ax.set_xscale(kwargs['xscale'])
+        if 'yscale' in kwargs.keys():
+            ratecomp.ax.set_yscale(kwargs['yscale'])
 
         ratecomp.ax.legend(fontsize=14)
         list_of_text = [
