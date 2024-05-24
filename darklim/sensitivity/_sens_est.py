@@ -16,7 +16,7 @@ __all__ = [
 ]
 
 
-def calculate_substrate_mass(vol, tm):
+def calculate_substrate_mass(vol, tm, rho=None):
     """
     Helper function for calculating the mass of substrate given its
     volume.
@@ -30,6 +30,10 @@ def calculate_substrate_mass(vol, tm):
         The target material of the detector. Can be passed as either
         the atomic symbol, the atomic number, or the full name of the
         element.
+    rho : float, optional
+        The density of the material in kg/m^3. Use this if your material
+        is made of more than one element. The Mendeleev library of densities
+        only contains information about pure elements.
 
     Returns
     -------
@@ -41,7 +45,8 @@ def calculate_substrate_mass(vol, tm):
 
     conv_factor = constants.centi**3 * constants.kilo
     # density in kg/m^3
-    rho = mendeleev.element(tm).density / conv_factor
+    if rho is None:
+        rho = mendeleev.element(tm).density / conv_factor
     mass = rho * vol
 
     return mass
