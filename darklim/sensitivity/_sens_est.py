@@ -188,6 +188,27 @@ class SensEst(object):
         self._backgrounds.append(dm_bkgd)
 
 
+    def add_exponential_bkgd(self, energy0, R0_DRU):
+        """
+        Method for adding a falling exponential background to the simulation.
+
+        Parameters
+        ----------
+        energy0 : float
+            The exponential parameter, i.e. the energy at which the rate falls
+            to 1/e of its maximal value. Expected units are eV, but could be
+            any units as long as you call the returned lambda function with
+            energies of the same unit.
+        R0_DRU : float
+            The amplitude of the background distribution, i.e. the mean rate.
+            Units are DRU.
+
+        """
+
+        exp_bkgd = lambda x: (R0_DRU / energy0 * np.exp(-1. * x / energy0))
+        self._backgrounds.append(exp_bkgd)
+
+
     def add_arb_bkgd(self, function):
         """
         Method for adding an arbitrary background to the simulation.
