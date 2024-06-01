@@ -88,7 +88,10 @@ def n_fold_lee(x,m=1,n=1,e0=0.020,R=0.12,w=100e-6):
     R has units 1/seconds
     w, coincidence window, units are seconds
     '''
-    
+    if n>m:
+        raise ValueError(
+            "Coincidence level (n) cannot exceed the number of devices (m)."
+        )
     term1 = special.factorial(m)/special.factorial(m-n)
     term2 = R**n * w**(n-1)
     pile_up_rate = term1*term2
@@ -400,8 +403,8 @@ class SensEst(object):
 
         nevts_exp = rtot * self.exposure
         nevts_sim = np.random.poisson(nevts_exp)
-        print('expect {:0.1f} evts'.format(nevts_exp))
-        print('created {:0.1f} evts'.format(nevts_sim))
+        #print('expect {:0.1f} evts'.format(nevts_exp))
+        #print('created {:0.1f} evts'.format(nevts_sim))
         
         evts_sim = pdf_sampling(
             tot_bkgd_func, (e_low, e_high), npoints=npts, nsamples=nevts_sim,
