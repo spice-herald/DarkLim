@@ -12,6 +12,7 @@ from darklim.sensitivity._plotting import RatePlot
 __all__ = [
     "calculate_substrate_mass",
     "trigger_pdf",
+    "n_fold_lee",
     "SensEst",
 ]
 
@@ -81,6 +82,20 @@ def trigger_pdf(x, sigma, n_win):
 
     return pdf
 
+def n_fold_lee(x,m=1,n=1,e0=0.020,R=0.12,w=100e-6):
+    '''
+    e0 has units keV
+    R has units 1/seconds
+    w, coincidence window, units are seconds
+    '''
+    
+    term1 = special.factorial(m)/special.factorial(m-n)
+    term2 = R**n * w**(n-1)
+    pile_up_rate = term1*term2
+    
+    dist = pile_up_rate * 3600 * 24 * stats.erlang.pdf(x,a=n,loc=0,scale=e0)
+    
+    return dist
 
 class SensEst(object):
     """
@@ -198,7 +213,25 @@ class SensEst(object):
         """
 
         self._backgrounds.append(function)
+    
+    def add_nfold_lee_bkgd(self,m=1,n=1,e0=0.020,R=0.12,w=100e-6):
+        """
+        Method for adding a flat background to the simulation.
 
+        Parameters
+        ----------
+        m : int
+            Total number of devices
+        n : int
+            Coincidence level
+        e0 : float
+        R : float
+        w : float
+            Coincidence window length in seconds. 
+        """
+    
+        nfold_lee = lambda x: n_fold_lee(x,m=m,n=n,e0=e0,R=R,w=w) / self.m_det
+        self._backgrounds.append(nfold_lee)
 
     def reset_sim(self):
         """Method for resetting the simulation to its initial state."""
