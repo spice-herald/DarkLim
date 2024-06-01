@@ -42,6 +42,7 @@ def calculate_substrate_mass(vol, tm):
     conv_factor = constants.centi**3 * constants.kilo
     # density in kg/m^3
     rho = mendeleev.element(tm).density / conv_factor
+    print('material density is {:0.1f} kg/m3'.format(rho))
     mass = rho * vol
 
     return mass
@@ -366,7 +367,9 @@ class SensEst(object):
 
         nevts_exp = rtot * self.exposure
         nevts_sim = np.random.poisson(nevts_exp)
-
+        print('expect {:0.1f} evts'.format(nevts_exp))
+        print('created {:0.1f} evts'.format(nevts_sim))
+        
         evts_sim = pdf_sampling(
             tot_bkgd_func, (e_low, e_high), npoints=npts, nsamples=nevts_sim,
         )
