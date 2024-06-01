@@ -243,7 +243,7 @@ class SensEst(object):
 
 
     def run_sim(self, threshold, e_high, e_low=1e-6, m_dms=None, nexp=1, npts=1000,
-                plot_bkgd=False):
+                plot_bkgd=False, res=None, verbose=False):
         """
         Method for running the simulation for getting the sensitivity
         estimate.
@@ -293,14 +293,19 @@ class SensEst(object):
             evts_sim = self._generate_background(
                 en_interp, plot_bkgd=plot_bkgd and ii==0,
             )
-
+            
             sig_temp, _, _ = optimuminterval(
-                evts_sim[evts_sim >= threshold],
-                en_interp,
-                np.heaviside(en_interp - threshold, 1),
-                m_dms,
-                self.exposure,
-                tm=self.tm,
+                evts_sim[evts_sim >= threshold], # evt energies
+                en_interp, # efficiency curve energies
+                np.heaviside(en_interp - threshold, 1), # efficiency curve values
+                m_dms, # mass list
+                self.exposure, #exposure
+                tm=self.tm, # target material
+                cl=0.9, # C.L.
+                res=res, # include smearing of DM spectrum
+                gauss_width=10, # if smearing, number of sigma to go out to
+                verbose=verbose, # print outs
+                drdefunction=None, # 
                 hard_threshold=threshold,
             )
 
@@ -311,7 +316,7 @@ class SensEst(object):
         return m_dms, sig
 
     def generate_background(self, e_high, e_low=1e-6, npts=1000,
-                            plot_bkgd=False):
+                            plot_bkgd=False,verbose=False):
         """
         Method for generating events based on the inputted background.
 
@@ -346,11 +351,11 @@ class SensEst(object):
         """
 
         en_interp = np.geomspace(e_low, e_high, num=npts)
-        evts_sim = self._generate_background(en_interp, plot_bkgd=plot_bkgd)
+        evts_sim = self._generate_background(en_interp, plot_bkgd=plot_bkgd,verbose=verbose)
 
         return evts_sim
 
-    def _generate_background(self, en_interp, plot_bkgd=False):
+    def _generate_background(self, en_interp, plot_bkgd=False, verbose=False):
         """
         Hidden method for generating events based on the inputted
         background.
@@ -403,8 +408,9 @@ class SensEst(object):
 
         nevts_exp = rtot * self.exposure
         nevts_sim = np.random.poisson(nevts_exp)
-        #print('expect {:0.1f} evts'.format(nevts_exp))
-        #print('created {:0.1f} evts'.format(nevts_sim))
+        if verbose:
+            print('expect {:0.1f} evts'.format(nevts_exp))
+            print('created {:0.1f} evts'.format(nevts_sim))
         
         evts_sim = pdf_sampling(
             tot_bkgd_func, (e_low, e_high), npoints=npts, nsamples=nevts_sim,
