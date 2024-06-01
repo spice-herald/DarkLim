@@ -114,7 +114,8 @@ def upper(fc, cl=0.9):
         )
 
     endpoints = _upper.upperlimcom.endpoints
-
+    
+    print(ulout)
     return ulout, endpoints[0], endpoints[1]
 
 
@@ -519,7 +520,7 @@ def optimuminterval(eventenergies, effenergies, effs, masslist, exposure,
 
             try:
                 uloutput, endpoint0, endpoint1 = upper(fc, cl=cl)
-
+                print(uloutput)
                 sigma[ii] = (sigma0 / tot_rate) * uloutput
 
                 oi_energy0[ii] = eventenergies[event_inds][possiblewimp][endpoint0-1] if endpoint0>0 else elow # endpoint==0 means the start of the SM integration range

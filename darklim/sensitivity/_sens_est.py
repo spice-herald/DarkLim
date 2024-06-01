@@ -183,7 +183,7 @@ class SensEst(object):
         self._backgrounds.append(noise_bkgd)
 
 
-    def add_dm_bkgd(self, m_dm, sig0):
+    def add_dm_bkgd(self, m_dm, sig0, res=None):
         """
         Method for adding a DM background to the simulation.
 
@@ -195,7 +195,8 @@ class SensEst(object):
         sig0 : float
             The dark matter cross section at which to calculate the
             expected differential event rate. Expected units are cm^2.
-
+        res : float
+            Energy resolution if one desires to smear the DM spectrum.
         """
 
         dm_bkgd = lambda x: drde(x, m_dm, sig0, tm=self.tm)
