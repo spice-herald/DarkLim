@@ -143,6 +143,7 @@ class SensEst(object):
         self.exposure = m_det * time_elapsed * eff
 
         self._backgrounds = []
+        self._background_labels = []
 
     def add_flat_bkgd(self, flat_rate):
         """
@@ -158,7 +159,7 @@ class SensEst(object):
 
         flat_bkgd = lambda x: flat_rate * np.ones(len(x))
         self._backgrounds.append(flat_bkgd)
-
+        self._background_labels.append('{:0.2f} DRU Bkg'.format(flat_rate))
 
     def add_noise_bkgd(self, sigma, n_win, fs):
         """
@@ -181,7 +182,7 @@ class SensEst(object):
         norm = self.m_det * n_win / fs / constants.day
         noise_bkgd = lambda x: trigger_pdf(x, sigma, n_win) / norm
         self._backgrounds.append(noise_bkgd)
-
+        self._background_labels.append('Noise Bkg')
 
     def add_dm_bkgd(self, m_dm, sig0, res=None):
         """
@@ -201,9 +202,10 @@ class SensEst(object):
 
         dm_bkgd = lambda x: drde(x, m_dm, sig0, tm=self.tm)
         self._backgrounds.append(dm_bkgd)
+        self._background_labels.append('{:0.2f} GeV DM'.format(m_dm))
 
 
-    def add_arb_bkgd(self, function):
+    def add_arb_bkgd(self, function, label='Arb. Bkg'):
         """
         Method for adding an arbitrary background to the simulation.
 
@@ -217,6 +219,7 @@ class SensEst(object):
         """
 
         self._backgrounds.append(function)
+        self._background_labels.append(label)
     
     def add_nfold_lee_bkgd(self,m=1,n=1,e0=0.020,R=0.12,w=100e-6):
         """
@@ -236,6 +239,7 @@ class SensEst(object):
     
         nfold_lee = lambda x: n_fold_lee(x,m=m,n=n,e0=e0,R=R,w=w) / self.m_det
         self._backgrounds.append(nfold_lee)
+        self._background_labels.append('{:d}-fold LEE in {:d} devices'.format(n,m))
 
     def reset_sim(self):
         """Method for resetting the simulation to its initial state."""
@@ -244,7 +248,7 @@ class SensEst(object):
 
 
     def run_sim(self, threshold, e_high, e_low=1e-6, m_dms=None, nexp=1, npts=1000,
-                plot_bkgd=False, res=None, verbose=False):
+                plot_bkgd=False, res=None, verbose=False, sigma0=1e-41):
         """
         Method for running the simulation for getting the sensitivity
         estimate.
@@ -308,6 +312,7 @@ class SensEst(object):
                 verbose=verbose, # print outs
                 drdefunction=None, # 
                 hard_threshold=threshold,
+                sigma0=sigma0
             )
 
             sigs.append(sig_temp)
@@ -356,7 +361,7 @@ class SensEst(object):
 
         return evts_sim
 
-    def _generate_background(self, en_interp, plot_bkgd=False, verbose=False):
+    def _generate_background(self, en_interp, plot_bkgd=False, verbose=False, nbins=100):
         """
         Hidden method for generating events based on the inputted
         background.
@@ -418,11 +423,11 @@ class SensEst(object):
         )
 
         if plot_bkgd:
-            self._plot_bkgd(evts_sim, en_interp, tot_bkgd_func)
+            self._plot_bkgd(evts_sim, en_interp, tot_bkgd_func, nbins=nbins)
 
         return evts_sim
 
-    def _plot_bkgd(self, evts, en_interp, tot_bkgd_func):
+    def _plot_bkgd(self, evts, en_interp, tot_bkgd_func, nbins=100):
         """
         Hidden Method for plotting the generated events on top of the
         inputted backgrounds.
@@ -435,6 +440,7 @@ class SensEst(object):
         ratecomp.add_data(
             evts,
             self.exposure,
+            nbins=nbins,
             label="Simulated Events Spectrum",
         )
 
@@ -444,7 +450,7 @@ class SensEst(object):
                     en_interp,
                     bkgd(en_interp),
                     linestyle='--',
-                    label=f"Background {ii + 1}",
+                    label=self._background_labels[ii],
                 )
 
         ratecomp.ax.plot(
