@@ -7,7 +7,10 @@ import types
 import contextlib
 from scipy import stats, signal, interpolate, special, integrate
 
-from darklim import constants
+from scipy.stats import poisson, norm
+import warnings
+
+from darklim import constants, feldman_cousins
 from darklim.limit import _upper
 import mendeleev
 
@@ -19,6 +22,7 @@ __all__ = [
     "drde_max_q",
     "gauss_smear",
     "optimuminterval",
+    "fc_limits"
 ]
 
 
@@ -530,3 +534,65 @@ def optimuminterval(eventenergies, effenergies, effs, masslist, exposure,
 
     return sigma, oi_energy0, oi_energy1
 
+def fc_limits(known_bkg_func, eventenergies, effenergies, effs, masslist, exposure,
+                    tm="Si", res=None, gauss_width=10, verbose=False,
+                    drdefunction=None, hard_threshold=0.0, sigma0=1e-41):
+    """
+    
+
+    """
+
+    if np.isscalar(masslist):
+        masslist = [masslist]
+
+    eventenergies = np.sort(eventenergies)
+
+    elow = max(hard_threshold, min(effenergies))
+    ehigh = max(effenergies)
+
+    en_interp = np.logspace(np.log10(elow), np.log10(ehigh), int(1e5))
+
+    event_inds = (eventenergies > elow) & (eventenergies < ehigh)
+
+    sigma = np.ones(len(masslist)) * np.inf
+    uls = np.ones(len(masslist)) * np.inf
+    
+    exp_bkg = np.trapz(known_bkg_func(en_interp), x=en_interp) * exposure
+    print('exp bkg =',exp_bkg,'evts')
+        
+    n_obs = np.count_nonzero(event_inds)
+    print('n_obs above threhsold =',n_obs,'evts')
+        
+    ul = feldman_cousins.FC_ints(n_obs,exp_bkg)[-1]
+    
+    for ii, mass in enumerate(masslist):
+        if verbose:
+            print(f"On mass {ii+1} of {len(masslist)}.")
+
+        if drdefunction is None:
+            exp = effs * exposure
+
+            curr_exp = interpolate.interp1d(
+                effenergies, exp, kind="linear", bounds_error=False, fill_value=(0, exp[-1]),
+            )
+    
+            init_rate = drde(
+                en_interp, mass, sigma0, tm=tm,
+            )
+            if res is not None:
+                init_rate = gauss_smear(en_interp, init_rate, res, gauss_width=gauss_width)
+            rate = init_rate * curr_exp(en_interp)
+        else:
+            rate = drdefunction[ii](en_interp) * exposure
+
+        integ_rate = integrate.cumtrapz(rate, x=en_interp, initial=0)
+        tot_rate = integ_rate[-1]
+        
+        #bkg_rate = known_bkg_func(en_interp) * exposure
+        #exp_bkg = integrate.cumtrapz(bkg_rate, x=en_interp, initial=0)[-1]
+        #print('exp bkg =',exp_bkg,'evts')
+        
+        sigma[ii] = (sigma0 / tot_rate) * ul
+        
+
+    return sigma, ul

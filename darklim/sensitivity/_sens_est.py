@@ -4,7 +4,7 @@ from scipy import stats, special
 
 import mendeleev
 from darklim import constants
-from darklim.limit._limit import drde, optimuminterval
+from darklim.limit._limit import drde, optimuminterval, fc_limits
 from darklim.sensitivity._random_sampling import pdf_sampling
 from darklim.sensitivity._plotting import RatePlot
 
@@ -320,7 +320,96 @@ class SensEst(object):
         sig = np.median(np.stack(sigs, axis=1), axis=1)
 
         return m_dms, sig
+    
+    def run_sim_fc(self, known_bkg_idx, threshold, e_high, e_low=1e-6, m_dms=None, nexp=1, npts=1000,
+                plot_bkgd=False, res=None, verbose=False, sigma0=1e-41):
+        """
+        Method for running the simulation for getting the sensitivity
+        estimate using FC intervals.
 
+        Parameters
+        ----------
+        known_bkg_index : ndarray, int
+            Indeces of the bkg components to be treated as 'known'.
+        threshold : float
+            The energy threshold of the experiment, units of keV.
+        e_high : float
+            The high energy cutoff of the analysis range, as we need
+            some cutoff to the event energies that we generate.
+        m_dms : ndarray, optional
+            Array of dark matter masses (in GeV/c^2) to run the Optimum
+            Interval code. Default is 50 points from 0.05 to 2 GeV/c^2.
+        nexp : int, optional
+            The number of experiments to run - the median of the
+            outputs will be taken. Recommended to set to 1 for
+            diagnostics, which is default.
+        npts : int, optional
+            The number of points to use when interpolating the
+            simulated background rates. Default is 1000.
+        plot_bkgd : bool, optional
+            Option to plot the background being used on top of the
+            generated data, for diagnostic purposes. If `nexp` is
+            greater than 1, then only the first generated dataset is
+            plotted.
+
+        Returns
+        -------
+        m_dms : ndarray
+            The dark matter masses in GeV/c^2 that upper limit was set
+            at.
+        sig : ndarray
+            The cross section in cm^2 that the upper limit was
+            determined to be.
+
+        """
+
+        sigs = []
+        uls = []
+
+        if m_dms is None:
+            m_dms = np.geomspace(0.5, 2, num=50)
+
+        en_interp = np.geomspace(e_low, e_high, num=npts)
+        
+        #tot_bkgd_func = lambda x: np.stack(
+        #    [bkgd(x) for bkgd in self._backgrounds], axis=1,
+        #).sum(axis=1)
+        
+        print('Treating {} as a known bkg'.format(self._background_labels[known_bkg_idx]))
+        
+        for ii in range(nexp):
+            if ii%5==0:
+                print('Running toy number {}...'.format(ii))
+            evts_sim = self._generate_background(
+                en_interp, plot_bkgd=plot_bkgd and ii==0,
+            )
+            
+            sig_temp, ul_temp = fc_limits(
+                self._backgrounds[known_bkg_idx],
+                evts_sim[evts_sim >= threshold], # evt energies
+                en_interp, # efficiency curve energies
+                np.heaviside(en_interp - threshold, 1), # efficiency curve values
+                m_dms, # mass list
+                self.exposure, #exposure
+                tm=self.tm, # target material
+                res=res, # include smearing of DM spectrum
+                gauss_width=10, # if smearing, number of sigma to go out to
+                verbose=verbose, # print outs
+                drdefunction=None, # 
+                hard_threshold=threshold,
+                sigma0=sigma0
+            )
+            
+            #print(sig_temp)
+            #print(ul_temp)
+            
+            sigs.append(sig_temp)
+            uls.append(ul_temp)
+
+        sig = np.median(np.stack(sigs, axis=1), axis=1)
+        ul = np.median(np.asarray(uls))
+        return m_dms, sig, ul
+    
     def generate_background(self, e_high, e_low=1e-6, npts=1000,
                             plot_bkgd=False,verbose=False):
         """
