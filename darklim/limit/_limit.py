@@ -549,19 +549,19 @@ def fc_limits(known_bkg_func, eventenergies, effenergies, effs, masslist, exposu
 
     elow = max(hard_threshold, min(effenergies))
     ehigh = max(effenergies)
-
     en_interp = np.logspace(np.log10(elow), np.log10(ehigh), int(1e5))
 
     event_inds = (eventenergies > elow) & (eventenergies < ehigh)
 
     sigma = np.ones(len(masslist)) * np.inf
-    uls = np.ones(len(masslist)) * np.inf
     
     exp_bkg = np.trapz(known_bkg_func(en_interp), x=en_interp) * exposure
-    print('exp bkg =',exp_bkg,'evts')
-        
     n_obs = np.count_nonzero(event_inds)
-    print('n_obs above threhsold =',n_obs,'evts')
+    
+    if verbose:
+        print('elow, ehigh = {:0.3e}, {:0.3e} keV'.format(elow,ehigh))
+        print('exp bkg =',exp_bkg,'evts')
+        print('n_obs above threhsold =',n_obs,'evts')
         
     ul = feldman_cousins.FC_ints(n_obs,exp_bkg)[-1]
     

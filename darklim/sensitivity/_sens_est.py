@@ -378,11 +378,14 @@ class SensEst(object):
         print('Treating {} as a known bkg'.format(self._background_labels[known_bkg_idx]))
         
         for ii in range(nexp):
-            if ii%5==0:
+            if ii%10==0:
                 print('Running toy number {}...'.format(ii))
             evts_sim = self._generate_background(
                 en_interp, plot_bkgd=plot_bkgd and ii==0,
             )
+            
+            # sig_temp has length = number of DM masses
+            # ul_temp is a scalar - UL in number of evts is same for all DM masses
             
             sig_temp, ul_temp = fc_limits(
                 self._backgrounds[known_bkg_idx],
