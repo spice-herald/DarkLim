@@ -32,7 +32,7 @@ def run_scan_point(time_elapsed,mass_det,n_devices,coinc,window,save=True):
     print('\nRunning with the following settings:')
     print('Mass: {:0.3f} kg; Time: {:0.3f} d => Exposure: {:0.3f} kg-d'.format(SE.m_det,time_elapsed,SE.exposure))
     print('Coincidence: {:d}-fold in {:d} devices; {:0.1f} microsecond window'.format(coinc,n_devices,window/1e-6))
-    print('Energy threshold: {:0.3f} keV'.format(threshold))
+    print('Energy threshold: {:0.3f} eV'.format(threshold*1e3))
     
     # run
     m_dm, sig, ul = SE.run_sim_fc(
@@ -54,7 +54,7 @@ def run_scan_point(time_elapsed,mass_det,n_devices,coinc,window,save=True):
     
     # save results to txt file
     if save:
-        outname = 'HeRALD_FC_{:0.1f}kgd_{:d}device_{:d}fold_{:0.0f}mus.txt'.format(SE.exposure,n_devices,coinc,window/1e-6)
+        outname = './scan_results/HeRALD_FC_{:0.1f}kgd_{:d}device_{:d}fold_{:0.0f}mus.txt'.format(SE.exposure,n_devices,coinc,window/1e-6)
         tot = np.column_stack( (m_dm, sig) )
         np.savetxt(outname,tot,fmt=['%.5e','%0.5e'] ,delimiter=' ')
     
@@ -63,7 +63,7 @@ def run_scan_point(time_elapsed,mass_det,n_devices,coinc,window,save=True):
 def helium_scan():
     
     #exposures = np.array([0.1,1,10]) # kg-d
-    exposures = np.array([10]) # kg-d
+    exposures = np.array([1]) # kg-d
     mass_det = 0.010 # mass in kg
     times = exposures/mass_det
     print(times)
