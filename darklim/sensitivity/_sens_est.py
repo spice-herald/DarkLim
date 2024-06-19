@@ -238,7 +238,7 @@ class SensEst(object):
 
 
     def run_sim(self, threshold, e_high, e_low=1e-6, m_dms=None, nexp=1, npts=1000,
-                plot_bkgd=False):
+                plot_bkgd=False, drdefunction=None, sigma0=1e-41):
         """
         Method for running the simulation for getting the sensitivity
         estimate.
@@ -265,6 +265,13 @@ class SensEst(object):
             generated data, for diagnostic purposes. If `nexp` is
             greater than 1, then only the first generated dataset is
             plotted.
+        drdefunction : list, optional
+            List of callables of type float(float). Every element of the list represents the signal model
+            rate as a function of reconstructed energy for the corresponding Dark Matter mass from the
+            `m_dms` and the cross section sigma=10^-41 cm^2. The experiment efficiency must be taken
+            into account. The energy unit is keV, the rate unit is 1/keV/kg/day.
+            By default (or if None is provided) the standard Lewin&Smith signal model is used with gaussian
+            smearing of width `res`, truncated at `gauss_width` standard deviations.
 
         Returns
         -------
@@ -297,6 +304,8 @@ class SensEst(object):
                 self.exposure,
                 tm=self.tm,
                 hard_threshold=threshold,
+                drdefunction=drdefunction,
+                sigma0=sigma0,
             )
 
             sigs.append(sig_temp)
