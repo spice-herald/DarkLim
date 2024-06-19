@@ -188,7 +188,7 @@ class SensEst(object):
         self._backgrounds.append(dm_bkgd)
 
 
-    def add_exponential_bkgd(self, energy0, R0_DRU):
+    def add_exponential_bkgd(self, energy0, R0_DRU, normalize_mass=False):
         """
         Method for adding a falling exponential background to the simulation.
 
@@ -196,16 +196,22 @@ class SensEst(object):
         ----------
         energy0 : float
             The exponential parameter, i.e. the energy at which the rate falls
-            to 1/e of its maximal value. Expected units are eV, but could be
-            any units as long as you call the returned lambda function with
-            energies of the same unit.
+            to 1/e of its maximal value. Expected units are keV.
         R0_DRU : float
-            The amplitude of the background distribution, i.e. the mean rate.
-            Units are DRU.
+            The amplitude of the background distribution, i.e. the mean rate
+            across energies. Units are events/kg/day by default, but units are
+            events/day if normalize_mass is True.
+        normalize_mass : bool, optional
+            If True, then we assume R0_DRU is in events/keV/day. To return
+            the rate in DRU, we will divide by the target mass.
 
         """
 
-        exp_bkgd = lambda x: (R0_DRU / energy0 * np.exp(-1. * x / energy0))
+        if normalize_mass:
+            exp_bkgd = lambda x: (R0_DRU / self.m_det / energy0 * np.exp(-1. * x / energy0))
+        else:
+            exp_bkgd = lambda x: (R0_DRU / energy0 * np.exp(-1. * x / energy0))
+
         self._backgrounds.append(exp_bkgd)
 
 
