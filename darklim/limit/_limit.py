@@ -383,7 +383,7 @@ def gauss_smear(x, f, res, nres=1e5, gauss_width=10):
 
 def optimuminterval(eventenergies, effenergies, effs, masslist, exposure,
                     tm="Si", cl=0.9, res=None, gauss_width=10, verbose=False,
-                    drdefunction=None, hard_threshold=0.0):
+                    drdefunction=None, hard_threshold=0.0, sigma0=1e-41):
     """
     Function for running Steve Yellin's Optimum Interval code on an inputted spectrum and efficiency curve.
 
@@ -463,8 +463,6 @@ def optimuminterval(eventenergies, effenergies, effs, masslist, exposure,
     ehigh = max(effenergies)
 
     en_interp = np.logspace(np.log10(elow), np.log10(ehigh), int(1e5))
-
-    sigma0 = 1e-41
 
     event_inds = (eventenergies > elow) & (eventenergies < ehigh)
 
