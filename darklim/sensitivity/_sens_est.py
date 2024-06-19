@@ -7,6 +7,7 @@ from darklim import constants
 from darklim.limit._limit import drde, optimuminterval
 from darklim.sensitivity._random_sampling import pdf_sampling
 from darklim.sensitivity._plotting import RatePlot
+from darklim.elf._elf import get_dRdE_lambda_Al2O3_electron
 
 
 __all__ = [
@@ -238,7 +239,7 @@ class SensEst(object):
 
 
     def run_sim(self, threshold, e_high, e_low=1e-6, m_dms=None, nexp=1, npts=1000,
-                plot_bkgd=False, drdefunction=None, sigma0=1e-41):
+                plot_bkgd=False, drdefunction=None, sigma0=1e-41, elf_model=None, elf_params=None):
         """
         Method for running the simulation for getting the sensitivity
         estimate.
@@ -290,6 +291,19 @@ class SensEst(object):
             m_dms = np.geomspace(0.5, 2, num=50)
 
         en_interp = np.geomspace(e_low, e_high, num=npts)
+
+        if elf_model == 'electron':
+            elf_mediator = elf_params['mediator'] if 'mediator' in elf_params else 'massless'
+            elf_kcut = elf_params['kcut'] if 'kcut' in elf_params else 0
+            elf_method = elf_params['method'] if 'method' in elf_params else 'grid'
+            elf_screening = elf_params['withscreening'] if 'withscreening' in elf_params else True
+            elf_suppress = elf_params['suppress_darkelf_output'] if 'suppress_darkelf_output' in elf_params else False
+
+            drdefunction = \
+                [get_dRdE_lambda_Al2O3_electron(mX_eV=m*1e9, sigmae=sigma0, mediator=elf_mediator,
+                                                    kcut=elf_kcut, method=elf_method, withscreening=elf_screening,
+                                                    suppress_darkelf_output=elf_suppress)
+                for m in m_dms]
 
         for ii in range(nexp):
             evts_sim = self._generate_background(
