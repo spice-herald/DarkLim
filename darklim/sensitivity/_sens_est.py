@@ -507,7 +507,7 @@ class SensEst(object):
         exp = np.zeros(nexp)
         for ii in range(nexp):
             if ii%100==0:
-                print('\n Running toy number {}...'.format(ii))
+                print('Running toy number {}...'.format(ii))
             
             # generate a toy:
             evts_sim = self._generate_background(en_interp, plot_bkgd=plot_bkgd and ii==0)

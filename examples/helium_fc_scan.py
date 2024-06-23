@@ -2,6 +2,7 @@ import os
 import sys
 import numpy as np
 import matplotlib.pyplot as plt
+import scipy.stats as stats
 
 import darklim
 
@@ -12,11 +13,11 @@ from multihist import Hist1d
 efficiency = 1.0
 tm = 'He' # target name
 energy_res = 0.373e-3 # energy resolution in keV
-per_device_threshold = 5 * energy_res # threshold
+
 he_gain = 0.15
 ##################################################################
 
-def run_scan_point(time_elapsed,mass_det,n_devices,coinc,window,save=True,savedir=None):
+def run_scan_point(time_elapsed,mass_det,n_devices,coinc,window,var_threshold=False,save=True,savedir=None):
     
     known_bkgs = [0,1]
     
@@ -24,6 +25,13 @@ def run_scan_point(time_elapsed,mass_det,n_devices,coinc,window,save=True,savedi
     m_dms = np.geomspace(0.005, 1, num=20)
     
     ehigh = 10 # keV
+    
+    if var_threshold:
+        nsigma = stats.norm.isf(stats.norm.sf(5)**(1/coinc))
+    else:
+        nsigma = 5
+    
+    per_device_threshold = nsigma * energy_res # threshold
     threshold = coinc*per_device_threshold
     
     SE = darklim.sensitivity.SensEst(mass_det, time_elapsed, eff=efficiency, tm=tm, gain=he_gain)
@@ -34,7 +42,7 @@ def run_scan_point(time_elapsed,mass_det,n_devices,coinc,window,save=True,savedi
     print('\nRunning with the following settings:')
     print('Mass: {:0.4f} kg; Time: {:0.3f} d => Exposure: {:0.3f} kg-d'.format(SE.m_det,time_elapsed,SE.exposure))
     print('Coincidence: {:d}-fold in {:d} devices; {:0.1f} microsecond window'.format(coinc,n_devices,window/1e-6))
-    print('Energy threshold: {:0.3f} eV'.format(threshold*1e3))
+    print('Energy threshold: {:0.3f} eV; {:0.2f} sigma in each device'.format(threshold*1e3,nsigma))
     
     # run
     m_dm, sig, ul = SE.run_fast_fc_sim( #SE.run_sim_fc(
@@ -45,7 +53,7 @@ def run_scan_point(time_elapsed,mass_det,n_devices,coinc,window,save=True,savedi
         m_dms=m_dms,
         nexp=nexp,
         npts=int(1e4),
-        plot_bkgd=True,
+        plot_bkgd=False,
         res=np.sqrt(n_devices)*energy_res,
         verbose=False,
         sigma0=1e-36,
@@ -85,7 +93,7 @@ def helium_scan(results_dir):
     
     for t in times:
         for n in coinc:
-            run_scan_point(t,mass_det,n_devices,n,window,save=True,savedir=results_dir)
+            run_scan_point(t,mass_det,n_devices,n,window,var_threshold=True,save=True,savedir=results_dir)
         
         
     return
