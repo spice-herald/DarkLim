@@ -20,8 +20,8 @@ def run_scan_point(time_elapsed,mass_det,n_devices,coinc,window,save=True,savedi
     
     known_bkgs = [0,1]
     
-    nexp = 20 # number of toys
-    m_dms = np.geomspace(0.03, 1, num=14)
+    nexp = 250 # number of toys
+    m_dms = np.geomspace(0.005, 1, num=20)
     
     ehigh = 10 # keV
     threshold = coinc*per_device_threshold
@@ -37,19 +37,21 @@ def run_scan_point(time_elapsed,mass_det,n_devices,coinc,window,save=True,savedi
     print('Energy threshold: {:0.3f} eV'.format(threshold*1e3))
     
     # run
-    m_dm, sig, ul = SE.run_sim_fc(
+    m_dm, sig, ul = SE.run_fast_fc_sim( #SE.run_sim_fc(
         known_bkgs,
         threshold,
         ehigh,
-        e_low=threshold,
+        e_low=1e-6, #threshold,
         m_dms=m_dms,
         nexp=nexp,
-        npts=1000,
-        plot_bkgd=False,
+        npts=int(1e4),
+        plot_bkgd=True,
         res=np.sqrt(n_devices)*energy_res,
         verbose=False,
         sigma0=1e-36,
-        use_drdefunction=True
+        use_drdefunction=True,
+        pltname='ULs_{:0.0f}d_{:d}device_{:d}fold_{:0.0f}mus'.format(time_elapsed,n_devices,coinc,window/1e-6)
+        #pltname=None
     )
 
     #print('ULs (evts) = ',ul)
@@ -78,6 +80,7 @@ def helium_scan(results_dir):
     
     n_devices = 4
     coinc = np.arange(2,5)
+    #coinc = np.array([2])
     window = 100e-6 # s
     
     for t in times:

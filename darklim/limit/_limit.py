@@ -14,6 +14,7 @@ from darklim import constants, feldman_cousins
 from darklim.limit import _upper
 import mendeleev
 
+import matplotlib.pyplot as plt
 
 __all__ = [
     "upper",
@@ -22,7 +23,9 @@ __all__ = [
     "drde_max_q",
     "gauss_smear",
     "optimuminterval",
-    "fc_limits"
+    "fc_limits",
+    "get_fc_ul",
+    "get_signal_rate"
 ]
 
 
@@ -551,8 +554,8 @@ def fc_limits(known_bkg_func, eventenergies, effenergies, effs, masslist, exposu
     elow = max(hard_threshold, min(effenergies))
     ehigh = max(effenergies)
     en_interp = np.logspace(np.log10(elow), np.log10(ehigh), int(1e5))
-
-    event_inds = (eventenergies > elow) & (eventenergies < ehigh)
+        
+    event_inds = (eventenergies > elow) & (eventenergies < ehigh) # obs evts in the ROI
 
     sigma = np.ones(len(masslist)) * np.inf
     
@@ -588,19 +591,103 @@ def fc_limits(known_bkg_func, eventenergies, effenergies, effs, masslist, exposu
         if verbose:
             print('Signal events at m={:0.3f} GeV & {:0.1e} cm2: {:0.3e} evts'.format(mass,sigma0,tot_rate))
         
-        if False: # this was to plot signal spectra as a check everything working okay
-            if drdefunction is None:
-                outname = '/global/cfs/cdirs/lz/users/haselsco/TESSERACT_Limits/DarkLim/examples/signal_shape_usecustom_0.txt'
-            else:
-                outname = '/global/cfs/cdirs/lz/users/haselsco/TESSERACT_Limits/DarkLim/examples/signal_shape_usecustom_1.txt'
-            tot = np.column_stack( (en_interp, rate) )
-            np.savetxt(outname,tot,fmt=['%.5e','%0.5e'] ,delimiter=' ')
+        #if False: # this was to plot signal spectra as a check everything working okay
+        #    if drdefunction is None:
+        #        outname = '/global/cfs/cdirs/lz/users/haselsco/TESSERACT_Limits/DarkLim/examples/signal_shape_usecustom_0.txt'
+        #    else:
+        #        outname = '/global/cfs/cdirs/lz/users/haselsco/TESSERACT_Limits/DarkLim/examples/signal_shape_usecustom_1.txt'
+        #    tot = np.column_stack( (en_interp, rate) )
+        #    np.savetxt(outname,tot,fmt=['%.5e','%0.5e'] ,delimiter=' ')
         
-        #bkg_rate = known_bkg_func(en_interp) * exposure
-        #exp_bkg = integrate.cumtrapz(bkg_rate, x=en_interp, initial=0)[-1]
-        #print('exp bkg =',exp_bkg,'evts')
-        
+        if verbose: # checking signal spectra and eff curve
+            fig, ax = plt.subplots(1,figsize=(4,3))
+            plt.plot(en_interp,rate,label='m={:0.3f}GeV,\n rate={:0.3e} evts'.format(mass,tot_rate))
+            plt.plot(en_interp,curr_exp(en_interp),ls='--')
+            #ax.axvline(threshold,ls='--',color='red')
+            ax.set_ylabel('evts/kg/day/keV')
+            ax.set_xlabel('Energy [keV]')
+            ax.set_xlim(elow,ehigh)
+            ax.set_xscale('log')
+            ax.set_yscale('log')
+            ax.legend()
+            outdir = '/global/cfs/cdirs/lz/users/haselsco/TESSERACT_Limits/DarkLim/examples/'
+            plt.savefig(outdir+'testplot_{:0.3f}GeV.png'.format(mass),dpi=300, facecolor='white',bbox_inches='tight')
+            
         sigma[ii] = (sigma0 / tot_rate) * ul
         
-
     return sigma, ul
+
+def get_fc_ul(known_bkg_func, eventenergies, threshold, ehigh, exposure, verbose=False):
+    """
+    return only the UL in events from the known bkg and obs data.
+    """
+
+    eventenergies = np.sort(eventenergies)
+    event_inds = (eventenergies > threshold) & (eventenergies < ehigh) # obs evts in the ROI
+    
+    en_interp = np.logspace(np.log10(threshold), np.log10(ehigh), int(1e5))
+    exp_bkg = np.trapz(known_bkg_func(en_interp), x=en_interp) * exposure # expected 'known' background
+    n_obs = np.count_nonzero(event_inds) # observed counts    
+    ul = feldman_cousins.FC_ints(n_obs,exp_bkg)[-1]
+    
+    if verbose:
+        print('elow, ehigh = {:0.3e}, {:0.3e} keV'.format(threshold,ehigh))
+        print('exp bkg =',exp_bkg,'evts')
+        print('n_obs above threhsold =',n_obs,'evts')
+        print('-->FC 90% CL UL =',ul,'evts')
+    
+    return n_obs, exp_bkg, ul
+
+def get_signal_rate(effenergies, effs, masslist, exposure,
+                    tm="Si", res=None, gauss_width=10, verbose=False,
+                    drdefunction=None, hard_threshold=0.0, sigma0=1e-41):
+    """
+    return the signal rate for each of the masses in masslist for the 
+    given reference cross section, exposure, and efficiency curve.
+    """
+
+    if np.isscalar(masslist):
+        masslist = [masslist]
+
+    elow = max(hard_threshold, min(effenergies))
+    ehigh = max(effenergies)
+    en_interp = np.logspace(np.log10(elow), np.log10(ehigh), int(1e5))
+    
+    signal_rates = np.zeros(len(masslist))
+    for ii, mass in enumerate(masslist):
+        if verbose:
+            print(f"On mass {ii+1} of {len(masslist)}.")
+
+        exp = effs * exposure
+        curr_exp = interpolate.interp1d(effenergies, exp, kind="linear", bounds_error=False, fill_value=(0, exp[-1]))
+        
+        if drdefunction is None:
+            init_rate = drde(en_interp, mass, sigma0, tm=tm)
+        else:
+            init_rate = drdefunction[ii](en_interp,mass) # note here.. mass also an input
+        
+        if res is not None:
+            init_rate = gauss_smear(en_interp, init_rate, res, gauss_width=gauss_width)
+            
+        rate = init_rate * curr_exp(en_interp)
+        integ_rate = integrate.cumtrapz(rate, x=en_interp, initial=0)
+        tot_rate = integ_rate[-1]
+        signal_rates[ii] = tot_rate
+        
+        if verbose:
+            print('Signal events at m={:0.3f} GeV & {:0.1e} cm2: {:0.3e} evts'.format(mass,sigma0,signal_rates[ii]))
+        
+            fig, ax = plt.subplots(1,figsize=(4,3))
+            plt.plot(en_interp,rate,label='m={:0.3f}GeV,\n rate={:0.3e} evts'.format(mass,signal_rates[ii]))
+            plt.plot(en_interp,curr_exp(en_interp),ls='--')
+            #ax.axvline(threshold,ls='--',color='red')
+            ax.set_ylabel('evts/kg/day/keV')
+            ax.set_xlabel('Energy [keV]')
+            ax.set_xlim(elow,ehigh)
+            ax.set_xscale('log')
+            ax.set_yscale('log')
+            ax.legend()
+            outdir = '/global/cfs/cdirs/lz/users/haselsco/TESSERACT_Limits/DarkLim/examples/'
+            plt.savefig(outdir+'testplot_{:0.3f}GeV.png'.format(mass),dpi=300, facecolor='white',bbox_inches='tight')
+                    
+    return signal_rates

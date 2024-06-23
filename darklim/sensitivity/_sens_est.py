@@ -4,7 +4,7 @@ from scipy import stats, special
 
 import mendeleev
 from darklim import constants
-from darklim.limit._limit import drde, optimuminterval, fc_limits
+from darklim.limit._limit import drde, optimuminterval, fc_limits, get_fc_ul, get_signal_rate
 from darklim.sensitivity._random_sampling import pdf_sampling
 from darklim.sensitivity._plotting import RatePlot
 
@@ -366,7 +366,7 @@ class SensEst(object):
         return m_dms, sig
     
     def run_sim_fc(self, known_bkgs_list, threshold, e_high, e_low=1e-6, m_dms=None, nexp=1, npts=1000,
-                plot_bkgd=False, res=None, verbose=False, sigma0=1e-41,use_drdefunction=False):
+                plot_bkgd=False, res=None, verbose=False, sigma0=1e-41,use_drdefunction=False,pltname=None):
         """
         Method for running the simulation for getting the sensitivity
         estimate using FC intervals.
@@ -432,7 +432,7 @@ class SensEst(object):
             #drdefunction = [drde_obs(en_interp,lambda x: drde(x,m,sigma0,tm=self.tm),self.gain) for m in m_dms]
             
         for ii in range(nexp):
-            if ii%10==0:
+            if ii%5==0:
                 print('\n Running toy number {}...'.format(ii))
             
             # generate a toy:
@@ -455,7 +455,7 @@ class SensEst(object):
                 gauss_width=10, # if smearing, number of sigma to go out to
                 verbose=verbose, # print outs
                 drdefunction=drdefunction, # 
-                hard_threshold=threshold,
+                hard_threshold=e_low, #threshold,
                 sigma0=sigma0
             )
             
@@ -465,9 +465,103 @@ class SensEst(object):
             sigs.append(sig_temp)
             uls.append(ul_temp)
 
+        
         sig = np.median(np.stack(sigs, axis=1), axis=1)
         ul = np.median(np.asarray(uls))
+        
+        if pltname is not None:
+            fig, ax = plt.subplots(1,figsize=(4,3))
+            plt.hist(np.asarray(uls),bins=20,range=(0,max(np.asarray(uls))))
+            ax.axvline(ul,ls='--',color='red')
+            ax.set_xlabel('Upper Limit [Events]')
+            ax.set_xlim(0,max(np.asarray(uls)))
+            outdir = '/global/cfs/cdirs/lz/users/haselsco/TESSERACT_Limits/DarkLim/examples/'
+            plt.savefig(outdir+pltname+'.png',dpi=300, facecolor='white',bbox_inches='tight')
+        
         return m_dms, sig, ul
+    
+    def run_fast_fc_sim(self, known_bkgs_list, threshold, e_high, e_low=1e-6, m_dms=None, nexp=1, npts=1000,
+                plot_bkgd=False, res=None, verbose=False, sigma0=1e-41,use_drdefunction=False,pltname=None):
+        """
+        Faster version of the above, avoiding repeat calculations of signal rates.
+        """
+
+        if m_dms is None:
+            m_dms = np.geomspace(0.5, 2, num=50)
+        
+        en_interp = np.geomspace(e_low, e_high, num=npts)
+        
+        # created summed 'known' background function:
+        known_bkgd_func = lambda x: np.stack([bkgd(x) for ind,bkgd in enumerate(self._backgrounds) if ind in known_bkgs_list], axis=1,).sum(axis=1)
+        print('Treating the following as known bkgs for FC limits: ')
+        for idx in known_bkgs_list:
+            print('   ',self._background_labels[idx])
+        
+        # create signal model functions at each mass
+        drdefunction = None
+        if use_drdefunction:
+            drdefunction = [ lambda x,m: drde_wimp_obs( x, m, sigma0, self.tm, self.gain ) for m in m_dms ]
+        
+        uls = np.zeros(nexp)
+        obs = np.zeros(nexp)
+        exp = np.zeros(nexp)
+        for ii in range(nexp):
+            if ii%100==0:
+                print('\n Running toy number {}...'.format(ii))
+            
+            # generate a toy:
+            evts_sim = self._generate_background(en_interp, plot_bkgd=plot_bkgd and ii==0)
+            
+            # get its FC UL:
+            obs[ii], exp[ii], uls[ii] = get_fc_ul(
+                known_bkgd_func, 
+                evts_sim[evts_sim >= threshold], 
+                threshold, 
+                e_high, 
+                self.exposure, 
+                verbose=verbose
+            )
+        
+        median_ul = np.median(uls)
+        median_obs = np.median(obs)
+        median_exp = np.median(exp)
+        print('Median Exp. Bkg =\t {:0.2f} evts'.format(median_exp))
+        print('Median N Obs =\t {:0.2f} evts'.format(median_obs))
+        print('Median 90% CL UL =\t {:0.2f} evts'.format(median_ul))
+        
+        # get signal rates at the reference xsec for each DM mass:
+        dm_rates = get_signal_rate(
+            en_interp, # efficiency curve energies
+            np.heaviside(en_interp - threshold, 1), # efficiency curve values
+            m_dms, # mass list
+            self.exposure, #exposure
+            tm=self.tm, # target material
+            res=res, # include smearing of DM spectrum
+            gauss_width=10, # if smearing, number of sigma to go out to
+            verbose=verbose, # print outs
+            drdefunction=drdefunction, # 
+            hard_threshold=e_low, #threshold,
+            sigma0=sigma0
+        )
+        
+        if verbose:
+            print('DM signal rates:',dm_rates)
+        
+        # option to plot distribution of ULs:
+        if pltname is not None:
+            fig, ax = plt.subplots(1,figsize=(4,3))
+            plt.hist(uls,bins=20,range=(0,max(uls)))
+            ax.axvline(median_ul,ls='--',color='red')
+            ax.set_xlabel('Upper Limit [Events]')
+            ax.set_xlim(0,max(uls))
+            outdir = '/global/cfs/cdirs/lz/users/haselsco/TESSERACT_Limits/DarkLim/examples/'
+            plt.savefig(outdir+pltname+'.png',dpi=300, facecolor='white',bbox_inches='tight')
+            
+        median_sig = (sigma0 / dm_rates) * median_ul
+        if verbose:
+            print('Median sigma ULs',median_sig)
+        
+        return m_dms, median_sig, median_ul
     
     def generate_background(self, e_high, e_low=1e-6, npts=1000,
                             plot_bkgd=False,verbose=False):
