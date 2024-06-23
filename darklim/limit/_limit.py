@@ -386,6 +386,7 @@ def gauss_smear(x, f, res, nres=1e5, gauss_width=10):
     return s(x)
 
 
+
 def optimuminterval(eventenergies, effenergies, effs, masslist, exposure,
                     tm="Si", cl=0.9, res=None, gauss_width=10, verbose=False,
                     drdefunction=None, hard_threshold=0.0, sigma0=1e-41):
@@ -555,38 +556,45 @@ def fc_limits(known_bkg_func, eventenergies, effenergies, effs, masslist, exposu
 
     sigma = np.ones(len(masslist)) * np.inf
     
-    exp_bkg = np.trapz(known_bkg_func(en_interp), x=en_interp) * exposure
-    n_obs = np.count_nonzero(event_inds)
+    exp_bkg = np.trapz(known_bkg_func(en_interp), x=en_interp) * exposure # expected 'known' background
+    n_obs = np.count_nonzero(event_inds) # observed counts    
+    ul = feldman_cousins.FC_ints(n_obs,exp_bkg)[-1]
     
     if verbose:
         print('elow, ehigh = {:0.3e}, {:0.3e} keV'.format(elow,ehigh))
         print('exp bkg =',exp_bkg,'evts')
         print('n_obs above threhsold =',n_obs,'evts')
-        
-    ul = feldman_cousins.FC_ints(n_obs,exp_bkg)[-1]
+        print('-->FC 90% CL UL =',ul,'evts')
     
     for ii, mass in enumerate(masslist):
         if verbose:
             print(f"On mass {ii+1} of {len(masslist)}.")
 
+        exp = effs * exposure
+        curr_exp = interpolate.interp1d(effenergies, exp, kind="linear", bounds_error=False, fill_value=(0, exp[-1]))
+        
         if drdefunction is None:
-            exp = effs * exposure
-
-            curr_exp = interpolate.interp1d(
-                effenergies, exp, kind="linear", bounds_error=False, fill_value=(0, exp[-1]),
-            )
-    
-            init_rate = drde(
-                en_interp, mass, sigma0, tm=tm,
-            )
-            if res is not None:
-                init_rate = gauss_smear(en_interp, init_rate, res, gauss_width=gauss_width)
-            rate = init_rate * curr_exp(en_interp)
+            init_rate = drde(en_interp, mass, sigma0, tm=tm)
         else:
-            rate = drdefunction[ii](en_interp) * exposure
-
+            init_rate = drdefunction[ii](en_interp,mass) # note here.. mass also an input
+        
+        if res is not None:
+            init_rate = gauss_smear(en_interp, init_rate, res, gauss_width=gauss_width)
+            
+        rate = init_rate * curr_exp(en_interp)
         integ_rate = integrate.cumtrapz(rate, x=en_interp, initial=0)
         tot_rate = integ_rate[-1]
+        
+        if verbose:
+            print('Signal events at m={:0.3f} GeV & {:0.1e} cm2: {:0.3e} evts'.format(mass,sigma0,tot_rate))
+        
+        if False: # this was to plot signal spectra as a check everything working okay
+            if drdefunction is None:
+                outname = '/global/cfs/cdirs/lz/users/haselsco/TESSERACT_Limits/DarkLim/examples/signal_shape_usecustom_0.txt'
+            else:
+                outname = '/global/cfs/cdirs/lz/users/haselsco/TESSERACT_Limits/DarkLim/examples/signal_shape_usecustom_1.txt'
+            tot = np.column_stack( (en_interp, rate) )
+            np.savetxt(outname,tot,fmt=['%.5e','%0.5e'] ,delimiter=' ')
         
         #bkg_rate = known_bkg_func(en_interp) * exposure
         #exp_bkg = integrate.cumtrapz(bkg_rate, x=en_interp, initial=0)[-1]

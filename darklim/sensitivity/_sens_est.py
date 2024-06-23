@@ -13,7 +13,12 @@ __all__ = [
     "calculate_substrate_mass",
     "trigger_pdf",
     "n_fold_lee",
-    "SensEst",
+    "edep_to_eobs",
+    "eobs_to_edep",
+    "drde_obs",
+    "drde_obs_test",
+    "drde_wimp_obs",
+    "SensEst"
 ]
 
 
@@ -100,6 +105,36 @@ def n_fold_lee(x,m=1,n=1,e0=0.020,R=0.12,w=100e-6):
     
     return dist
 
+def edep_to_eobs(e_dep,gain):
+    return e_dep*gain
+
+def eobs_to_edep(e_obs,gain):
+    return e_obs/gain
+
+#def drde_obs(e_obs, drde_func, gain):
+def drde_obs(drde_func, gain):
+    """
+    given an observed energy value (e_obs) and a signal spectrum,
+    differential in the *deposited energy* (drde_func), return the 
+    spectrum function differential in the observed energy.
+    assumed the obs and dep energies are related by a gain factor.
+    """
+    return lambda x : (1/gain) * drde_func( eobs_to_edep(x,gain) )
+    #return (1/gain) * drde_func( get_e_dep(e_obs,gain) )
+
+def drde_wimp_obs(eobs, m, sigma0, tm, gain):
+    """
+    given an observed energy value (e_obs) return the WIMP NR 
+    differential rate, now differential in the observed energy.
+    """
+    return (1/gain) * drde( eobs_to_edep(eobs,gain) ,m, sigma0, tm )
+    
+def drde_obs_test(e_obs, drde_func, gain):
+    """
+    test for debugging/understanding
+    """
+    return (1/gain) * drde_func( eobs_to_edep(e_obs,gain) )
+
 class SensEst(object):
     """
     Class for setting up and running an estimate of the sensitivity of
@@ -118,7 +153,7 @@ class SensEst(object):
 
     """
 
-    def __init__(self, m_det, time_elapsed, eff=1, tm="Si"):
+    def __init__(self, m_det, time_elapsed, eff=1, tm="Si", gain=1):#, signal_name='SI-NR'):
         """
         Initialization of the SensEst class.
 
@@ -141,10 +176,17 @@ class SensEst(object):
         self.m_det = m_det
         self.tm = tm
         self.exposure = m_det * time_elapsed * eff
-
+        self.gain = gain
+        
         self._backgrounds = []
         self._background_labels = []
-
+        
+        #self.signal_name = signal_name
+        
+        #self.signal = None
+        #if self.signal_name=='SI-NR':
+        #    self.add_signal_model
+        
     def add_flat_bkgd(self, flat_rate):
         """
         Method for adding a flat background to the simulation.
@@ -293,7 +335,9 @@ class SensEst(object):
             m_dms = np.geomspace(0.5, 2, num=50)
 
         en_interp = np.geomspace(e_low, e_high, num=npts)
-
+        
+        #drdefunction = [drde_obs(en_interp,lambda x: drde(x,m,sigma0,tm=self.tm),gain)*np.heaviside(en_interp-threshold,1) for m in m_dms]
+        
         for ii in range(nexp):
             evts_sim = self._generate_background(
                 en_interp, plot_bkgd=plot_bkgd and ii==0,
@@ -321,8 +365,8 @@ class SensEst(object):
 
         return m_dms, sig
     
-    def run_sim_fc(self, known_bkg_idx, threshold, e_high, e_low=1e-6, m_dms=None, nexp=1, npts=1000,
-                plot_bkgd=False, res=None, verbose=False, sigma0=1e-41):
+    def run_sim_fc(self, known_bkgs_list, threshold, e_high, e_low=1e-6, m_dms=None, nexp=1, npts=1000,
+                plot_bkgd=False, res=None, verbose=False, sigma0=1e-41,use_drdefunction=False):
         """
         Method for running the simulation for getting the sensitivity
         estimate using FC intervals.
@@ -368,18 +412,30 @@ class SensEst(object):
 
         if m_dms is None:
             m_dms = np.geomspace(0.5, 2, num=50)
-
+        
+        #if verbose:
+        #    print('Running over the following masses:',m_dms)
+        
         en_interp = np.geomspace(e_low, e_high, num=npts)
         
-        #tot_bkgd_func = lambda x: np.stack(
-        #    [bkgd(x) for bkgd in self._backgrounds], axis=1,
-        #).sum(axis=1)
+        # created summed 'known' background function:
+        known_bkgd_func = lambda x: np.stack([bkgd(x) for ind,bkgd in enumerate(self._backgrounds) if ind in known_bkgs_list], axis=1,).sum(axis=1)
+        print('Treating the following as known bkgs for FC limits: ')
+        for idx in known_bkgs_list:
+            print('   ',self._background_labels[idx])
         
-        print('Treating {} as a known bkg'.format(self._background_labels[known_bkg_idx]))
-        
+        # create signal model functions at each mass
+        drdefunction = None
+        if use_drdefunction:
+            drdefunction = [ lambda x,m: drde_wimp_obs( x, m, sigma0, self.tm, self.gain ) for m in m_dms ]
+            #drdefunction = [ drde_obs( lambda x: drde(x,m,sigma0,tm=self.tm), self.gain ) for m in m_dms ]
+            #drdefunction = [drde_obs(en_interp,lambda x: drde(x,m,sigma0,tm=self.tm),self.gain) for m in m_dms]
+            
         for ii in range(nexp):
             if ii%10==0:
-                print('Running toy number {}...'.format(ii))
+                print('\n Running toy number {}...'.format(ii))
+            
+            # generate a toy:
             evts_sim = self._generate_background(
                 en_interp, plot_bkgd=plot_bkgd and ii==0,
             )
@@ -388,7 +444,7 @@ class SensEst(object):
             # ul_temp is a scalar - UL in number of evts is same for all DM masses
             
             sig_temp, ul_temp = fc_limits(
-                self._backgrounds[known_bkg_idx],
+                known_bkgd_func,
                 evts_sim[evts_sim >= threshold], # evt energies
                 en_interp, # efficiency curve energies
                 np.heaviside(en_interp - threshold, 1), # efficiency curve values
@@ -398,7 +454,7 @@ class SensEst(object):
                 res=res, # include smearing of DM spectrum
                 gauss_width=10, # if smearing, number of sigma to go out to
                 verbose=verbose, # print outs
-                drdefunction=None, # 
+                drdefunction=drdefunction, # 
                 hard_threshold=threshold,
                 sigma0=sigma0
             )
