@@ -653,6 +653,7 @@ def get_signal_rate(effenergies, effs, masslist, exposure,
     ehigh = max(effenergies)
     en_interp = np.logspace(np.log10(elow), np.log10(ehigh), int(1e5))
     
+    raw_signal_rates = np.zeros(len(masslist))
     signal_rates = np.zeros(len(masslist))
     for ii, mass in enumerate(masslist):
         if verbose:
@@ -669,6 +670,7 @@ def get_signal_rate(effenergies, effs, masslist, exposure,
         if res is not None:
             init_rate = gauss_smear(en_interp, init_rate, res, gauss_width=gauss_width)
             
+        raw_signal_rates[ii] = np.trapz(init_rate*exposure, x=en_interp)
         rate = init_rate * curr_exp(en_interp)
         integ_rate = integrate.cumtrapz(rate, x=en_interp, initial=0)
         tot_rate = integ_rate[-1]
@@ -677,17 +679,19 @@ def get_signal_rate(effenergies, effs, masslist, exposure,
         if verbose:
             print('Signal events at m={:0.3f} GeV & {:0.1e} cm2: {:0.3e} evts'.format(mass,sigma0,signal_rates[ii]))
         
-            fig, ax = plt.subplots(1,figsize=(4,3))
-            plt.plot(en_interp,rate,label='m={:0.3f}GeV,\n rate={:0.3e} evts'.format(mass,signal_rates[ii]))
-            plt.plot(en_interp,curr_exp(en_interp),ls='--')
+            fig, ax = plt.subplots(1,figsize=(6,4))
+            plt.plot(en_interp,init_rate*exposure,color='blue',label='DM recoil-No threshold')
+            plt.plot(en_interp,rate,color='red',ls='--',label='DM recoil-Threshold applied')
+            plt.plot(en_interp,curr_exp(en_interp),color='orange',ls='--',lw=0.7,label='Efficiency x Exposure')
             #ax.axvline(threshold,ls='--',color='red')
-            ax.set_ylabel('evts/kg/day/keV')
+            ax.set_ylabel('evts/keV')
             ax.set_xlabel('Energy [keV]')
             ax.set_xlim(elow,ehigh)
             ax.set_xscale('log')
             ax.set_yscale('log')
-            ax.legend()
+            ax.legend(loc='lower left',frameon=False)
+            ax.set_title('m={:0.3f}GeV,\n rate over threshold={:0.3e} evts'.format(mass,signal_rates[ii]))
             outdir = '/global/cfs/cdirs/lz/users/haselsco/TESSERACT_Limits/DarkLim/examples/'
-            plt.savefig(outdir+'testplot_{:0.3f}GeV.png'.format(mass),dpi=300, facecolor='white',bbox_inches='tight')
+            plt.savefig(outdir+'testplot_{:0.3f}GeV.png'.format(mass),facecolor='white',bbox_inches='tight')
                     
-    return signal_rates
+    return signal_rates, raw_signal_rates

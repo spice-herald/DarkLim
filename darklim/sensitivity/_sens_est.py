@@ -530,7 +530,7 @@ class SensEst(object):
         print('Median 90% CL UL =\t {:0.2f} evts'.format(median_ul))
         
         # get signal rates at the reference xsec for each DM mass:
-        dm_rates = get_signal_rate(
+        dm_rates, raw_dm_rates = get_signal_rate(
             en_interp, # efficiency curve energies
             np.heaviside(en_interp - threshold, 1), # efficiency curve values
             m_dms, # mass list
@@ -556,12 +556,16 @@ class SensEst(object):
             ax.set_xlim(0,max(uls))
             outdir = '/global/cfs/cdirs/lz/users/haselsco/TESSERACT_Limits/DarkLim/examples/'
             plt.savefig(outdir+pltname+'.png',dpi=300, facecolor='white',bbox_inches='tight')
-            
-        median_sig = (sigma0 / dm_rates) * median_ul
+        
+        # expected bkg rate, made to match m_dm len just to make analysis easier
+        exp_bkg = np.full_like(m_dms,median_exp)
+        
+        median_sig = (sigma0 / dm_rates) * median_ul # median UL
+        
         if verbose:
             print('Median sigma ULs',median_sig)
         
-        return m_dms, median_sig, median_ul
+        return m_dms, median_sig, median_ul, dm_rates, raw_dm_rates, exp_bkg
     
     def generate_background(self, e_high, e_low=1e-6, npts=1000,
                             plot_bkgd=False,verbose=False):

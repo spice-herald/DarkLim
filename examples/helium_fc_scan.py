@@ -17,12 +17,52 @@ energy_res = 0.373e-3 # energy resolution in keV
 he_gain = 0.15
 ##################################################################
 
-def run_scan_point(time_elapsed,mass_det,n_devices,coinc,window,var_threshold=False,save=True,savedir=None):
+def plot_dm_rates(m_dms,dm_rates,raw_dm_rates,sigma0,savename=None):
     
-    known_bkgs = [0,1]
+    #print('Signal events at m={:0.3f} GeV & {:0.1e} cm2: {:0.3e} evts'.format(mass,sigma0,signal_rates[ii]))
     
-    nexp = 250 # number of toys
-    m_dms = np.geomspace(0.005, 1, num=20)
+    # plot the evt rate vs mass:
+    fig, ax = plt.subplots(1,figsize=(6,4))
+    plt.plot(m_dms,dm_rates)
+    #plt.plot(en_interp,curr_exp(en_interp),ls='--')
+    #ax.axvline(threshold,ls='--',color='red')
+    ax.set_ylabel('Events')
+    ax.set_xlabel('Dark Matter Mass [GeV]')
+    ax.set_xlim(m_dms[0],m_dms[-1])
+    ax.set_xscale('log')
+    ax.set_yscale('log')
+    ax.set_title('Expected WIMP events at {:0.1e} cm2'.format(sigma0))
+    
+    if savename is not None:
+        plt.savefig(savename+'_rate.png',facecolor='white',bbox_inches='tight')
+    
+    # plot the acceptance vs mass:
+    fig, ax = plt.subplots(1,figsize=(6,4))
+    plt.plot(m_dms,dm_rates/raw_dm_rates)
+    ax.set_ylabel('Signal Acceptance')
+    ax.set_xlabel('Dark Matter Mass [GeV]')
+    ax.set_xlim(m_dms[0],m_dms[-1])
+    ax.set_xscale('log')
+    ax.set_yscale('log')
+    ax.set_ylim(1e-5,1)
+    #ax.set_title('Signal Acceptance')
+    
+    if savename is not None:
+        plt.savefig(savename+'_acceptance.png',facecolor='white',bbox_inches='tight')
+    
+    return
+
+def run_scan_point(nexp,time_elapsed,mass_det,n_devices,coinc,window,var_threshold=False,save=True,savedir=None):
+    
+    if coinc==1: # if coinc is 1, LEE is 'unknown'
+        known_bkgs = [0]
+    else:
+        known_bkgs = [0,1]
+    
+    #m_dms = np.geomspace(0.005, 2, num=25)
+    m_dms = np.concatenate((np.geomspace(0.01, 0.220, num=12),np.array([0.300]),np.geomspace(0.320, 2, num=12)))
+    #print(m_dms)
+    sigma0 = 1e-36
     
     ehigh = 10 # keV
     
@@ -45,7 +85,7 @@ def run_scan_point(time_elapsed,mass_det,n_devices,coinc,window,var_threshold=Fa
     print('Energy threshold: {:0.3f} eV; {:0.2f} sigma in each device'.format(threshold*1e3,nsigma))
     
     # run
-    m_dm, sig, ul = SE.run_fast_fc_sim( #SE.run_sim_fc(
+    m_dm, sig, ul, dm_rates, raw_dm_rates, exp_bkg = SE.run_fast_fc_sim(
         known_bkgs,
         threshold,
         ehigh,
@@ -56,20 +96,22 @@ def run_scan_point(time_elapsed,mass_det,n_devices,coinc,window,var_threshold=Fa
         plot_bkgd=False,
         res=np.sqrt(n_devices)*energy_res,
         verbose=False,
-        sigma0=1e-36,
+        sigma0=sigma0,
         use_drdefunction=True,
         pltname='ULs_{:0.0f}d_{:d}device_{:d}fold_{:0.0f}mus'.format(time_elapsed,n_devices,coinc,window/1e-6)
         #pltname=None
     )
-
-    #print('ULs (evts) = ',ul)
-    #print('ULs (xsec) = ',sig)
     
     # save results to txt file
     if save and savedir is not None:
         outname = './{:s}/HeRALD_FC_{:0.0f}d_{:d}device_{:d}fold_{:0.0f}mus.txt'.format(savedir,time_elapsed,n_devices,coinc,window/1e-6)
-        tot = np.column_stack( (m_dm, sig) )
-        np.savetxt(outname,tot,fmt=['%.5e','%0.5e'] ,delimiter=' ')
+        tot = np.column_stack( (m_dm, sig, dm_rates/raw_dm_rates, exp_bkg) )
+        np.savetxt(outname,tot,fmt=['%.5e','%0.5e','%0.5e','%0.5e'] ,delimiter=' ')
+    
+    # plot acceptance and DM evt rate:
+    savename = \
+    './{:s}/dmrate_{:0.0f}d_{:d}device_{:d}fold_{:0.0f}mus'.format(savedir,time_elapsed,n_devices,coinc,window/1e-6)
+    plot_dm_rates(m_dms,dm_rates,raw_dm_rates,sigma0,savename=savename)
     
     return
     
@@ -78,35 +120,44 @@ def helium_scan(results_dir):
     if not os.path.exists(results_dir):
         os.makedirs(results_dir)
     
-    #exposures = np.array([0.1,1,10]) # kg-d
-    #exposures = np.array([1]) # kg-d
+    nexp = 250 # number of toys
     
-    times = np.array([10])#1,10,50,100,200,500]) # d
+    var_threshold = False # vary 5sigma requirement based on coinc level
+    
+    times = np.array([1,2,5,10,20,50,75,100,200,500]) # d
     mass_det = 8.*0.14*1e-3 # mass in kg, = 8cc * 0.14g/cc
     exposures = times*mass_det
-    #print(times)
     
     n_devices = 4
     coinc = np.arange(2,5)
-    #coinc = np.array([2])
+    #coinc = np.array([1])
     window = 100e-6 # s
     
     for t in times:
         for n in coinc:
-            run_scan_point(t,mass_det,n_devices,n,window,var_threshold=True,save=True,savedir=results_dir)
-        
+            run_scan_point(
+                nexp,
+                t,
+                mass_det,
+                n_devices,
+                n,
+                window,
+                var_threshold=var_threshold,
+                save=True,
+                savedir=results_dir
+            )
         
     return
 
 # ------------------------------------------------------
 # ------------------------------------------------------
 def main():
-    results_dir = sys.argv[1]
-    #try: 
-    #    file = sys.argv[1]
-    #except:
-    #    print("Check inputs.\n")
-    #    return 1
+    
+    try: 
+        results_dir = sys.argv[1]
+    except:
+        print("Check inputs.\n")
+        return 1
     
     helium_scan(results_dir)
     return 0
