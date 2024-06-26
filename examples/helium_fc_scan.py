@@ -52,7 +52,7 @@ def plot_dm_rates(m_dms,dm_rates,raw_dm_rates,sigma0,savename=None):
     
     return
 
-def run_scan_point(nexp,time_elapsed,mass_det,n_devices,coinc,window,var_threshold=False,save=True,savedir=None):
+def run_scan_point(nexp,time_elapsed,mass_det,n_devices,coinc,window,change_box=True,var_threshold=False,save=True,savedir=None):
     
     if coinc==1: # if coinc is 1, LEE is 'unknown'
         known_bkgs = [0]
@@ -64,7 +64,10 @@ def run_scan_point(nexp,time_elapsed,mass_det,n_devices,coinc,window,var_thresho
     #print(m_dms)
     sigma0 = 1e-36
     
-    ehigh = 10 # keV
+    if change_box:
+        ehigh = darklim.sensitivity.edep_to_eobs(darklim.limit.drde_max_q(max(m_dms), tm=tm),he_gain) + 10*np.sqrt(n_devices)*energy_res
+    else:
+        ehigh = 10 # keV
     
     if var_threshold:
         nsigma = stats.norm.isf(stats.norm.sf(5)**(1/coinc))
@@ -83,6 +86,7 @@ def run_scan_point(nexp,time_elapsed,mass_det,n_devices,coinc,window,var_thresho
     print('Mass: {:0.4f} kg; Time: {:0.3f} d => Exposure: {:0.3f} kg-d'.format(SE.m_det,time_elapsed,SE.exposure))
     print('Coincidence: {:d}-fold in {:d} devices; {:0.1f} microsecond window'.format(coinc,n_devices,window/1e-6))
     print('Energy threshold: {:0.3f} eV; {:0.2f} sigma in each device'.format(threshold*1e3,nsigma))
+    print('ROI max: {:0.3f} keV for max DM mass of {:0.3f} GeV.'.format(ehigh,max(m_dms)))
     
     # run
     m_dm, sig, ul, dm_rates, raw_dm_rates, exp_bkg = SE.run_fast_fc_sim(
@@ -120,11 +124,15 @@ def helium_scan(results_dir):
     if not os.path.exists(results_dir):
         os.makedirs(results_dir)
     
-    nexp = 250 # number of toys
+    nexp = 200 # number of toys
     
-    var_threshold = False # vary 5sigma requirement based on coinc level
+    var_threshold = True # vary 5sigma requirement based on coinc level
+    change_box = True # vary upper limit of energy ROI based on DM mass
     
-    times = np.array([1,2,5,10,20,50,75,100,200,500]) # d
+    #times = np.array([1,2,5,10,20,50,75,100,200,500]) # d
+    #times = np.linspace(1,250,num=20, endpoint=True) # d
+    times = np.concatenate( (np.array([1,2,5,10]), np.linspace(15,400,num=20, endpoint=True)) ) #d
+
     mass_det = 8.*0.14*1e-3 # mass in kg, = 8cc * 0.14g/cc
     exposures = times*mass_det
     
@@ -142,6 +150,7 @@ def helium_scan(results_dir):
                 n_devices,
                 n,
                 window,
+                change_box=change_box,
                 var_threshold=var_threshold,
                 save=True,
                 savedir=results_dir

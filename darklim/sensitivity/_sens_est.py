@@ -4,7 +4,7 @@ from scipy import stats, special
 
 import mendeleev
 from darklim import constants
-from darklim.limit._limit import drde, optimuminterval, fc_limits, get_fc_ul, get_signal_rate
+from darklim.limit._limit import drde, drde_max_q, optimuminterval, fc_limits, get_fc_ul, get_signal_rate
 from darklim.sensitivity._random_sampling import pdf_sampling
 from darklim.sensitivity._plotting import RatePlot
 
@@ -488,6 +488,10 @@ class SensEst(object):
 
         if m_dms is None:
             m_dms = np.geomspace(0.5, 2, num=50)
+        
+        #if e_high is None:    # set upper energy range to max energy of DM recoil spectrum:
+        #    e_uppers = np.asarray([ edep_to_eobs(drde_max_q(m, tm=self.tm))+5*res for m in m_dms ])
+        #    e_high = max(e_uppers)
         
         en_interp = np.geomspace(e_low, e_high, num=npts)
         
