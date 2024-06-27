@@ -45,7 +45,7 @@ def plot_dm_rates(m_dms,dm_rates,raw_dm_rates,sigma0,savename=None):
     ax.set_xscale('log')
     ax.set_yscale('log')
     ax.set_ylim(1e-5,1)
-    #ax.set_title('Signal Acceptance')
+    ax.grid(ls='--',lw=0.3)
     
     if savename is not None:
         plt.savefig(savename+'_acceptance.png',facecolor='white',bbox_inches='tight')
@@ -60,7 +60,7 @@ def run_scan_point(nexp,time_elapsed,mass_det,n_devices,coinc,window,change_box=
         known_bkgs = [0,1]
     
     #m_dms = np.geomspace(0.005, 2, num=25)
-    m_dms = np.concatenate((np.geomspace(0.01, 0.220, num=12),np.array([0.300]),np.geomspace(0.320, 2, num=12)))
+    m_dms = np.concatenate((np.geomspace(0.08, 0.280, num=15),np.array([0.300]),np.geomspace(0.320, 2, num=12)))
     #print(m_dms)
     sigma0 = 1e-36
     
@@ -131,8 +131,10 @@ def helium_scan(results_dir):
     
     #times = np.array([1,2,5,10,20,50,75,100,200,500]) # d
     #times = np.linspace(1,250,num=20, endpoint=True) # d
-    times = np.concatenate( (np.array([1,2,5,10]), np.linspace(15,400,num=20, endpoint=True)) ) #d
-
+    
+    #times = np.concatenate( (np.array([1,2,5,10]), np.linspace(15,400,num=20, endpoint=True)) ) #d
+    times = np.array([30,183,365]) # 1, 6, and 12 months
+    
     mass_det = 8.*0.14*1e-3 # mass in kg, = 8cc * 0.14g/cc
     exposures = times*mass_det
     
