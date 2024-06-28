@@ -132,10 +132,14 @@ def helium_scan(results_dir):
     #times = np.array([1,2,5,10,20,50,75,100,200,500]) # d
     #times = np.linspace(1,250,num=20, endpoint=True) # d
     
-    #times = np.concatenate( (np.array([1,2,5,10]), np.linspace(15,400,num=20, endpoint=True)) ) #d
-    times = np.array([30,183,365]) # 1, 6, and 12 months
+    times = np.concatenate( (np.array([1,2,5,10]), np.linspace(15,400,num=20, endpoint=True), np.array([30,183,365])) ) #d
+    times = np.sort(times)
+    #times = np.array([30,183,365]) # 1, 6, and 12 months
     
-    mass_det = 8.*0.14*1e-3 # mass in kg, = 8cc * 0.14g/cc
+    #mass_det = 8.*0.14*1e-3 # mass in kg, = 8cc * 0.14g/cc
+    
+    mass_det = 10*1e-3 # mass in kg
+    
     exposures = times*mass_det
     
     n_devices = 4
