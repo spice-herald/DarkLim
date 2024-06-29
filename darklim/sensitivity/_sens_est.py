@@ -4,10 +4,11 @@ from scipy import stats, special
 
 import mendeleev
 from darklim import constants
-from darklim.limit._limit import drde, drde_max_q, optimuminterval, fc_limits, get_fc_ul, get_signal_rate
+from darklim.limit._limit import drde, optimuminterval, fc_limits, get_fc_ul, get_signal_rate
 from darklim.sensitivity._random_sampling import pdf_sampling
 from darklim.sensitivity._plotting import RatePlot
 
+import darklim.elf._elf as elf
 
 __all__ = [
     "calculate_substrate_mass",
@@ -186,7 +187,8 @@ class SensEst(object):
         #self.signal = None
         #if self.signal_name=='SI-NR':
         #    self.add_signal_model
-        
+
+
     def add_flat_bkgd(self, flat_rate):
         """
         Method for adding a flat background to the simulation.
@@ -332,7 +334,7 @@ class SensEst(object):
         sigs = []
 
         if m_dms is None:
-            m_dms = np.geomspace(0.5, 2, num=50)
+            m_dms = np.geomspace(0.01, 2, num=5)
 
         en_interp = np.geomspace(e_low, e_high, num=npts)
         
@@ -411,7 +413,7 @@ class SensEst(object):
         uls = []
 
         if m_dms is None:
-            m_dms = np.geomspace(0.5, 2, num=50)
+            m_dms = np.geomspace(0.01, 2, num=5)
         
         #if verbose:
         #    print('Running over the following masses:',m_dms)
@@ -428,6 +430,7 @@ class SensEst(object):
         drdefunction = None
         if use_drdefunction:
             drdefunction = [ lambda x,m: drde_wimp_obs( x, m, sigma0, self.tm, self.gain ) for m in m_dms ]
+
             #drdefunction = [ drde_obs( lambda x: drde(x,m,sigma0,tm=self.tm), self.gain ) for m in m_dms ]
             #drdefunction = [drde_obs(en_interp,lambda x: drde(x,m,sigma0,tm=self.tm),self.gain) for m in m_dms]
             
@@ -475,37 +478,71 @@ class SensEst(object):
             ax.axvline(ul,ls='--',color='red')
             ax.set_xlabel('Upper Limit [Events]')
             ax.set_xlim(0,max(np.asarray(uls)))
-            outdir = '/global/cfs/cdirs/lz/users/haselsco/TESSERACT_Limits/DarkLim/examples/'
+            outdir = '/Users/vetri/GitRepos/Test/DarkLim/examples/'
             plt.savefig(outdir+pltname+'.png',dpi=300, facecolor='white',bbox_inches='tight')
         
         return m_dms, sig, ul
     
     def run_fast_fc_sim(self, known_bkgs_list, threshold, e_high, e_low=1e-6, m_dms=None, nexp=1, npts=1000,
-                plot_bkgd=False, res=None, verbose=False, sigma0=1e-41,use_drdefunction=False,pltname=None):
+                plot_bkgd=False, res=None, verbose=False, sigma0=1e-41,use_drdefunction=False,pltname=None,
+                elf_model=None, elf_params=None, elf_target=None, savedir=None, return_only_drde=False):
         """
         Faster version of the above, avoiding repeat calculations of signal rates.
         """
 
         if m_dms is None:
-            m_dms = np.geomspace(0.5, 2, num=50)
-        
-        #if e_high is None:    # set upper energy range to max energy of DM recoil spectrum:
-        #    e_uppers = np.asarray([ edep_to_eobs(drde_max_q(m, tm=self.tm))+5*res for m in m_dms ])
-        #    e_high = max(e_uppers)
-        
-        en_interp = np.geomspace(e_low, e_high, num=npts)
-        
+            m_dms = np.geomspace(0.01, 2, num=5)
+
+
+
+        # create signal model functions at each mass
+        drdefunction = None
+
+        if use_drdefunction and elf_model is None:
+
+             drdefunction = [ lambda x,m: drde_wimp_obs( x, m, sigma0, self.tm, self.gain ) for m in m_dms ]
+
+        elif elf_model == 'electron' and elf_target == 'GaAs':
+
+            elf_mediator = elf_params['mediator'] if 'mediator' in elf_params else 'massless'
+            elf_kcut = elf_params['kcut'] if 'kcut' in elf_params else 0
+            elf_method = elf_params['method'] if 'method' in elf_params else 'grid'
+            elf_screening = elf_params['withscreening'] if 'withscreening' in elf_params else True
+            elf_suppress = elf_params['suppress_darkelf_output'] if 'suppress_darkelf_output' in elf_params else False
+
+            drdefunction = \
+                [elf.get_dRdE_lambda_GaAs_electron(mX_eV=m*1e9, sigmae=sigma0, mediator=elf_mediator,
+                                                    kcut=elf_kcut, method=elf_method, withscreening=elf_screening,
+                                                    suppress_darkelf_output=elf_suppress, gain=self.gain)
+                for m in m_dms]
+
+        elif elf_model == 'electron' and elf_target == 'Al2O3':
+
+            elf_mediator = elf_params['mediator'] if 'mediator' in elf_params else 'massless'
+            elf_kcut = elf_params['kcut'] if 'kcut' in elf_params else 0
+            elf_method = elf_params['method'] if 'method' in elf_params else 'grid'
+            elf_screening = elf_params['withscreening'] if 'withscreening' in elf_params else True
+            elf_suppress = elf_params['suppress_darkelf_output'] if 'suppress_darkelf_output' in elf_params else False
+
+            drdefunction = \
+                [elf.get_dRdE_lambda_Al2O3_electron(mX_eV=m*1e9, sigmae=sigma0, mediator=elf_mediator,
+                                                    kcut=elf_kcut, method=elf_method, withscreening=elf_screening,
+                                                    suppress_darkelf_output=elf_suppress, gain=self.gain)
+                for m in m_dms]
+
+        if return_only_drde:
+            return drdefunction
+
+
+
         # created summed 'known' background function:
         known_bkgd_func = lambda x: np.stack([bkgd(x) for ind,bkgd in enumerate(self._backgrounds) if ind in known_bkgs_list], axis=1,).sum(axis=1)
         print('Treating the following as known bkgs for FC limits: ')
         for idx in known_bkgs_list:
             print('   ',self._background_labels[idx])
-        
-        # create signal model functions at each mass
-        drdefunction = None
-        if use_drdefunction:
-            drdefunction = [ lambda x,m: drde_wimp_obs( x, m, sigma0, self.tm, self.gain ) for m in m_dms ]
-        
+
+        en_interp = np.geomspace(e_low, e_high, num=npts)
+ 
         uls = np.zeros(nexp)
         obs = np.zeros(nexp)
         exp = np.zeros(nexp)
@@ -532,7 +569,8 @@ class SensEst(object):
         print('Median Exp. Bkg =\t {:0.2f} evts'.format(median_exp))
         print('Median N Obs =\t {:0.2f} evts'.format(median_obs))
         print('Median 90% CL UL =\t {:0.2f} evts'.format(median_ul))
-        
+
+
         # get signal rates at the reference xsec for each DM mass:
         dm_rates, raw_dm_rates = get_signal_rate(
             en_interp, # efficiency curve energies
@@ -545,9 +583,10 @@ class SensEst(object):
             verbose=verbose, # print outs
             drdefunction=drdefunction, # 
             hard_threshold=e_low, #threshold,
-            sigma0=sigma0
+            sigma0=sigma0,
+            savedir=savedir
         )
-        
+
         if verbose:
             print('DM signal rates:',dm_rates)
         
@@ -558,7 +597,7 @@ class SensEst(object):
             ax.axvline(median_ul,ls='--',color='red')
             ax.set_xlabel('Upper Limit [Events]')
             ax.set_xlim(0,max(uls))
-            outdir = '/global/cfs/cdirs/lz/users/haselsco/TESSERACT_Limits/DarkLim/examples/'
+            outdir = '/Users/vetri/GitRepos/Test/DarkLim/examples/'
             plt.savefig(outdir+pltname+'.png',dpi=300, facecolor='white',bbox_inches='tight')
         
         # expected bkg rate, made to match m_dm len just to make analysis easier
