@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 import scipy.stats as stats
 
 import darklim
+from darklim import constants
 
 from multihist import Hist1d
 import time
@@ -74,6 +75,7 @@ def run_scan_point(nexp,time_elapsed,mass_det,n_devices,coinc,window,var_thresho
     SE = darklim.sensitivity.SensEst(mass_det, time_elapsed, eff=efficiency, tm=tm, gain=det_gain)
     SE.reset_sim()
     SE.add_flat_bkgd(1) # flat background of 1 DRU
+
     SE.add_nfold_lee_bkgd(m=n_devices,n=coinc,w=window)
     
     print('\nRunning with the following settings:')
@@ -88,11 +90,11 @@ def run_scan_point(nexp,time_elapsed,mass_det,n_devices,coinc,window,var_thresho
     raw_dm_rates = np.zeros_like(m_dms)
     exp_bkg = np.zeros_like(m_dms)
 
-    ehigh_list = []
     for i, mass in enumerate(m_dms):
 
         ehigh = 1 # keV
 
+        # First, figure out what the maximum energy from this dRdE is
         drdefunction = SE.run_fast_fc_sim(
             known_bkgs,
             threshold,
@@ -116,11 +118,9 @@ def run_scan_point(nexp,time_elapsed,mass_det,n_devices,coinc,window,var_thresho
             ehigh = 1.
         else:
             j = int(indices[0][-1])
-            ehigh = ehigh_guesses[j]
-        ehigh_list.append(ehigh)
-        continue
+            ehigh = ehigh_guesses[j] * 1.1
 
-
+        # Second, actually calculate the FC limit
         _, sig[i], ul[i], dm_rates[i], raw_dm_rates[i], exp_bkg[i] = SE.run_fast_fc_sim(
             known_bkgs,
             threshold,
@@ -141,9 +141,6 @@ def run_scan_point(nexp,time_elapsed,mass_det,n_devices,coinc,window,var_thresho
             elf_params=elf_params,
             )
 
-    print(ehigh_list) 
-    sys.exit()
-
     # save results to txt file
     if save and savedir is not None:
         outname = './{:s}/HeRALD_FC_{:0.0f}d_{:d}device_{:d}fold_{:0.0f}mus.txt'.format(savedir,time_elapsed,n_devices,coinc,window/1e-6)
@@ -162,23 +159,23 @@ def sapphire_scan(results_dir):
     if not os.path.exists(results_dir):
         os.makedirs(results_dir)
     
-    nexp = 200 # number of toys
+    nexp = 50 # number of toys
     
-    var_threshold = True # vary 5sigma requirement based on coinc level
+    var_threshold = False # vary 5sigma requirement based on coinc level
     
     times = np.array([1]) # d
-    mass_det = 8.*5.32*1e-3 # mass in kg, = 8cc * 3.98g/cc
+    mass_det = 8. * constants.Al2O3_density * 1e-3 # mass in kg, = 8cc
     exposures = times*mass_det
     
-    n_devices = 4
+    n_devices = 1
     coinc = np.array([1])
     window = 100e-6 # s
 
-    m_dms = np.geomspace(1e-4, 10, 20) # GeV
+    m_dms = np.geomspace(1e-4, 10, 50) # GeV
     sigma0 = 1e-36 # cm2 (might be DM-n or DM-e)
 
     elf_model='electron'
-    elf_params={'mediator': 'massless', 'kcut': 0, 'method': 'grid', 'withscreening': True, 'suppress_darkelf_output': False}
+    elf_params={'mediator': 'massive', 'kcut': 0, 'method': 'grid', 'withscreening': True, 'suppress_darkelf_output': False}
 
     f = open(results_dir + '/info.txt', 'w')
     f.write(datetime.datetime.now().strftime('%m/%d/%Y, %H:%M:%S') + '\n\n')
@@ -237,4 +234,4 @@ def main():
     return 0
 
 if __name__ == "__main__":
-         main()
+    main()
