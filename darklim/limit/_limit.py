@@ -16,6 +16,7 @@ import mendeleev
 
 import matplotlib.pyplot as plt
 
+
 __all__ = [
     "upper",
     "helmfactor",
@@ -610,7 +611,7 @@ def fc_limits(known_bkg_func, eventenergies, effenergies, effs, masslist, exposu
             ax.set_xscale('log')
             ax.set_yscale('log')
             ax.legend()
-            outdir = '/global/cfs/cdirs/lz/users/haselsco/TESSERACT_Limits/DarkLim/examples/'
+            outdir = '/Users/vetri/GitRepos/Test/DarkLim/examples/'
             plt.savefig(outdir+'testplot_{:0.3f}GeV.png'.format(mass),dpi=300, facecolor='white',bbox_inches='tight')
             
         sigma[ii] = (sigma0 / tot_rate) * ul
@@ -640,7 +641,8 @@ def get_fc_ul(known_bkg_func, eventenergies, threshold, ehigh, exposure, verbose
 
 def get_signal_rate(effenergies, effs, masslist, exposure,
                     tm="Si", res=None, gauss_width=10, verbose=False,
-                    drdefunction=None, hard_threshold=0.0, sigma0=1e-41):
+                    drdefunction=None, hard_threshold=0.0, sigma0=1e-41,
+                    savedir=''):
     """
     return the signal rate for each of the masses in masslist for the 
     given reference cross section, exposure, and efficiency curve.
@@ -665,7 +667,7 @@ def get_signal_rate(effenergies, effs, masslist, exposure,
         if drdefunction is None:
             init_rate = drde(en_interp, mass, sigma0, tm=tm)
         else:
-            init_rate = drdefunction[ii](en_interp,mass) # note here.. mass also an input
+            init_rate = drdefunction[ii](en_interp)
         
         if res is not None:
             init_rate = gauss_smear(en_interp, init_rate, res, gauss_width=gauss_width)
@@ -691,7 +693,7 @@ def get_signal_rate(effenergies, effs, masslist, exposure,
             ax.set_yscale('log')
             ax.legend(loc='lower left',frameon=False)
             ax.set_title('m={:0.3f}GeV,\n rate over threshold={:0.3e} evts'.format(mass,signal_rates[ii]))
-            outdir = '/global/cfs/cdirs/lz/users/haselsco/TESSERACT_Limits/DarkLim/examples/'
-            plt.savefig(outdir+'testplot_{:0.3f}GeV.png'.format(mass),facecolor='white',bbox_inches='tight')
-                    
+            outdir = '/Users/vetri/GitRepos/Test/DarkLim/examples/'
+            plt.savefig(outdir+savedir+'/testplot_{:0.3f}GeV.png'.format(mass),facecolor='white',bbox_inches='tight')
+ 
     return signal_rates, raw_signal_rates
