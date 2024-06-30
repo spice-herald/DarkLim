@@ -534,7 +534,8 @@ class SensEst(object):
 
         if use_drdefunction and elf_model is None:
 
-             drdefunction = [ lambda x,m: drde_wimp_obs( x, m, sigma0, self.tm, self.gain ) for m in m_dms ]
+            drdefunction = [(lambda x: drde_wimp_obs( x, m, sigma0, self.tm, self.gain )) for m in m_dms ]
+            print('Using WIMPs')
 
         elif elf_model == 'electron' and elf_target == 'GaAs':
 
@@ -561,6 +562,18 @@ class SensEst(object):
             drdefunction = \
                 [elf.get_dRdE_lambda_Al2O3_electron(mX_eV=m*1e9, sigmae=sigma0, mediator=elf_mediator,
                                                     kcut=elf_kcut, method=elf_method, withscreening=elf_screening,
+                                                    suppress_darkelf_output=elf_suppress, gain=self.gain)
+                for m in m_dms]
+
+        elif elf_model == 'phonon' and elf_target == 'Al2O3':
+
+            elf_mediator = elf_params['mediator'] if 'mediator' in elf_params else 'massless'
+            elf_suppress = elf_params['suppress_darkelf_output'] if 'suppress_darkelf_output' in elf_params else False
+            elf_darkphoton = elf_params['dark_photon'] if 'dark_photon' in elf_params else False
+
+            drdefunction = \
+                [elf.get_dRdE_lambda_Al2O3_phonon(mX_eV=m*1e9, sigman=sigma0, mediator=elf_mediator,
+                                                    dark_photon=elf_darkphoton,
                                                     suppress_darkelf_output=elf_suppress, gain=self.gain)
                 for m in m_dms]
 
@@ -631,7 +644,7 @@ class SensEst(object):
             ax.axvline(median_ul,ls='--',color='red')
             ax.set_xlabel('Upper Limit [Events]')
             ax.set_xlim(0,max(uls))
-            outdir = '/global/cfs/cdirs/lz/users/vvelan/Test/DarkLim/examples/'
+            outdir = '/Users/vetri/GitRepos/Test/DarkLim/examples/'
             plt.savefig(outdir+pltname+'.png',dpi=300, facecolor='white',bbox_inches='tight')
         
         # expected bkg rate, made to match m_dm len just to make analysis easier
