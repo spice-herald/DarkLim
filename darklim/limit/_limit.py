@@ -696,7 +696,7 @@ def get_signal_rate(effenergies, effs, masslist, exposure,
             ax.set_yscale('log')
             ax.legend(loc='lower left',frameon=False)
             ax.set_title('m={:0.3f}GeV,\n rate over threshold={:0.3e} evts'.format(mass,signal_rates[ii]))
-            outdir = '/global/cfs/cdirs/lz/users/vvelan/Test/DarkLim/'
+            outdir = '/global/cfs/cdirs/lz/users/vvelan/Test/DarkLim/examples/'
             plt.savefig(outdir+savedir+'/testplot_{:0.3f}GeV.png'.format(mass),facecolor='white',bbox_inches='tight')
  
     return signal_rates, raw_signal_rates
