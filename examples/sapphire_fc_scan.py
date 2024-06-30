@@ -111,8 +111,10 @@ def run_scan_point(nexp,time_elapsed,mass_det,n_devices,coinc,window,var_thresho
         drdefunction = drdefunction[0]
 
         ehigh_guesses = np.geomspace(1e-6, 1e3, 3000)
-        drdefunction_guesses = drdefunction(ehigh_guesses)
-        
+        try:
+            drdefunction_guesses = drdefunction(ehigh_guesses)
+        except ValueError:
+            drdefunction_guesses = np.array([drdefunction(en) for en in ehigh_guesses])
         indices = np.where(drdefunction_guesses > 0)
         if len(indices[0]) == 0:
             ehigh = 1.
@@ -171,11 +173,13 @@ def sapphire_scan(results_dir):
     coinc = np.array([1])
     window = 100e-6 # s
 
-    m_dms = np.geomspace(1e-4, 10, 50) # GeV
+    m_dms = np.geomspace(1, 100, 3) # GeV
     sigma0 = 1e-36 # cm2 (might be DM-n or DM-e)
 
-    elf_model='electron'
-    elf_params={'mediator': 'massive', 'kcut': 0, 'method': 'grid', 'withscreening': True, 'suppress_darkelf_output': False}
+#    elf_model='electron'
+#    elf_params={'mediator': 'massive', 'kcut': 0, 'method': 'grid', 'withscreening': True, 'suppress_darkelf_output': False}
+    elf_model='phonon'
+    elf_params={'mediator': 'massive', 'suppress_darkelf_output': False, 'dark_photon': False}
 
     f = open(results_dir + '/info.txt', 'w')
     f.write(datetime.datetime.now().strftime('%m/%d/%Y, %H:%M:%S') + '\n\n')
