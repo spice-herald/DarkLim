@@ -667,7 +667,10 @@ def get_signal_rate(effenergies, effs, masslist, exposure,
         if drdefunction is None:
             init_rate = drde(en_interp, mass, sigma0, tm=tm)
         else:
-            init_rate = drdefunction[ii](en_interp)
+            try:
+                init_rate = drdefunction[ii](en_interp)
+            except ValueError:
+                init_rate = np.array([drdefunction[ii](en) for en in en_interp])
         
         if res is not None:
             init_rate = gauss_smear(en_interp, init_rate, res, gauss_width=gauss_width)
