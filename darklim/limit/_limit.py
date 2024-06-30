@@ -500,7 +500,11 @@ def optimuminterval(eventenergies, effenergies, effs, masslist, exposure,
                 init_rate = gauss_smear(en_interp, init_rate, res, gauss_width=gauss_width)
             rate = init_rate * curr_exp(en_interp)
         else:
-            rate = drdefunction[ii](en_interp) * exposure
+            try:
+                rate = drdefunction[ii](en_interp) * exposure
+            except ValueError:
+                rate = np.array([drdefunction[ii](en) for en in en_interp]) * exposure
+
 
         integ_rate = integrate.cumtrapz(rate, x=en_interp, initial=0)
 
@@ -612,6 +616,7 @@ def fc_limits(known_bkg_func, eventenergies, effenergies, effs, masslist, exposu
             ax.set_yscale('log')
             ax.legend()
             outdir = '/global/cfs/cdirs/lz/users/vvelan/Test/DarkLim/examples/'
+
             plt.savefig(outdir+'testplot_{:0.3f}GeV.png'.format(mass),dpi=300, facecolor='white',bbox_inches='tight')
             
         sigma[ii] = (sigma0 / tot_rate) * ul

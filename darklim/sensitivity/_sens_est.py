@@ -293,7 +293,7 @@ class SensEst(object):
 
     def run_sim(self, threshold, e_high, e_low=1e-6, m_dms=None, nexp=1, npts=1000,
                 plot_bkgd=False, res=None, verbose=False, sigma0=1e-41,
-                elf_model=None, elf_params=None, elf_target=None):
+                elf_model=None, elf_params=None, elf_target=None, return_only_drde=False):
 
         """
         Method for running the simulation for getting the sensitivity
@@ -340,18 +340,21 @@ class SensEst(object):
 
         en_interp = np.geomspace(e_low, e_high, num=npts)
 
+        drdefunction = None
+
         if elf_model is None:
-            
-             drdefunction = [ lambda x,m: drde_wimp_obs( x, m, sigma0, self.tm, self.gain ) for m in m_dms ]
-            
+
+            drdefunction = [(lambda x: drde_wimp_obs( x, m, sigma0, self.tm, self.gain )) for m in m_dms ]
+            print('Using WIMPs')
+
         elif elf_model == 'electron' and elf_target == 'GaAs':
-        
+
             elf_mediator = elf_params['mediator'] if 'mediator' in elf_params else 'massless'
             elf_kcut = elf_params['kcut'] if 'kcut' in elf_params else 0
             elf_method = elf_params['method'] if 'method' in elf_params else 'grid'
             elf_screening = elf_params['withscreening'] if 'withscreening' in elf_params else True
             elf_suppress = elf_params['suppress_darkelf_output'] if 'suppress_darkelf_output' in elf_params else False
-        
+
             drdefunction = \
                 [elf.get_dRdE_lambda_GaAs_electron(mX_eV=m*1e9, sigmae=sigma0, mediator=elf_mediator,
                                                     kcut=elf_kcut, method=elf_method, withscreening=elf_screening,
@@ -371,6 +374,33 @@ class SensEst(object):
                                                     kcut=elf_kcut, method=elf_method, withscreening=elf_screening,
                                                     suppress_darkelf_output=elf_suppress, gain=self.gain)
                 for m in m_dms]
+
+        elif elf_model == 'phonon' and elf_target == 'Al2O3':
+
+            elf_mediator = elf_params['mediator'] if 'mediator' in elf_params else 'massless'
+            elf_suppress = elf_params['suppress_darkelf_output'] if 'suppress_darkelf_output' in elf_params else False
+            elf_darkphoton = elf_params['dark_photon'] if 'dark_photon' in elf_params else False
+
+            drdefunction = \
+                [elf.get_dRdE_lambda_Al2O3_phonon(mX_eV=m*1e9, sigman=sigma0, mediator=elf_mediator,
+                                                    dark_photon=elf_darkphoton,
+                                                    suppress_darkelf_output=elf_suppress, gain=self.gain)
+                for m in m_dms]
+
+        elif elf_model == 'phonon' and elf_target == 'GaAs':
+            
+            elf_mediator = elf_params['mediator'] if 'mediator' in elf_params else 'massless'
+            elf_suppress = elf_params['suppress_darkelf_output'] if 'suppress_darkelf_output' in elf_params else False
+            elf_darkphoton = elf_params['dark_photon'] if 'dark_photon' in elf_params else False
+            
+            drdefunction = \
+                [elf.get_dRdE_lambda_GaAs_phonon(mX_eV=m*1e9, sigman=sigma0, mediator=elf_mediator,
+                                                    dark_photon=elf_darkphoton,
+                                                    suppress_darkelf_output=elf_suppress, gain=self.gain)
+                for m in m_dms]
+
+        if return_only_drde:
+            return drdefunction
 
 
  
@@ -573,6 +603,18 @@ class SensEst(object):
 
             drdefunction = \
                 [elf.get_dRdE_lambda_Al2O3_phonon(mX_eV=m*1e9, sigman=sigma0, mediator=elf_mediator,
+                                                    dark_photon=elf_darkphoton,
+                                                    suppress_darkelf_output=elf_suppress, gain=self.gain)
+                for m in m_dms]
+
+        elif elf_model == 'phonon' and elf_target == 'GaAs':
+            
+            elf_mediator = elf_params['mediator'] if 'mediator' in elf_params else 'massless'
+            elf_suppress = elf_params['suppress_darkelf_output'] if 'suppress_darkelf_output' in elf_params else False
+            elf_darkphoton = elf_params['dark_photon'] if 'dark_photon' in elf_params else False
+            
+            drdefunction = \
+                [elf.get_dRdE_lambda_GaAs_phonon(mX_eV=m*1e9, sigman=sigma0, mediator=elf_mediator,
                                                     dark_photon=elf_darkphoton,
                                                     suppress_darkelf_output=elf_suppress, gain=self.gain)
                 for m in m_dms]
