@@ -164,13 +164,10 @@ def get_dRdE_lambda_GaAs_electron(mX_eV=1e8, mediator='massless', sigmae=1e-31, 
 
 
 
-
-def get_dRdE_lambda_GaAs_phonon(mX_eV=1e8, mediator='massless', sigmae=1e-31, suppress_darkelf_output=False, gain=1.):
+def get_dRdE_lambda_GaAs_phonon(mX_eV=1e8, mediator='massless', sigman=1e-31, dark_photon=False, suppress_darkelf_output=False, gain=1.):
     """
     Function to get an anonymous lambda function, which calculates dRdE
-    for DM-electron scattering in GaAs via phonons given only deposited
-    energy. We return the total rate from both single-photon and
-    multi-phonon interactions (by adding these together).
+    for DM-nuclear scattering via GaAs in Al2O3 given only deposited energy.
 
     Parameters
     ----------
@@ -180,7 +177,9 @@ def get_dRdE_lambda_GaAs_phonon(mX_eV=1e8, mediator='massless', sigmae=1e-31, su
         Dark photon mediator mass. Must be "massive" (infinity) or
         "massless" (zero).
     sigman : float
-        DM-nuclon scattering cross section in cm^2
+        DM-nucleon scattering cross section in cm^2
+    dark_photon : bool
+        Whether to treat this as a dark photon
     suppress_darkelf_output : bool
         Whether to suppress the (useful but long) output that DarkELF gives
         when loading a material's properties.
@@ -192,30 +191,20 @@ def get_dRdE_lambda_GaAs_phonon(mX_eV=1e8, mediator='massless', sigmae=1e-31, su
 
     """
 
-    # Set up DarkELF Al2O3 (sapphire) object
+    # Set up DarkELF GaAs object
     if suppress_darkelf_output:
         print('WARNING: You are suppressing DarkELF output')
         with io.capture_output() as captured:
-            gaas_single = darkelf(target='GaAs',phonon_filename="GaAs_epsphonon_data10K.dat")
-            gaas_multi = darkelf(target='GaAs')
+            gaas = darkelf(target='GaAs', filename="GaAs_mermin.dat", phonon_filename='GaAs_epsphonon_data10K.dat')
     else:
-        gaas_single = darkelf(target='GaAs',phonon_filename="GaAs_epsphonon_data10K.dat")
-        gaas_multi = darkelf(target='GaAs')
+        gaas = darkelf(target='GaAs', filename="GaAs_mermin.dat", phonon_filename='GaAs_epsphonon_data10K.dat')
 
     # Create anonymous function to get rate with only deposited energy
     # Note DarkELF expects recoil energies and WIMP masses in eV, and returns rates in counts/kg/yr/eV
     # But DarkLim expects recoil energies in keV, WIMP masses in GeV, and rates in counts/kg/day/keV (DRU)
-    if mediator == 'massless':
-        gaas_single.update_params(mX=mX_eV, mMed=0)
-        gaas_multi.update_params(mX=mX_eV, mMed=0)
-    elif mediator == 'massive':
-        gaas_single.update_params(mX=mX_eV, mMed=1e11)
-        gaas_multi.update_params(mX=mX_eV, mMed=1e11)
-    fun = lambda keV : (1000 / 365.25) * \
-            (gaas_single.dRdomega_phonon(keV * 1000, sigmae=sigmae)
-             + gaas_multi._dR_domega_multiphonons_no_single(keV * 1000, ))
+    gaas.update_params(mX=mX_eV, mediator=mediator)
+    fun = lambda keV : gaas._dR_domega_multiphonons_no_single(keV * 1000 / gain, sigman=sigman, dark_photon=dark_photon) * \
+            (1000 / 365.25) / gain
 
     return fun
-
-
 
