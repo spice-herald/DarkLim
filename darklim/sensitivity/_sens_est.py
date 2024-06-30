@@ -644,7 +644,7 @@ class SensEst(object):
             ax.axvline(median_ul,ls='--',color='red')
             ax.set_xlabel('Upper Limit [Events]')
             ax.set_xlim(0,max(uls))
-            outdir = '/Users/vetri/GitRepos/Test/DarkLim/examples/'
+            outdir = '/global/cfs/cdirs/lz/users/vvelan/Test/DarkLim/examples/'
             plt.savefig(outdir+pltname+'.png',dpi=300, facecolor='white',bbox_inches='tight')
         
         # expected bkg rate, made to match m_dm len just to make analysis easier
