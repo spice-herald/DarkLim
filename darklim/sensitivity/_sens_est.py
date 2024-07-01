@@ -9,6 +9,7 @@ from darklim.sensitivity._random_sampling import pdf_sampling
 from darklim.sensitivity._plotting import RatePlot
 
 import darklim.elf._elf as elf
+import darklim.detector._detector as detector
 
 __all__ = [
     "calculate_substrate_mass",
@@ -293,7 +294,8 @@ class SensEst(object):
 
     def run_sim(self, threshold, e_high, e_low=1e-6, m_dms=None, nexp=1, npts=1000,
                 plot_bkgd=False, res=None, verbose=False, sigma0=1e-41,
-                elf_model=None, elf_params=None, elf_target=None, return_only_drde=False):
+                elf_model=None, elf_params=None, elf_target=None,
+                gaas_params=None, return_only_drde=False):
 
         """
         Method for running the simulation for getting the sensitivity
@@ -347,20 +349,6 @@ class SensEst(object):
             drdefunction = [(lambda x: drde_wimp_obs( x, m, sigma0, self.tm, self.gain )) for m in m_dms ]
             print('Using WIMPs')
 
-        elif elf_model == 'electron' and elf_target == 'GaAs':
-
-            elf_mediator = elf_params['mediator'] if 'mediator' in elf_params else 'massless'
-            elf_kcut = elf_params['kcut'] if 'kcut' in elf_params else 0
-            elf_method = elf_params['method'] if 'method' in elf_params else 'grid'
-            elf_screening = elf_params['withscreening'] if 'withscreening' in elf_params else True
-            elf_suppress = elf_params['suppress_darkelf_output'] if 'suppress_darkelf_output' in elf_params else False
-
-            drdefunction = \
-                [elf.get_dRdE_lambda_GaAs_electron(mX_eV=m*1e9, sigmae=sigma0, mediator=elf_mediator,
-                                                    kcut=elf_kcut, method=elf_method, withscreening=elf_screening,
-                                                    suppress_darkelf_output=elf_suppress, gain=self.gain)
-                for m in m_dms]
-
         elif elf_model == 'electron' and elf_target == 'Al2O3':
 
             elf_mediator = elf_params['mediator'] if 'mediator' in elf_params else 'massless'
@@ -387,6 +375,20 @@ class SensEst(object):
                                                     suppress_darkelf_output=elf_suppress, gain=self.gain)
                 for m in m_dms]
 
+        elif elf_model == 'electron' and elf_target == 'GaAs':
+
+            elf_mediator = elf_params['mediator'] if 'mediator' in elf_params else 'massless'
+            elf_kcut = elf_params['kcut'] if 'kcut' in elf_params else 0
+            elf_method = elf_params['method'] if 'method' in elf_params else 'grid'
+            elf_screening = elf_params['withscreening'] if 'withscreening' in elf_params else True
+            elf_suppress = elf_params['suppress_darkelf_output'] if 'suppress_darkelf_output' in elf_params else False
+
+            drdefunction = \
+                [elf.get_dRdE_lambda_GaAs_electron(mX_eV=m*1e9, sigmae=sigma0, mediator=elf_mediator,
+                                                    kcut=elf_kcut, method=elf_method, withscreening=elf_screening,
+                                                    suppress_darkelf_output=elf_suppress, gain=1.)
+                for m in m_dms]
+
         elif elf_model == 'phonon' and elf_target == 'GaAs':
             
             elf_mediator = elf_params['mediator'] if 'mediator' in elf_params else 'massless'
@@ -399,11 +401,31 @@ class SensEst(object):
                                                     suppress_darkelf_output=elf_suppress, gain=self.gain)
                 for m in m_dms]
 
+
+        if self.tm == 'GaAs' and gaas_params is not None:
+
+            for j, m in enumerate(m_dms):
+                E_deposited_keV_arr = np.geomspace(0.1e-3, 800, int(1e4))
+                dRdE_deposited_DRU_arr = drdefunction[j](E_deposited_keV_arr)
+
+                check = sum(dRdE_deposited_DRU_arr > 0)
+                if check == 0:
+                    continue
+
+                E_observed_keV_arr, dRdE_observed_DRU_arr, _ = \
+                    detector.convert_dRdE_dep_to_obs_gaas(E_deposited_keV_arr, dRdE_deposited_DRU_arr,
+                                                     pce=gaas_params['pce'],
+                                                     lce_per_channel=gaas_params['lce_per_channel'],
+                                                     res=gaas_params['res'],
+                                                     n_coincidence_light=gaas_params['n_coincidence_light'],
+                                                     calorimeter_threshold_eV=gaas_params['calorimeter_threshold_eV'])
+
+                drdefunction[j] = lambda E: np.interp(E, E_observed_keV_arr, dRdE_observed_DRU_arr)
+            
+
         if return_only_drde:
             return drdefunction
 
-
- 
         for ii in range(nexp):
             evts_sim = self._generate_background(
                 en_interp, plot_bkgd=plot_bkgd and ii==0,
@@ -549,7 +571,7 @@ class SensEst(object):
     
     def run_fast_fc_sim(self, known_bkgs_list, threshold, e_high, e_low=1e-6, m_dms=None, nexp=1, npts=1000,
                 plot_bkgd=False, res=None, verbose=False, sigma0=1e-41,use_drdefunction=False,pltname=None,
-                elf_model=None, elf_params=None, elf_target=None, savedir=None, return_only_drde=False):
+                elf_model=None, elf_params=None, elf_target=None, savedir=None, return_only_drde=False, gaas_params=None):
         """
         Faster version of the above, avoiding repeat calculations of signal rates.
         """
@@ -618,6 +640,22 @@ class SensEst(object):
                                                     dark_photon=elf_darkphoton,
                                                     suppress_darkelf_output=elf_suppress, gain=self.gain)
                 for m in m_dms]
+
+        if self.tm == 'GaAs' and gaas_params is not None:
+
+            for j, m in enumerate(m_dms):
+                E_deposited_keV_arr = np.geomspace(0.1e-3, 800, int(1e4))
+                dRdE_deposited_DRU_arr = drdefunction[j](E_deposited_keV_arr)
+
+                E_observed_keV_arr, dRdE_observed_DRU_arr, _ = \
+                    detector.convert_dRdE_dep_to_obs_gaas(E_deposited_keV_arr, dRdE_deposited_DRU_arr,
+                                                     pce=gaas_params['pce'],
+                                                     lce_per_channel=gaas_params['lce_per_channel'],
+                                                     res=gaas_params['res'],
+                                                     n_coincidence_light=gaas_params['n_coincidence_light'],
+                                                     calorimeter_threshold_eV=gaas_params['calorimeter_threshold_eV'])
+
+                drdefunction[j] = lambda E: np.interp(E, E_observed_keV_arr, dRdE_observed_DRU_arr)
 
         if return_only_drde:
             return drdefunction

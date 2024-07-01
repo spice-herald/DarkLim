@@ -11,6 +11,9 @@ import matplotlib as mpl
 def get_deposited_energy_gaas(E_recoil_eV, pce, lce_per_channel, res, n_coincidence_light, threshold_eV, n_samples=1):
 
     E_light_eV = constants.GaAs_light_fraction * E_recoil_eV
+    #print('E recoil eV', E_recoil_eV)
+    #print('GaAs light fraction', constants.GaAs_light_fraction)
+    #print('E light eV', E_light_eV)
 
     n_photons_generated_average = np.floor(E_light_eV / constants.bandgap_GaAs_eV)
     if n_photons_generated_average == 0:
@@ -19,6 +22,9 @@ def get_deposited_energy_gaas(E_recoil_eV, pce, lce_per_channel, res, n_coincide
         else:
             return np.full(n_samples, 0.)
 
+    #print('LCE per channel', lce_per_channel, type(lce_per_channel))
+    #print('photons generated', n_photons_generated_average, type(n_photons_generated_average))
+    #print('n samples', n_samples, type(n_samples))
     n_photons_detected_ch1 = np.random.binomial(n_photons_generated_average, lce_per_channel, n_samples)
     n_photons_detected_ch2 = np.random.binomial(n_photons_generated_average, lce_per_channel, n_samples)
 
@@ -40,7 +46,7 @@ def get_deposited_energy_gaas(E_recoil_eV, pce, lce_per_channel, res, n_coincide
 
 
 
-def convert_dRdE_dep_to_obs(E_dep_keV, dRdE_dep_DRU, pce=0.40, lce_per_channel=0.10, res=0.10, n_coincidence_light=1, calorimeter_threshold_eV=0.37, E_min_keV=None, E_max_keV=None, n_samples=int(1e6)):
+def convert_dRdE_dep_to_obs_gaas(E_dep_keV, dRdE_dep_DRU, pce=0.40, lce_per_channel=0.10, res=0.10, n_coincidence_light=1, calorimeter_threshold_eV=0.37, E_min_keV=None, E_max_keV=None, n_samples=int(1e6)):
 
     # Reduce data to the appropriate energy range
     if E_min_keV is None or E_min_keV < E_dep_keV[0]:
@@ -62,8 +68,14 @@ def convert_dRdE_dep_to_obs(E_dep_keV, dRdE_dep_DRU, pce=0.40, lce_per_channel=0
     energies_sim_keV = inv_cdf(samples)
     energies_obs_keV = np.zeros_like(energies_sim_keV)
     energies_obs_keV = np.copy(energies_sim_keV)
+    #print(f'Out of {len(energies_sim_keV)} energies, {sum(np.isnan(energies_sim_keV))} are nan')
+
     for i, E in enumerate(energies_sim_keV):
         energies_obs_keV[i] = get_deposited_energy_gaas(E * 1000, pce, lce_per_channel, res, n_coincidence_light, calorimeter_threshold_eV) / 1000
+
+    # Perhaps no energy is ever observed
+    if sum(energies_obs_keV > 0) == 0:
+        return E_pdf, np.zeros_like(dRdE_pdf), np.array([])
 
     # Convert to E vs dRdE that we can later interpolate from
     # Normalize to the number of events that are detected
