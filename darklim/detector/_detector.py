@@ -11,9 +11,6 @@ import matplotlib as mpl
 def get_deposited_energy_gaas(E_recoil_eV, pce, lce_per_channel, res, n_coincidence_light, threshold_eV, n_samples=1):
 
     E_light_eV = constants.GaAs_light_fraction * E_recoil_eV
-    #print('E recoil eV', E_recoil_eV)
-    #print('GaAs light fraction', constants.GaAs_light_fraction)
-    #print('E light eV', E_light_eV)
 
     n_photons_generated_average = np.floor(E_light_eV / constants.bandgap_GaAs_eV)
     if n_photons_generated_average == 0:
@@ -22,9 +19,6 @@ def get_deposited_energy_gaas(E_recoil_eV, pce, lce_per_channel, res, n_coincide
         else:
             return np.full(n_samples, 0.)
 
-    #print('LCE per channel', lce_per_channel, type(lce_per_channel))
-    #print('photons generated', n_photons_generated_average, type(n_photons_generated_average))
-    #print('n samples', n_samples, type(n_samples))
     n_photons_detected_ch1 = np.random.binomial(n_photons_generated_average, lce_per_channel, n_samples)
     n_photons_detected_ch2 = np.random.binomial(n_photons_generated_average, lce_per_channel, n_samples)
 
@@ -68,7 +62,6 @@ def convert_dRdE_dep_to_obs_gaas(E_dep_keV, dRdE_dep_DRU, pce=0.40, lce_per_chan
     energies_sim_keV = inv_cdf(samples)
     energies_obs_keV = np.zeros_like(energies_sim_keV)
     energies_obs_keV = np.copy(energies_sim_keV)
-    #print(f'Out of {len(energies_sim_keV)} energies, {sum(np.isnan(energies_sim_keV))} are nan')
 
     for i, E in enumerate(energies_sim_keV):
         energies_obs_keV[i] = get_deposited_energy_gaas(E * 1000, pce, lce_per_channel, res, n_coincidence_light, calorimeter_threshold_eV) / 1000
