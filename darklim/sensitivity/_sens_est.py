@@ -406,7 +406,11 @@ class SensEst(object):
 
             for j, m in enumerate(m_dms):
                 E_deposited_keV_arr = np.geomspace(0.1e-3, 800, int(1e4))
-                dRdE_deposited_DRU_arr = drdefunction[j](E_deposited_keV_arr)
+                try:
+                    dRdE_deposited_DRU_arr = drdefunction[j](E_deposited_keV_arr)
+                except ValueError:
+                    dRdE_deposited_DRU_arr = np.array([drdefunction[j](en) for en in E_deposited_keV_arr])
+
 
                 check = sum(dRdE_deposited_DRU_arr > 0)
                 if check == 0:
