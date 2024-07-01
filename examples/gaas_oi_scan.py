@@ -16,8 +16,7 @@ import datetime
 efficiency = 1.0
 tm = 'GaAs' # target name
 energy_res = 0.373e-3 # energy resolution in keV
-
-det_gain = 0.40
+det_gain = 1.
 
 ##################################################################
 
@@ -57,7 +56,7 @@ def plot_dm_rates(m_dms,dm_rates,raw_dm_rates,sigma0,savename=None):
     return
 
 def run_scan_point(nexp,time_elapsed,mass_det,n_devices,coinc,window,var_threshold=False,save=True,savedir=None,
-    m_dms=np.geomspace(0.0001,5,50),sigma0=1e-36,elf_model=None, elf_target=None, elf_params=None):
+    m_dms=np.geomspace(0.0001,5,50),sigma0=1e-36,elf_model=None, elf_target=None, elf_params=None, gaas_params=None):
     
     if coinc==1: # if coinc is 1, LEE is 'unknown'
         known_bkgs = [0]
@@ -113,7 +112,8 @@ def run_scan_point(nexp,time_elapsed,mass_det,n_devices,coinc,window,var_thresho
             elf_model=elf_model,
             elf_target=elf_target,
             elf_params=elf_params,
-            return_only_drde=True
+            return_only_drde=True,
+            gaas_params=None
             )
         drdefunction = drdefunction[0]
 
@@ -145,7 +145,8 @@ def run_scan_point(nexp,time_elapsed,mass_det,n_devices,coinc,window,var_thresho
             elf_model=elf_model,
             elf_params=elf_params,
             elf_target=elf_target,
-            return_only_drde=False)
+            return_only_drde=False,
+            gaas_params=gaas_params)
 
         print(f'Done mass = {mass}, sigma = {sig[i]}')
 
@@ -162,24 +163,32 @@ def gaas_scan(results_dir):
     if not os.path.exists(results_dir):
         os.makedirs(results_dir)
     
-    nexp = 5 # number of toys
+    nexp = 1 # number of toys
     
     var_threshold = False # vary 5sigma requirement based on coinc level
     
-    times = np.array([1]) # d
-    mass_det = 8. * constants.GaAs_density * 1e-3 # mass in kg, = 8cc
+    times = np.array([100]) # d
+    mass_det = 8. * constants.Al2O3_density * 1e-3 # mass in kg, = 8cc
     exposures = times*mass_det
     
-    n_devices = 4
+    n_devices = 2
     coinc = np.array([2])
     window = 100e-6 # s
 
-    m_dms, sigma0, _, _ = np.loadtxt('results_gaas_fc_phonon_massless_scalar_001_days/HeRALD_FC_1d_4device_2fold_100mus.txt').transpose()
+#    m_dms = np.array(list(np.geomspace(0.040, 10, 25)) + list(np.geomspace(11, 100, 8)) + list(np.geomspace(200, 1000, 3)))
+    m_dms = np.geomspace(1e-3, 1e3, 7)
+    sigma0 = np.full_like(m_dms, 1e-37)
 
-#    elf_model='electron'
-#    elf_params={'mediator': 'massless', 'kcut': 0, 'method': 'grid', 'withscreening': True, 'suppress_darkelf_output': False}
-    elf_model='phonon'
-    elf_params={'mediator': 'massless', 'suppress_darkelf_output': False, 'dark_photon': False}
+    elf_model='electron'
+    elf_params={'mediator': 'massive', 'kcut': 0, 'method': 'grid', 'withscreening': True, 'suppress_darkelf_output': False}
+#    elf_model='phonon'
+#    elf_params={'mediator': 'massive', 'suppress_darkelf_output': False, 'dark_photon': False}
+#    elf_model = None
+#    elf_params = {}
+
+    gaas_params = {'pce': 0.4, 'lce_per_channel': 0.10, 'res': 0.10,
+                    'n_coincidence_light': (n_devices-1),
+                    'calorimeter_threshold_eV': (5 * energy_res / 1000)} 
 
     f = open(results_dir + '/info.txt', 'w')
     f.write(datetime.datetime.now().strftime('%m/%d/%Y, %H:%M:%S') + '\n\n')
@@ -196,6 +205,7 @@ def gaas_scan(results_dir):
     f.write('Variable resolution: ' + str(var_threshold) + '\n')
     f.write('ELF model: ' + str(elf_model) + '\n')
     f.write('ELF params: ' + str(elf_params) + '\n') 
+    f.write('GaAs params: ' + str(gaas_params) + '\n')
     f.close()
     
     
@@ -216,6 +226,7 @@ def gaas_scan(results_dir):
                 elf_target=tm,
                 elf_model=elf_model,
                 elf_params=elf_params,
+                gaas_params=gaas_params
             )
         
     return
