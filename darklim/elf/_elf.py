@@ -55,7 +55,7 @@ def get_dRdE_lambda_Al2O3_electron(mX_eV=1e8, mediator='massless', sigmae=1e-31,
     # Note DarkELF expects recoil energies and WIMP masses in eV, and returns rates in counts/kg/yr/eV
     # But DarkLim expects recoil energies in keV, WIMP masses in GeV, and rates in counts/kg/day/keV (DRU)
     sapphire.update_params(mX=mX_eV, mediator=mediator)
-    fun = lambda keV : np.heaviside(keV * 1000 / gain - 2 * constants.bandgap_Al2O3_eV, 1) * \
+    fun = lambda keV : np.heaviside(keV * 1000 / gain - constants.bandgap_Al2O3_eV, 1) * \
             sapphire.dRdomega_electron(keV * 1000 / gain, method=method, sigmae=sigmae, kcut=kcut, withscreening=withscreening) * \
             (1000 / 365.25) / gain
 
@@ -155,7 +155,7 @@ def get_dRdE_lambda_GaAs_electron(mX_eV=1e8, mediator='massless', sigmae=1e-31, 
     # Note DarkELF expects recoil energies and WIMP masses in eV, and returns rates in counts/kg/yr/eV
     # But DarkLim expects recoil energies in keV, WIMP masses in GeV, and rates in counts/kg/day/keV (DRU)
     gaas.update_params(mX=mX_eV, mediator=mediator)
-    fun = lambda keV : np.heaviside(keV * 1000 / gain - 2 * constants.bandgap_GaAs_eV, 1) * \
+    fun = lambda keV : np.heaviside(keV * 1000 / gain - constants.bandgap_GaAs_eV, 1) * \
             gaas.dRdomega_electron(keV * 1000 / gain, method=method, sigmae=sigmae, kcut=kcut, withscreening=withscreening) * \
             (1000 / 365.25) / gain
 
