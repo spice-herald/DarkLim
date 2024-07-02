@@ -8,7 +8,7 @@ import darklim.sensitivity._sens_est as sens_est
 import matplotlib.pyplot as plt
 import matplotlib as mpl
 
-def get_deposited_energy_gaas(E_recoil_eV, pce, lce_per_channel, res, n_coincidence_light, threshold_eV, coincidence_window_us=100., phonon_tau_us=100., n_samples=1):
+def get_deposited_energy_gaas(E_recoil_eV, pce, lce_per_channel, res, n_coincidence_light, threshold_eV, coincidence_window_us, phonon_tau_us, n_samples=1):
 
     # Get the light signal in each channel
     E_light_eV = constants.GaAs_light_fraction * E_recoil_eV
@@ -47,7 +47,8 @@ def get_deposited_energy_gaas(E_recoil_eV, pce, lce_per_channel, res, n_coincide
 
 
 
-def convert_dRdE_dep_to_obs_gaas(E_dep_keV, dRdE_dep_DRU, pce=0.40, lce_per_channel=0.10, res=0.10, n_coincidence_light=1, calorimeter_threshold_eV=0.37, E_min_keV=None, E_max_keV=None, n_samples=int(1e6)):
+def convert_dRdE_dep_to_obs_gaas(E_dep_keV, dRdE_dep_DRU, pce=0.40, lce_per_channel=0.10, res=0.10, n_coincidence_light=1,
+    calorimeter_threshold_eV=0.37, coincidence_window_us=100., phonon_tau_us=100., E_min_keV=None, E_max_keV=None, n_samples=int(1e6)):
 
     # Reduce data to the appropriate energy range
     if E_min_keV is None or E_min_keV < E_dep_keV[0]:
@@ -71,7 +72,8 @@ def convert_dRdE_dep_to_obs_gaas(E_dep_keV, dRdE_dep_DRU, pce=0.40, lce_per_chan
     energies_obs_keV = np.copy(energies_sim_keV)
 
     for i, E in enumerate(energies_sim_keV):
-        energies_obs_keV[i] = get_deposited_energy_gaas(E * 1000, pce, lce_per_channel, res, n_coincidence_light, calorimeter_threshold_eV) / 1000
+        energies_obs_keV[i] = get_deposited_energy_gaas(E * 1000, pce, lce_per_channel, res, n_coincidence_light, calorimeter_threshold_eV,
+            coincidence_window_us, phonon_tau_us) / 1000
 
     # Perhaps no energy is ever observed
     if sum(energies_obs_keV > 0) == 0:

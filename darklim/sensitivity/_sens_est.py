@@ -422,9 +422,13 @@ class SensEst(object):
                                                      lce_per_channel=gaas_params['lce_per_channel'],
                                                      res=gaas_params['res'],
                                                      n_coincidence_light=gaas_params['n_coincidence_light'],
-                                                     calorimeter_threshold_eV=gaas_params['calorimeter_threshold_eV'])
+                                                     calorimeter_threshold_eV=gaas_params['calorimeter_threshold_eV'],
+                                                     coincidence_window_us=gaas_params['coincidence_window_us'],
+                                                     phonon_tau_us=gaas_params['phonon_tau_us'])
 
-                drdefunction[j] = lambda E: np.interp(E, E_observed_keV_arr, dRdE_observed_DRU_arr)
+
+                print(f'In run_sim(). The integral is {sum(dRdE_observed_DRU_arr[1:] * np.diff(E_observed_keV_arr))} cts/kg/day')
+                drdefunction[j] = lambda E: np.interp(E, E_observed_keV_arr, dRdE_observed_DRU_arr, left=0., right=0.)
             
 
         if return_only_drde:
@@ -657,9 +661,13 @@ class SensEst(object):
                                                      lce_per_channel=gaas_params['lce_per_channel'],
                                                      res=gaas_params['res'],
                                                      n_coincidence_light=gaas_params['n_coincidence_light'],
-                                                     calorimeter_threshold_eV=gaas_params['calorimeter_threshold_eV'])
+                                                     calorimeter_threshold_eV=gaas_params['calorimeter_threshold_eV'],
+                                                     coincidence_window_us=gaas_params['coincidence_window_us'],
+                                                     phonon_tau_us=gaas_params['phonon_tau_us'])
 
-                drdefunction[j] = lambda E: np.interp(E, E_observed_keV_arr, dRdE_observed_DRU_arr)
+
+                print(f'In fast sim. The integral is {sum(dRdE_observed_DRU_arr[1:] * np.diff(E_observed_keV_arr))} cts/kg/day')
+                drdefunction[j] = lambda E: np.interp(E, E_observed_keV_arr, dRdE_observed_DRU_arr, left=0., right=0.)
 
         if return_only_drde:
             return drdefunction
