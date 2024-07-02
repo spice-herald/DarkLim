@@ -8,8 +8,9 @@ import darklim.sensitivity._sens_est as sens_est
 import matplotlib.pyplot as plt
 import matplotlib as mpl
 
-def get_deposited_energy_gaas(E_recoil_eV, pce, lce_per_channel, res, n_coincidence_light, threshold_eV, n_samples=1):
+def get_deposited_energy_gaas(E_recoil_eV, pce, lce_per_channel, res, n_coincidence_light, threshold_eV, coincidence_window_us=100., phonon_tau_us=100., n_samples=1):
 
+    # Get the light signal in each channel
     E_light_eV = constants.GaAs_light_fraction * E_recoil_eV
 
     n_photons_generated_average = np.floor(E_light_eV / constants.bandgap_GaAs_eV)
@@ -25,8 +26,14 @@ def get_deposited_energy_gaas(E_recoil_eV, pce, lce_per_channel, res, n_coincide
     E_ch1_eV = n_photons_detected_ch1 * constants.bandgap_GaAs_eV * np.random.normal(1, res, n_samples)
     E_ch2_eV = n_photons_detected_ch2 * constants.bandgap_GaAs_eV * np.random.normal(1, res, n_samples)
 
+    # Get the heat signal observed within coincidence window
     E_heat_eV = (1 - constants.GaAs_light_fraction) * E_recoil_eV
-    E_ch0_eV = np.full(n_samples, E_heat_eV * pce)
+    
+    n_phonons_generated_average = int(E_heat_eV / constants.GaAs_average_phonon_energy_eV)
+    phonon_arrival_times_us = np.random.exponential(phonon_tau_us, (n_phonons_generated_average, n_samples))
+    n_phonons_detected = np.sum(phonon_arrival_times_us < coincidence_window_us, axis=0)
+
+    E_ch0_eV = n_phonons_detected * pce * constants.GaAs_average_phonon_energy_eV * np.random.normal(1, res, n_samples)
 
     if n_coincidence_light == 1:
         E_det_eV = (E_ch0_eV + E_ch1_eV + E_ch2_eV) * (E_ch0_eV > threshold_eV) * ((E_ch1_eV > threshold_eV) + (E_ch2_eV > threshold_eV))
