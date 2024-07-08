@@ -32,11 +32,14 @@ ax.plot(m_limit, x_limit, '-', lw=8, label='Freeze-in')
 # Simulation
 for fold, ls  in zip([2, 3], ['-', ':', '-.']):
     for lce, color in zip([5, 10, 25], ['r', 'b', 'm', 'g', 'y']):
-        m_limit, x_limit = np.loadtxt(f'results_gaas_oi_scan_electron_massless_100days_{fold}fold_lce{lce:02d}/HeRALD_FC_100d_{fold}device_{fold}fold_100mus.txt').transpose()
+        m_limit, x_limit = np.loadtxt(f'gaas/results_gaas_oi_scan_electron_massless_100days_{fold}fold_lce{lce:02d}/HeRALD_FC_100d_{fold}device_{fold}fold_100mus.txt').transpose()
         ax.plot(m_limit*1e3, x_limit, lw=4, ls=ls, color=color, label=f'{fold}-fold, {lce/100:.02f} LCE per channel')
 
-m_limit, x_limit = np.loadtxt('results_gaas_oi_scan_electron_massless_300days_3fold_lce10/HeRALD_FC_300d_3device_3fold_100mus.txt').transpose()
+m_limit, x_limit = np.loadtxt('gaas/results_gaas_oi_scan_electron_massless_300days_3fold_lce10/HeRALD_FC_300d_3device_3fold_100mus.txt').transpose()
 ax.plot(m_limit*1e3, x_limit, lw=4, ls=':', color='k', label=f'300 days')
+
+m_limit, x_limit = np.loadtxt('results_gaas_oi_electron_massless_100days_3fold_lce10/HeRALD_FC_100d_3device_3fold_100mus.txt').transpose()
+ax.plot(m_limit*1e3, x_limit, lw=6, ls='-', color='k', label=f'New')
 
 
 ax.set_xscale('log')
