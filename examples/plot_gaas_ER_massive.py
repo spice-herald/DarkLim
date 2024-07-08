@@ -27,12 +27,15 @@ ax.plot(m_limit, x_limit, '--', lw=1.5, label='XENON1T S2only')
 #ax.plot(m_limit, x_limit, '--', lw=1.5, label='XENON1T S2only (Solar Refl.)')
 
 # Simulation
-m_limit, x_limit = np.loadtxt('results_gaas_oi_scan_electron_massive_100days_2fold_lce10/HeRALD_FC_100d_2device_2fold_100mus.txt').transpose()
+m_limit, x_limit = np.loadtxt('gaas/results_gaas_oi_scan_electron_massive_100days_2fold_lce10/HeRALD_FC_100d_2device_2fold_100mus.txt').transpose()
 ax.plot(m_limit*1e3, x_limit, 'r-', lw=4, label=f'100 days, 1 light signal, 10% LCE per channel')
-m_limit, x_limit = np.loadtxt('results_gaas_oi_scan_electron_massive_100days_3fold_lce10/HeRALD_FC_100d_3device_3fold_100mus.txt').transpose()
+m_limit, x_limit = np.loadtxt('gaas/results_gaas_oi_scan_electron_massive_100days_3fold_lce10/HeRALD_FC_100d_3device_3fold_100mus.txt').transpose()
 ax.plot(m_limit*1e3, x_limit, 'b-', lw=4, label=f'100 days, 2 light signal, 10% LCE per channel')
-m_limit, x_limit = np.loadtxt('results_gaas_oi_scan_electron_massive_300days_3fold_lce10/HeRALD_FC_300d_3device_3fold_100mus.txt').transpose()
+m_limit, x_limit = np.loadtxt('gaas/results_gaas_oi_scan_electron_massive_300days_3fold_lce10/HeRALD_FC_300d_3device_3fold_100mus.txt').transpose()
 ax.plot(m_limit*1e3, x_limit, 'm-', lw=4, label=f'300 days, 2 light signal, 10% LCE per channel')
+
+m_limit, x_limit = np.loadtxt('results_gaas_oi_electron_massive_100days_3fold_lce10/HeRALD_FC_100d_3device_3fold_100mus.txt').transpose()
+ax.plot(m_limit*1e3, x_limit, lw=6, ls='-', color='k', label=f'New')
 
 
 ax.set_xscale('log')
