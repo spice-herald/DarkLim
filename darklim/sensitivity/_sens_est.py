@@ -10,6 +10,8 @@ from darklim.sensitivity._plotting import RatePlot
 
 import darklim.elf._elf as elf
 import darklim.detector._detector as detector
+import time
+np.random.seed(int(time.time()))
 
 __all__ = [
     "calculate_substrate_mass",
