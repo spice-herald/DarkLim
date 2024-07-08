@@ -15,7 +15,7 @@ import datetime
 
 efficiency = 1.0
 tm = 'GaAs' # target name
-energy_res = 0.373e-3 # energy resolution in keV
+energy_res = 0.250e-3 # energy resolution in keV
 det_gain = 1.
 
 ##################################################################
@@ -132,6 +132,8 @@ def run_scan_point(nexp,time_elapsed,mass_det,n_devices,coinc,window,var_thresho
                 ehigh = 1.
 
         _, sig[i] = SE.run_sim(
+#        _, sig[i], _, _, _, _ = SE.run_fast_fc_sim(
+#            known_bkgs, # remove
             threshold,
             ehigh,
             e_low=1e-6,
@@ -141,6 +143,8 @@ def run_scan_point(nexp,time_elapsed,mass_det,n_devices,coinc,window,var_thresho
             plot_bkgd=True,
 #           res=None,
             verbose=True,
+#            use_drdefunction=True, #remove
+#            savedir=savedir, # remove
             sigma0=sigma0,
             elf_model=elf_model,
             elf_params=elf_params,
@@ -163,32 +167,39 @@ def gaas_scan(results_dir):
     if not os.path.exists(results_dir):
         os.makedirs(results_dir)
     
-    nexp = 1 # number of toys
+    nexp = 10 # number of toys
     
-    var_threshold = False # vary 5sigma requirement based on coinc level
+    var_threshold = True # vary 5sigma requirement based on coinc level
     
     times = np.array([100]) # d
-    mass_det = 8. * constants.Al2O3_density * 1e-3 # mass in kg, = 8cc
+    mass_det = 1. * constants.GaAs_density * 1e-3 # mass in kg, = 1 cc
     exposures = times*mass_det
     
-    n_devices = 2
-    coinc = np.array([2])
+    n_devices = 3
+    coinc = np.array([3])
     window = 100e-6 # s
 
-#    m_dms = np.array(list(np.geomspace(0.040, 10, 25)) + list(np.geomspace(11, 100, 8)) + list(np.geomspace(200, 1000, 3)))
-    m_dms = np.geomspace(1e-3, 1e3, 7)
-    sigma0 = np.full_like(m_dms, 1e-37)
+    m_dms = np.geomspace(1e-3, 300e-3, 25)
+    sigma0 = np.full_like(m_dms, 1e-35)
 
     elf_model='electron'
-    elf_params={'mediator': 'massive', 'kcut': 0, 'method': 'grid', 'withscreening': True, 'suppress_darkelf_output': False}
+    elf_params={'mediator': 'massless', 'kcut': 0, 'method': 'grid', 'withscreening': True, 'suppress_darkelf_output': False}
 #    elf_model='phonon'
-#    elf_params={'mediator': 'massive', 'suppress_darkelf_output': False, 'dark_photon': False}
+#    elf_params={'mediator': 'massless', 'suppress_darkelf_output': False, 'dark_photon': True}
 #    elf_model = None
 #    elf_params = {}
 
-    gaas_params = {'pce': 0.4, 'lce_per_channel': 0.10, 'res': 0.10,
+    if var_threshold:
+        nsigma = stats.norm.isf(stats.norm.sf(5)**(1/coinc))
+    else:
+        nsigma = 5
+    gaas_params = {'pce': 0.4,
+                    'lce_per_channel': 0.10,
+                    'res': 0.17,
                     'n_coincidence_light': (n_devices-1),
-                    'calorimeter_threshold_eV': (5 * energy_res / 1000)} 
+                    'calorimeter_threshold_eV': (nsigma * energy_res * 1000),
+                    'coincidence_window_us': (window*1e6),
+                    'phonon_tau_us': 100.}
 
     f = open(results_dir + '/info.txt', 'w')
     f.write(datetime.datetime.now().strftime('%m/%d/%Y, %H:%M:%S') + '\n\n')
