@@ -344,12 +344,15 @@ class SensEst(object):
 
         en_interp = np.geomspace(e_low, e_high, num=npts)
 
+        ########################
+        # Get the dRdE lambda function to convert E (keV) to dRdE (DRU)
+        ########################
+
         drdefunction = None
 
         if elf_model is None:
 
             drdefunction = [(lambda x: drde_wimp_obs( x, m, sigma0, self.tm, self.gain )) for m in m_dms ]
-            print('Using WIMPs')
 
         elif elf_model == 'electron' and elf_target == 'Al2O3':
 
@@ -388,7 +391,7 @@ class SensEst(object):
             drdefunction = \
                 [elf.get_dRdE_lambda_GaAs_electron(mX_eV=m*1e9, sigmae=sigma0, mediator=elf_mediator,
                                                     kcut=elf_kcut, method=elf_method, withscreening=elf_screening,
-                                                    suppress_darkelf_output=elf_suppress, gain=1.)
+                                                    suppress_darkelf_output=elf_suppress, gain=self.gain)
                 for m in m_dms]
 
         elif elf_model == 'phonon' and elf_target == 'GaAs':
@@ -403,7 +406,7 @@ class SensEst(object):
                                                     suppress_darkelf_output=elf_suppress, gain=self.gain)
                 for m in m_dms]
 
-
+        # If appropriate, convert dRdE from deposited energy to observed energy
         if self.tm == 'GaAs' and gaas_params is not None:
 
             for j, m in enumerate(m_dms):
@@ -428,13 +431,16 @@ class SensEst(object):
                                                      coincidence_window_us=gaas_params['coincidence_window_us'],
                                                      phonon_tau_us=gaas_params['phonon_tau_us'])
 
-
-                print(f'In run_sim(). The integral is {sum(dRdE_observed_DRU_arr[1:] * np.diff(E_observed_keV_arr))} cts/kg/day')
                 drdefunction[j] = lambda E: np.interp(E, E_observed_keV_arr, dRdE_observed_DRU_arr, left=0., right=0.)
-            
 
+        # Optionally, just return the anonymous lambda function without doing anything else
         if return_only_drde:
             return drdefunction
+
+        ########################
+        # For each pseudoexperiment, calculate the
+        # limit using the optimum interval method.
+        ########################
 
         for ii in range(nexp):
             evts_sim = self._generate_background(
@@ -449,15 +455,19 @@ class SensEst(object):
                 self.exposure, #exposure
                 tm=self.tm, # target material
                 cl=0.9, # C.L.
-#                res=res, # include smearing of DM spectrum
-#                gauss_width=10, # if smearing, number of sigma to go out to
+                res=res, # include smearing of DM spectrum
+                gauss_width=10, # if smearing, number of sigma to go out to
                 verbose=verbose, # print outs
-                drdefunction=drdefunction, # 
-                hard_threshold=threshold,
-                sigma0=sigma0
+                drdefunction=drdefunction, # lambda function for dRdE(E)
+                hard_threshold=threshold, # hard threshold for energies
+                sigma0=sigma0 # Starting guess for sigma
             )
 
             sigs.append(sig_temp)
+
+        ########################
+        # Get median limit and return
+        ########################
 
         sig = np.median(np.stack(sigs, axis=1), axis=1)
 
@@ -574,7 +584,7 @@ class SensEst(object):
             ax.axvline(ul,ls='--',color='red')
             ax.set_xlabel('Upper Limit [Events]')
             ax.set_xlim(0,max(np.asarray(uls)))
-            outdir = '/global/cfs/cdirs/lz/users/vvelan/Test/DarkLim/examples/'
+            outdir = '/global/scratch/users/vvelan/DarkLim/examples/'
             plt.savefig(outdir+pltname+'.png',dpi=300, facecolor='white',bbox_inches='tight')
         
         return m_dms, sig, ul
@@ -597,7 +607,6 @@ class SensEst(object):
         if use_drdefunction and elf_model is None:
 
             drdefunction = [(lambda x: drde_wimp_obs( x, m, sigma0, self.tm, self.gain )) for m in m_dms ]
-            print('Using WIMPs')
 
         elif elf_model == 'electron' and elf_target == 'GaAs':
 
@@ -667,8 +676,6 @@ class SensEst(object):
                                                      coincidence_window_us=gaas_params['coincidence_window_us'],
                                                      phonon_tau_us=gaas_params['phonon_tau_us'])
 
-
-                print(f'In fast sim. The integral is {sum(dRdE_observed_DRU_arr[1:] * np.diff(E_observed_keV_arr))} cts/kg/day')
                 drdefunction[j] = lambda E: np.interp(E, E_observed_keV_arr, dRdE_observed_DRU_arr, left=0., right=0.)
 
         if return_only_drde:
@@ -738,7 +745,7 @@ class SensEst(object):
             ax.axvline(median_ul,ls='--',color='red')
             ax.set_xlabel('Upper Limit [Events]')
             ax.set_xlim(0,max(uls))
-            outdir = '/global/cfs/cdirs/lz/users/vvelan/Test/DarkLim/examples/'
+            outdir = '/global/scratch/users/vvelan/DarkLim/examples/'
             plt.savefig(outdir+pltname+'.png',dpi=300, facecolor='white',bbox_inches='tight')
         
         # expected bkg rate, made to match m_dm len just to make analysis easier
