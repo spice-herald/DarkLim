@@ -15,9 +15,8 @@ import datetime
 
 efficiency = 1.0
 tm = 'Al2O3' # target name
-energy_res = 0.373e-3 # energy resolution in keV
-
-det_gain = 0.40
+energy_res = 0.010e-3 # energy resolution in keV
+det_gain = 1.
 
 ##################################################################
 
@@ -59,11 +58,6 @@ def plot_dm_rates(m_dms,dm_rates,raw_dm_rates,sigma0,savename=None):
 def run_scan_point(nexp,time_elapsed,mass_det,n_devices,coinc,window,var_threshold=False,save=True,savedir=None,
     m_dms=np.geomspace(0.0001,5,50),sigma0=1e-36,elf_model=None, elf_target=None, elf_params=None):
     
-    if coinc==1: # if coinc is 1, LEE is 'unknown'
-        known_bkgs = [0]
-    else:
-        known_bkgs = [0,1]
-
     if var_threshold:
         nsigma = stats.norm.isf(stats.norm.sf(5)**(1/coinc))
     else:
@@ -90,30 +84,36 @@ def run_scan_point(nexp,time_elapsed,mass_det,n_devices,coinc,window,var_thresho
     raw_dm_rates = np.zeros_like(m_dms)
     exp_bkg = np.zeros_like(m_dms)
 
-    if not np.isscalar(sigma0):
+    if np.isscalar(sigma0):
+        sigma0_arr = np.full(len(m_dms), sigma0)
+    else:
         sigma0_arr = np.copy(sigma0)
 
     for i, mass in enumerate(m_dms):
 
-        ehigh = 1 # keV
-        sigma0 = sigma0_arr[i]
-        if sigma0 == np.inf:
+        sigma0_i = sigma0_arr[i]
+        if sigma0_i  == np.inf:
             print(f'Infinite, skipping mass {mass}')
             continue
 
         # First, figure out what the maximum energy from this dRdE is
-        drdefunction = SE.run_fast_fc_sim(
-            known_bkgs,
+        ehigh = 1. # keV
+        drdefunction = SE.run_sim(
             threshold,
             ehigh,
             e_low=1e-6,
             m_dms=[mass],
-            sigma0=sigma0,
-            use_drdefunction=True,
+            nexp=1,
+            npts=100000,
+            plot_bkgd=False,
+            res=None,
+            verbose=False,
+            sigma0=sigma0_i,
             elf_model=elf_model,
             elf_target=elf_target,
             elf_params=elf_params,
-            return_only_drde=True
+            return_only_drde=True,
+#            gaas_params=None
             )
         drdefunction = drdefunction[0]
 
@@ -138,14 +138,16 @@ def run_scan_point(nexp,time_elapsed,mass_det,n_devices,coinc,window,var_thresho
             m_dms=[mass],
             nexp=nexp,
             npts=100000,
-            plot_bkgd=True,
-#           res=None,
+            plot_bkgd=False,
+            res=None,
             verbose=True,
-            sigma0=sigma0,
+            sigma0=sigma0_i,
             elf_model=elf_model,
             elf_params=elf_params,
             elf_target=elf_target,
-            return_only_drde=False)
+            return_only_drde=False,
+#            gaas_params=None
+        )
 
         print(f'Done mass = {mass}, sigma = {sig[i]}')
 
@@ -162,29 +164,32 @@ def sapphire_scan(results_dir):
     if not os.path.exists(results_dir):
         os.makedirs(results_dir)
     
-    nexp = 1 # number of toys
+    nexp = 100 # number of toys
     
-    var_threshold = False # vary 5sigma requirement based on coinc level
+    var_threshold = True # vary 5sigma requirement based on coinc level
     
-    times = np.array([1]) # d
-    mass_det = 8. * constants.Al2O3_density * 1e-3 # mass in kg, = 8cc
+    times = np.array([1/24]) # days
+    mass_det = 0.5 * constants.Al2O3_density * 1e-3 # mass in kg, = (0.5 cm)^3
     exposures = times*mass_det
     
     n_devices = 1
     coinc = np.array([1])
     window = 100e-6 # s
 
-#    m_dms, sigma0, _, _ = np.loadtxt('results_sapphire_fc_electron_massive_001_days/HeRALD_FC_1d_1device_1fold_100mus.txt').transpose()
-    m_dms = np.array(list(np.geomspace(0.040, 10, 25)) + list(np.geomspace(11, 100, 8)) + list(np.geomspace(200, 1000, 3)))
-    print(m_dms)
-    sigma0 = np.full_like(m_dms, 1e-39)
+    m_dms = np.geomspace(10e-3, 300, 45)
+    sigma0 = np.full_like(m_dms, 1e-35)
 
-    elf_model='electron'
-    elf_params={'mediator': 'massive', 'kcut': 0, 'method': 'grid', 'withscreening': True, 'suppress_darkelf_output': False}
-#    elf_model='phonon'
-#    elf_params={'mediator': 'massive', 'suppress_darkelf_output': False, 'dark_photon': False}
+#    elf_model='electron'
+#    elf_params={'mediator': 'massless', 'kcut': 0, 'method': 'grid', 'withscreening': True, 'suppress_darkelf_output': False}
+    elf_model='phonon'
+    elf_params={'mediator': 'massless', 'suppress_darkelf_output': False, 'dark_photon': False}
 #    elf_model = None
 #    elf_params = {}
+
+    if var_threshold:
+        nsigma = stats.norm.isf(stats.norm.sf(5)**(1/coinc))
+    else:
+        nsigma = 5
 
     f = open(results_dir + '/info.txt', 'w')
     f.write(datetime.datetime.now().strftime('%m/%d/%Y, %H:%M:%S') + '\n\n')

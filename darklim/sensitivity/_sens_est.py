@@ -442,11 +442,32 @@ class SensEst(object):
         # limit using the optimum interval method.
         ########################
 
+        rate_interp = []
+        for ii in range(len(m_dms)):
+
+            t_start = time.time()
+            try:
+                rate_temp = drdefunction[ii](en_interp) * exposure
+            except ValueError:
+#                rate = np.zeros_like(en_interp)
+#                for jj, en in enumerate(en_interp):
+#                    rate[jj] = drdefunction[ii](en) * exposure
+#                    if jj % 1000 == 0:
+#                        print(f'Finished iter {jj}. Took {(time.time()-t_start)/60:.2f} minutes.')
+                rate_temp = np.array([drdefunction[ii](en) for en in en_interp]) * self.exposure
+
+            rate_interp.append(rate_temp)
+
+            print(f'Finished mass {ii}. Took {(time.time()-t_start)/60:.2f} minutes.')
+
+
         for ii in range(nexp):
             evts_sim = self._generate_background(
                 en_interp, plot_bkgd=plot_bkgd and ii==0,
             )
-            
+            if ii == 0:
+                print(f'Simulated {len(evts_sim)} events')
+
             sig_temp, _, _ = optimuminterval(
                 evts_sim[evts_sim >= threshold], # evt energies
                 en_interp, # efficiency curve energies
@@ -460,7 +481,9 @@ class SensEst(object):
                 verbose=verbose, # print outs
                 drdefunction=drdefunction, # lambda function for dRdE(E)
                 hard_threshold=threshold, # hard threshold for energies
-                sigma0=sigma0 # Starting guess for sigma
+                sigma0=sigma0, # Starting guess for sigma
+                en_interp=en_interp,
+                rate_interp=rate_interp,
             )
 
             sigs.append(sig_temp)

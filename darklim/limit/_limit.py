@@ -393,7 +393,8 @@ def gauss_smear(x, f, res, nres=1e5, gauss_width=10):
 
 def optimuminterval(eventenergies, effenergies, effs, masslist, exposure,
                     tm="Si", cl=0.9, res=None, gauss_width=10, verbose=False,
-                    drdefunction=None, hard_threshold=0.0, sigma0=1e-41):
+                    drdefunction=None, hard_threshold=0.0, sigma0=1e-41,
+                    en_interp=None, rate_interp=None):
     """
     Function for running Steve Yellin's Optimum Interval code on an inputted spectrum and efficiency curve.
 
@@ -472,9 +473,8 @@ def optimuminterval(eventenergies, effenergies, effs, masslist, exposure,
     elow = max(hard_threshold, min(effenergies))
     ehigh = max(effenergies)
 
-    en_interp = np.logspace(np.log10(elow), np.log10(ehigh), int(1e5))
-
-    #sigma0 = 1e-41
+    if en_interp is None:
+        en_interp = np.logspace(np.log10(elow), np.log10(ehigh), int(1e5))
 
     event_inds = (eventenergies > elow) & (eventenergies < ehigh)
 
@@ -486,7 +486,7 @@ def optimuminterval(eventenergies, effenergies, effs, masslist, exposure,
         if verbose:
             print(f"On mass {ii+1} of {len(masslist)}.")
 
-        if drdefunction is None:
+        if drdefunction is None and rate_interp is None:
             exp = effs * exposure
 
             curr_exp = interpolate.interp1d(
@@ -499,12 +499,21 @@ def optimuminterval(eventenergies, effenergies, effs, masslist, exposure,
             if res is not None:
                 init_rate = gauss_smear(en_interp, init_rate, res, gauss_width=gauss_width)
             rate = init_rate * curr_exp(en_interp)
-        else:
+
+        elif rate_interp is None:
             try:
                 rate = drdefunction[ii](en_interp) * exposure
             except ValueError:
+#                t_start = time.time()
+#                rate = np.zeros_like(en_interp)
+#                for jj, en in enumerate(en_interp):
+#                    rate[jj] = drdefunction[ii](en) * exposure
+#                    if jj % 1000 == 0:
+#                        print(f'Finished iter {jj}. Took {(time.time()-t_start)/60:.2f} minutes.')
                 rate = np.array([drdefunction[ii](en) for en in en_interp]) * exposure
 
+        else:
+            rate = rate_interp[ii]
 
         integ_rate = integrate.cumtrapz(rate, x=en_interp, initial=0)
 
@@ -615,7 +624,8 @@ def fc_limits(known_bkg_func, eventenergies, effenergies, effs, masslist, exposu
             ax.set_xscale('log')
             ax.set_yscale('log')
             ax.legend()
-            outdir = '/global/cfs/cdirs/lz/users/vvelan/Test/DarkLim/examples/'
+            outdir = '/global/scratch/users/vvelan/DarkLim/examples/'
+
 
             plt.savefig(outdir+'testplot_{:0.3f}GeV.png'.format(mass),dpi=300, facecolor='white',bbox_inches='tight')
             
@@ -701,7 +711,8 @@ def get_signal_rate(effenergies, effs, masslist, exposure,
             ax.set_yscale('log')
             ax.legend(loc='lower left',frameon=False)
             ax.set_title('m={:0.3f}GeV,\n rate over threshold={:0.3e} evts'.format(mass,signal_rates[ii]))
-            outdir = '/global/cfs/cdirs/lz/users/vvelan/Test/DarkLim/examples/'
+            outdir = '/global/scratch/users/vvelan/DarkLim/examples/'
+
             plt.savefig(outdir+savedir+'/testplot_{:0.3f}GeV.png'.format(mass),facecolor='white',bbox_inches='tight')
  
     return signal_rates, raw_signal_rates
