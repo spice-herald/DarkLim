@@ -12,6 +12,7 @@ import warnings
 
 from darklim import constants, feldman_cousins
 from darklim.limit import _upper
+import darklim.elf._elf as elf
 import mendeleev
 
 import matplotlib.pyplot as plt
@@ -23,6 +24,7 @@ __all__ = [
     "drde",
     "drde_max_q",
     "gauss_smear",
+    "drde_darkelf",
     "optimuminterval",
     "fc_limits",
     "get_fc_ul",
@@ -389,11 +391,40 @@ def gauss_smear(x, f, res, nres=1e5, gauss_width=10):
 
     return s(x)
 
+def drde_darkelf(m_dm,elf_model=None, elf_params=None, elf_target=None,sigma0=1e-41):
+    
+    drdefunction = None
+    
+    if elf_model == 'electron' and elf_target == 'Si':
+        elf_mediator = elf_params['mediator'] if 'mediator' in elf_params else 'massless'
+        elf_kcut = elf_params['kcut'] if 'kcut' in elf_params else 0
+        elf_method = elf_params['method'] if 'method' in elf_params else 'grid'
+        elf_screening = elf_params['withscreening'] if 'withscreening' in elf_params else True
+        elf_suppress = elf_params['suppress_darkelf_output'] if 'suppress_darkelf_output' in elf_params else False
+
+        drdefunction = \
+            [elf.get_dRdE_lambda_Si_electron(mX_eV=m*1e9, sigmae=sigma0, mediator=elf_mediator,
+                                                kcut=elf_kcut, method=elf_method, withscreening=elf_screening,
+                                                suppress_darkelf_output=elf_suppress, gain=1)
+            for m in m_dm]
+
+    elif elf_model == 'phonon' and elf_target == 'Si':
+        elf_mediator = elf_params['mediator'] if 'mediator' in elf_params else 'massless'
+        elf_suppress = elf_params['suppress_darkelf_output'] if 'suppress_darkelf_output' in elf_params else False
+        elf_darkphoton = elf_params['dark_photon'] if 'dark_photon' in elf_params else False
+
+        drdefunction = \
+            [elf.get_dRdE_lambda_Si_phonon(mX_eV=m*1e9, sigman=sigma0, mediator=elf_mediator,
+                                                dark_photon=elf_darkphoton,
+                                                suppress_darkelf_output=elf_suppress, gain=1)
+            for m in m_dm]
+    
+    return drdefunction
 
 
 def optimuminterval(eventenergies, effenergies, effs, masslist, exposure,
                     tm="Si", cl=0.9, res=None, gauss_width=10, verbose=False,
-                    drdefunction=None, hard_threshold=0.0, sigma0=1e-41):
+                    drdefunction=None, hard_threshold=0.0, sigma0=1e-41,iself=False):
     """
     Function for running Steve Yellin's Optimum Interval code on an inputted spectrum and efficiency curve.
 
@@ -438,12 +469,17 @@ def optimuminterval(eventenergies, effenergies, effs, masslist, exposure,
         `masslist` and the cross section sigma=10^-41 cm^2. The experiment efficiency must be taken
         into account. The energy unit is keV, the rate unit is 1/keV/kg/day.
         By default (or if None is provided) the standard Lewin&Smith signal model is used with gaussian
-        smearing of width `res`, truncated at `gauss_width` standard deviations.
+        smearing of width `res`, truncated at `gauss_width` standard deviations. 
+        If iself is True, then this function does not need to be a callable function, and can instead be
+        a nested list of rates for given masses. Assumes guassian smearing has already been done. 
     hard_threshold : float, optional
         The energy value (keV) below which the efficiency is zero.
         This argument is not required in a case of smooth efficiency curve, however it must be provided 
         in a case of step-function-like efficiency.
-
+    iself : bool, optional
+        If True, then the algoroithm will allow you to insert a non-callable function for drdefunction. 
+        This allows for calculation of a drde spectrum produced by DarkElf to be created as a callable 
+        function and then executed, producing a list of rates. 
     Returns
     -------
     sigma : ndarray
@@ -472,7 +508,7 @@ def optimuminterval(eventenergies, effenergies, effs, masslist, exposure,
     elow = max(hard_threshold, min(effenergies))
     ehigh = max(effenergies)
 
-    en_interp = np.logspace(np.log10(elow), np.log10(ehigh), int(1e5))
+    en_interp = np.logspace(np.log10(elow), np.log10(ehigh), int(1e4))
 
     #sigma0 = 1e-41
 
@@ -485,30 +521,43 @@ def optimuminterval(eventenergies, effenergies, effs, masslist, exposure,
     for ii, mass in enumerate(masslist):
         if verbose:
             print(f"On mass {ii+1} of {len(masslist)}.")
+            
+        if iself is False:    
 
-        if drdefunction is None:
+            if drdefunction is None:
+                exp = effs * exposure
+
+                curr_exp = interpolate.interp1d(
+                    effenergies, exp, kind="linear", bounds_error=False, fill_value=(0, exp[-1]),
+                )
+
+                init_rate = drde(
+                    en_interp, mass, sigma0, tm=tm,
+                )
+                if res is not None:
+                    init_rate = gauss_smear(en_interp, init_rate, res, gauss_width=gauss_width)
+                rate = init_rate * curr_exp(en_interp)
+            else:
+                try:
+                    rate = drdefunction[ii](en_interp) * exposure
+                except ValueError:
+                    rate = np.array([drdefunction[ii](en) for en in en_interp]) * exposure
+                    
+        else:
+            print("iself")
             exp = effs * exposure
-
             curr_exp = interpolate.interp1d(
                 effenergies, exp, kind="linear", bounds_error=False, fill_value=(0, exp[-1]),
             )
-    
-            init_rate = drde(
-                en_interp, mass, sigma0, tm=tm,
-            )
-            if res is not None:
-                init_rate = gauss_smear(en_interp, init_rate, res, gauss_width=gauss_width)
-            rate = init_rate * curr_exp(en_interp)
-        else:
-            try:
-                rate = drdefunction[ii](en_interp) * exposure
-            except ValueError:
-                rate = np.array([drdefunction[ii](en) for en in en_interp]) * exposure
-
+            print(drdefunction[ii])
+            rate = np.array(drdefunction[ii] * curr_exp(en_interp))
+            print(rate)
 
         integ_rate = integrate.cumtrapz(rate, x=en_interp, initial=0)
+        print(integ_rate)
 
         tot_rate = integ_rate[-1]
+        print(tot_rate)
 
         x_val_fcn = interpolate.interp1d(
             en_interp,
