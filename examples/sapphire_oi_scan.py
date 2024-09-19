@@ -15,7 +15,7 @@ import datetime
 
 efficiency = 1.0
 tm = 'Al2O3' # target name
-energy_res = 0.010e-3 # energy resolution in keV
+energy_res = 0.100e-3 # energy resolution in keV
 det_gain = 1.
 
 ##################################################################
@@ -169,22 +169,22 @@ def sapphire_scan(results_dir):
     var_threshold = True # vary 5sigma requirement based on coinc level
     
     times = np.array([1/24]) # days
-    mass_det = 0.5 * constants.Al2O3_density * 1e-3 # mass in kg, = (0.5 cm)^3
+    mass_det = 1. * constants.Al2O3_density * 1e-3 # mass in kg, = (0.1 cm)^3
     exposures = times*mass_det
     
     n_devices = 1
     coinc = np.array([1])
     window = 100e-6 # s
 
-    m_dms = np.geomspace(10e-3, 300, 45)
+    m_dms = np.geomspace(3e-4, 1e3, 40)
     sigma0 = np.full_like(m_dms, 1e-35)
 
 #    elf_model='electron'
 #    elf_params={'mediator': 'massless', 'kcut': 0, 'method': 'grid', 'withscreening': True, 'suppress_darkelf_output': False}
-    elf_model='phonon'
-    elf_params={'mediator': 'massless', 'suppress_darkelf_output': False, 'dark_photon': False}
-#    elf_model = None
-#    elf_params = {}
+#    elf_model='phonon'
+#    elf_params={'mediator': 'massive', 'suppress_darkelf_output': False, 'dark_photon': False}
+    elf_model = None
+    elf_params = {}
 
     if var_threshold:
         nsigma = stats.norm.isf(stats.norm.sf(5)**(1/coinc))
@@ -243,7 +243,7 @@ def main():
     
     sapphire_scan(results_dir)
     t_end = time.time()
-    print(f'Took {(t_end - t_start)/60} minutes.')
+    print(f'Full scan took {(t_end - t_start)/60:.2f} minutes.')
 
     return 0
 
