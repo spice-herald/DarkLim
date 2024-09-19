@@ -123,7 +123,6 @@ def upper(fc, cl=0.9):
 
     endpoints = _upper.upperlimcom.endpoints
     
-    print(ulout)
     return ulout, endpoints[0], endpoints[1]
 
 
@@ -542,7 +541,6 @@ def optimuminterval(eventenergies, effenergies, effs, masslist, exposure,
 
             try:
                 uloutput, endpoint0, endpoint1 = upper(fc, cl=cl)
-                print(uloutput)
                 sigma[ii] = (sigma0 / tot_rate) * uloutput
 
                 oi_energy0[ii] = eventenergies[event_inds][possiblewimp][endpoint0-1] if endpoint0>0 else elow # endpoint==0 means the start of the SM integration range
@@ -624,7 +622,7 @@ def fc_limits(known_bkg_func, eventenergies, effenergies, effs, masslist, exposu
             ax.set_xscale('log')
             ax.set_yscale('log')
             ax.legend()
-            outdir = '/global/scratch/users/vvelan/DarkLim/examples/'
+            outdir = '/global/cfs/cdirs/lz/users/vvelan/Test/DarkLim/examples/'
 
 
             plt.savefig(outdir+'testplot_{:0.3f}GeV.png'.format(mass),dpi=300, facecolor='white',bbox_inches='tight')
@@ -711,7 +709,8 @@ def get_signal_rate(effenergies, effs, masslist, exposure,
             ax.set_yscale('log')
             ax.legend(loc='lower left',frameon=False)
             ax.set_title('m={:0.3f}GeV,\n rate over threshold={:0.3e} evts'.format(mass,signal_rates[ii]))
-            outdir = '/global/scratch/users/vvelan/DarkLim/examples/'
+            outdir = '/global/cfs/cdirs/lz/users/vvelan/Test/DarkLim/examples/'
+
 
             plt.savefig(outdir+savedir+'/testplot_{:0.3f}GeV.png'.format(mass),facecolor='white',bbox_inches='tight')
  
