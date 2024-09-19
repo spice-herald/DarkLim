@@ -447,7 +447,7 @@ class SensEst(object):
 
             t_start = time.time()
             try:
-                rate_temp = drdefunction[ii](en_interp) * exposure
+                rate_temp = drdefunction[ii](en_interp) * self.exposure
             except ValueError:
 #                rate = np.zeros_like(en_interp)
 #                for jj, en in enumerate(en_interp):
@@ -459,7 +459,6 @@ class SensEst(object):
             rate_interp.append(rate_temp)
 
             print(f'Finished mass {ii}. Took {(time.time()-t_start)/60:.2f} minutes.')
-
 
         for ii in range(nexp):
             evts_sim = self._generate_background(
@@ -478,7 +477,7 @@ class SensEst(object):
                 cl=0.9, # C.L.
                 res=res, # include smearing of DM spectrum
                 gauss_width=10, # if smearing, number of sigma to go out to
-                verbose=verbose, # print outs
+                verbose=(verbose*(ii==0)), # print outs
                 drdefunction=drdefunction, # lambda function for dRdE(E)
                 hard_threshold=threshold, # hard threshold for energies
                 sigma0=sigma0, # Starting guess for sigma
@@ -607,7 +606,7 @@ class SensEst(object):
             ax.axvline(ul,ls='--',color='red')
             ax.set_xlabel('Upper Limit [Events]')
             ax.set_xlim(0,max(np.asarray(uls)))
-            outdir = '/global/scratch/users/vvelan/DarkLim/examples/'
+            outdir = '/global/cfs/cdirs/lz/users/vvelan/Test/DarkLim/examples/'
             plt.savefig(outdir+pltname+'.png',dpi=300, facecolor='white',bbox_inches='tight')
         
         return m_dms, sig, ul
@@ -768,7 +767,7 @@ class SensEst(object):
             ax.axvline(median_ul,ls='--',color='red')
             ax.set_xlabel('Upper Limit [Events]')
             ax.set_xlim(0,max(uls))
-            outdir = '/global/scratch/users/vvelan/DarkLim/examples/'
+            outdir = '/global/cfs/cdirs/lz/users/vvelan/Test/DarkLim/examples/'
             plt.savefig(outdir+pltname+'.png',dpi=300, facecolor='white',bbox_inches='tight')
         
         # expected bkg rate, made to match m_dm len just to make analysis easier
