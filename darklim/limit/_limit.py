@@ -473,7 +473,7 @@ def optimuminterval(eventenergies, effenergies, effs, masslist, exposure,
     ehigh = max(effenergies)
 
     if en_interp is None:
-        en_interp = np.logspace(np.log10(elow), np.log10(ehigh), int(1e5))
+        en_interp = np.geomspace(elow, ehigh, 1e5)
 
     event_inds = (eventenergies > elow) & (eventenergies < ehigh)
 
@@ -503,12 +503,6 @@ def optimuminterval(eventenergies, effenergies, effs, masslist, exposure,
             try:
                 rate = drdefunction[ii](en_interp) * exposure
             except ValueError:
-#                t_start = time.time()
-#                rate = np.zeros_like(en_interp)
-#                for jj, en in enumerate(en_interp):
-#                    rate[jj] = drdefunction[ii](en) * exposure
-#                    if jj % 1000 == 0:
-#                        print(f'Finished iter {jj}. Took {(time.time()-t_start)/60:.2f} minutes.')
                 rate = np.array([drdefunction[ii](en) for en in en_interp]) * exposure
 
         else:

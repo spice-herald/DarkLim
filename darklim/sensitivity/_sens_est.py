@@ -294,8 +294,8 @@ class SensEst(object):
         self._backgrounds = []
 
 
-    def run_sim(self, threshold, e_high, e_low=1e-6, m_dms=None, nexp=1, npts=1000,
-                plot_bkgd=False, res=None, verbose=False, sigma0=1e-41,
+    def run_sim(self, threshold, e_high=1., e_low=1e-6, m_dms=np.geomspace(0.01, 2, num=5),
+                nexp=1, npts=1000, plot_bkgd=False, res=None, verbose=False, sigma0=1e-41,
                 elf_model=None, elf_params=None, elf_target=None,
                 gaas_params=None, return_only_drde=False):
 
@@ -336,13 +336,6 @@ class SensEst(object):
             determined to be.
 
         """
-
-        sigs = []
-
-        if m_dms is None:
-            m_dms = np.geomspace(0.01, 2, num=5)
-
-        en_interp = np.geomspace(e_low, e_high, num=npts)
 
         ########################
         # Get the dRdE lambda function to convert E (keV) to dRdE (DRU)
@@ -437,49 +430,48 @@ class SensEst(object):
         if return_only_drde:
             return drdefunction
 
-        ########################
+        ##########################################
         # For each pseudoexperiment, calculate the
         # limit using the optimum interval method.
-        ########################
+        ##########################################
 
+        sigs = []
+
+        en_interp = np.geomspace(e_low, e_high, num=npts) # keV
         rate_interp = []
+
         for ii in range(len(m_dms)):
 
             t_start = time.time()
             try:
                 rate_temp = drdefunction[ii](en_interp) * self.exposure
             except ValueError:
-#                rate = np.zeros_like(en_interp)
-#                for jj, en in enumerate(en_interp):
-#                    rate[jj] = drdefunction[ii](en) * exposure
-#                    if jj % 1000 == 0:
-#                        print(f'Finished iter {jj}. Took {(time.time()-t_start)/60:.2f} minutes.')
                 rate_temp = np.array([drdefunction[ii](en) for en in en_interp]) * self.exposure
 
             rate_interp.append(rate_temp)
 
             print(f'Finished mass {ii}. Took {(time.time()-t_start)/60:.2f} minutes.')
 
-        for ii in range(nexp):
+        for jj in range(nexp):
+            
             evts_sim = self._generate_background(
-                en_interp, plot_bkgd=plot_bkgd and ii==0,
-            )
-            if ii == 0:
-                print(f'Simulated {len(evts_sim)} events')
+                en_interp, plot_bkgd=(plot_bkgd and jj==0))
+            if jj == 0:
+                print(f'In the first pseudoexperiment, we simulated {len(evts_sim)} events')
 
             sig_temp, _, _ = optimuminterval(
                 evts_sim[evts_sim >= threshold], # evt energies
                 en_interp, # efficiency curve energies
-                np.heaviside(en_interp - threshold, 1), # efficiency curve values
+                np.ones_like(en_interp), # efficiency curve values
                 m_dms, # mass list
                 self.exposure, #exposure
                 tm=self.tm, # target material
                 cl=0.9, # C.L.
                 res=res, # include smearing of DM spectrum
                 gauss_width=10, # if smearing, number of sigma to go out to
-                verbose=(verbose*(ii==0)), # print outs
-                drdefunction=drdefunction, # lambda function for dRdE(E)
-                hard_threshold=threshold, # hard threshold for energies
+                verbose=(verbose*(jj==0)), # print outs
+#                drdefunction=drdefunction, # lambda function for dRdE(E)
+#                hard_threshold=0., # hard threshold for energies
                 sigma0=sigma0, # Starting guess for sigma
                 en_interp=en_interp,
                 rate_interp=rate_interp,
