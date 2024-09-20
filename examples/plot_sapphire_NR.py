@@ -9,8 +9,8 @@ curves_dir = 'ExistingLimits/'
 mpl.rcParams.update({'font.size': 20})
 mpl.rcParams.update({'axes.linewidth': 2})
 fig, ax = plt.subplots(1, 1, figsize=(11, 11))
-xmin = 1e1; xmax = 1e6;
-ymin = 1e-48; ymax = 1e-28;
+xmin = 1e-2; xmax = 1e7;
+ymin = 1e-48; ymax = 1e-20;
 
 # Existing limits
 m_limit, x_limit = np.loadtxt(curves_dir + 'SENSEI_Migdal_NR.txt').transpose()
@@ -23,15 +23,20 @@ m_limit, x_limit = np.loadtxt(curves_dir + 'LZ_SI_2022.txt').transpose()
 ax.plot(m_limit*1e3, x_limit, '--', lw=1.5, label='LZ')
 
 # Simulation
-m_limit, x_limit = np.loadtxt('sapphire/results_sapphire_oi_phonon_massless_001_days/HeRALD_FC_1d_1device_1fold_100mus.txt').transpose()
-ax.plot(m_limit*1e3, x_limit, 'b--', lw=4, label='1 day, multiphonon')
-m_limit, x_limit = np.loadtxt('sapphire/results_sapphire_oi_phonon_massless_010_days/HeRALD_FC_10d_1device_1fold_100mus.txt').transpose()
-ax.plot(m_limit*1e3, x_limit, 'r--', lw=4, label='10 days, multiphonon')
-# Also massive
-m_limit, x_limit = np.loadtxt('sapphire/results_sapphire_oi_scan_NR_001days/HeRALD_FC_1d_1device_1fold_100mus.txt').transpose()
-ax.plot(m_limit*1e3, x_limit, 'b:', lw=4, alpha=0.5, label='1 day, NR')
-m_limit, x_limit = np.loadtxt('sapphire/results_sapphire_oi_scan_NR_010days/HeRALD_FC_10d_1device_1fold_100mus.txt').transpose()
-ax.plot(m_limit*1e3, x_limit, 'r:', lw=4, alpha=0.5, label='1 day, NR')
+m_limit, x_limit = np.loadtxt('results/sapphire_oi_NR_1h_low_bkgd/HeRALD_FC_0d_1device_1fold_100mus.txt').transpose()
+ax.plot(m_limit*1e3, x_limit, 'k--', lw=3, label='NR Low Bkgd')
+
+m_limit, x_limit = np.loadtxt('results/sapphire_oi_phonon_massive_1h_low_bkgd/HeRALD_FC_0d_1device_1fold_100mus.txt').transpose()
+ax.plot(m_limit*1e3, x_limit, 'g--', lw=3, label='Multiphonon Low Bkgd')
+
+m_limit, x_limit = np.loadtxt('results/sapphire_oi_NR_1h/HeRALD_FC_0d_1device_1fold_100mus.txt').transpose()
+ax.plot(m_limit*1e3, x_limit, 'k-', lw=3, label='NR')
+
+m_limit, x_limit = np.loadtxt('results/sapphire_oi_phonon_massive_1h/HeRALD_FC_0d_1device_1fold_100mus.txt').transpose()
+ax.plot(m_limit*1e3, x_limit, 'g-', lw=3, label='Multiphonon')
+
+m_limit, x_limit = np.loadtxt('results/limit.txt').transpose()
+ax.plot(m_limit*1e3, x_limit, 'r-', lw=3, label='Test')
 
 ax.set_xscale('log')
 ax.set_xlim([xmin, xmax])
