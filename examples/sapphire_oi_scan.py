@@ -13,6 +13,8 @@ from multihist import Hist1d
 import time
 import datetime
 
+import multiprocessing as mp
+
 
 ##################################################################
 
@@ -51,104 +53,97 @@ def plot_dm_rates(m_dms,dm_rates,raw_dm_rates,sigma0,savename=None):
     
     return
 
-def sapphire_scan():
-    
-    args = scanparser.get_scan_parameters()
-    
-    if not os.path.exists(args.results_dir):
-        os.makedirs(args.results_dir)
 
-    f = open(args.results_dir + 'info.txt', 'w')
-    f.write(datetime.datetime.now().strftime('%m/%d/%Y, %H:%M:%S') + '\n\n')
-    f.write(f'Detector material: {args.target}\n')
-    f.write(f'Exposure time: {args.t_days} days\n')
-    f.write(f'Detector volume: {args.volume_cm3} cm^3\n')
-    f.write(f'Detector mass: {args.target_mass_kg} kg\n')
-    f.write(f'Number of devices: {args.n_sensors}\n')
-    f.write(f'Coincidence level: {args.coincidence}\n')
-    f.write(f'Time window (s): {args.window_s}\n')
-    f.write(f'Baseline energy resolution (eV): {args.baseline_res_eV}\n')
-    f.write(f'Sigma above baseline for detection per sensor: {args.nsigma}\n')
-    f.write(f'Dark matter masses (GeV/c2): ' + str(args.masses_GeV) + '\n')
-    f.write(f'Default cross section (cm2): {args.sigma0:.4f}\n')
-    f.write(f'Detector gain: 1\n')
-    f.write('ELF model: ' + str(args.elf_model) + '\n')
-    f.write('ELF params: ' + str(args.elf_params) + '\n') 
-    f.close()
-    
-    ##################
-    
-    per_device_threshold_keV = args.nsigma * args.baseline_res_eV * 1e-3
-    threshold_keV = args.coincidence * per_device_threshold_keV
-    
+
+def process_mass(mass, args):
+    # All the code that processes the mass value goes here, extracted from the original loop.
+
     SE = darklim.sensitivity.SensEst(args.target_mass_kg, args.t_days, tm=args.target, eff=1., gain=1.)
     SE.reset_sim()
     SE.add_flat_bkgd(1) # flat background of 1 DRU
-
     SE.add_nfold_lee_bkgd(m=args.n_sensors, n=args.coincidence, w=args.window_s)
-    
-    sigma_out = np.zeros_like(args.masses_GeV)
 
-    for i, mass in enumerate(args.masses_GeV):
+    per_device_threshold_keV = args.nsigma * args.baseline_res_eV * 1e-3
+    threshold_keV = args.coincidence * per_device_threshold_keV
 
-        # First, figure out what the maximum energy from this dRdE is
-        e_high_keV = 100. # keV
-        e_low_keV = 1e-6 # keV
-        drdefunction = SE.run_sim(
+    # First, figure out what the maximum energy from this dRdE is
+    e_high_keV = 100. # keV
+    e_low_keV = 1e-6 # keV
+    drdefunction = SE.run_sim(
+        threshold_keV,
+        e_high=e_high_keV,
+        e_low=e_low_keV,
+        m_dms=[mass],
+        sigma0=args.sigma0,
+        elf_model=args.elf_model,
+        elf_target=args.target,
+        elf_params=args.elf_params,
+        return_only_drde=True,
+#            gaas_params=None
+        )
+    drdefunction = drdefunction[0]
+
+    e_high_guesses = np.geomspace(e_low_keV, e_high_keV, 3000)
+    skip = False
+    try:
+        drdefunction_guesses = drdefunction(e_high_guesses)
+    except ValueError:
+        drdefunction_guesses = np.array([drdefunction(en) for en in e_high_guesses])
+    indices = np.where(drdefunction_guesses > 0)
+    if len(indices[0]) == 0:
+        e_high_keV = threshold_keV * 1.1
+    else:
+        j = int(indices[0][-1])
+        e_high_keV = e_high_guesses[j] * 1.1
+        if e_high_keV < threshold_keV:
+            e_high_keV = threshold_keV * 1.1
+
+    if skip:
+        sigma = np.inf
+    else:
+        _, sigma = SE.run_sim(
             threshold_keV,
             e_high=e_high_keV,
-            e_low=e_low_keV,
+            e_low=1e-6,
             m_dms=[mass],
+            nexp=args.nexp,
+            npts=100000,
+            plot_bkgd=False,
+            res=None,
+            verbose=True,
             sigma0=args.sigma0,
             elf_model=args.elf_model,
             elf_target=args.target,
             elf_params=args.elf_params,
-            return_only_drde=True,
+            return_only_drde=False,
 #            gaas_params=None
-            )
-        drdefunction = drdefunction[0]
+        )
 
-        e_high_guesses = np.geomspace(e_low_keV, e_high_keV, 3000)
-        skip = False
-        try:
-            drdefunction_guesses = drdefunction(e_high_guesses)
-        except ValueError:
-            drdefunction_guesses = np.array([drdefunction(en) for en in e_high_guesses])
-        indices = np.where(drdefunction_guesses > 0)
-        if len(indices[0]) == 0:
-            e_high_keV = threshold_keV * 1.1
-        else:
-            j = int(indices[0][-1])
-            e_high_keV = e_high_guesses[j] * 1.1
-            if e_high_keV < threshold_keV:
-                e_high_keV = threshold_keV * 1.1
+    print(f'Done mass = {mass}, sigma = {sigma}')
 
-        if skip:
-            sigma_out[i] = np.inf
-        else:
-            _, sigma_out[i] = SE.run_sim(
-                threshold_keV,
-                e_high=e_high_keV,
-                e_low=1e-6,
-                m_dms=[mass],
-                nexp=args.nexp,
-                npts=100000,
-                plot_bkgd=False,
-                res=None,
-                verbose=True,
-                sigma0=args.sigma0,
-                elf_model=args.elf_model,
-                elf_target=args.target,
-                elf_params=args.elf_params,
-                return_only_drde=False,
-    #            gaas_params=None
-            )
+    return mass, sigma
 
-        print(f'Done mass = {mass}, sigma = {sigma_out[i]}')
+
+    
+def sapphire_scan():
+    
+    # Read command-line arguments
+    args = scanparser.get_scan_parameters()
+
+    # Write input parameters to a text file
+    scanparser.write_info(args)
+        
+    # Main parallel execution block
+    with mp.Pool(processes=mp.cpu_count()) as pool:
+        results = pool.starmap(process_mass, [(mass, args) for mass in args.masses_GeV])
 
     # save results to txt file
+    sigma = np.zeros_like(args.masses_GeV)
+    for i, result in enumerate(results):
+        sigma[i] = result[1][0]
+
     outname = args.results_dir + 'limit.txt'
-    tot = np.column_stack( (args.masses_GeV, sigma_out) )
+    tot = np.column_stack( (args.masses_GeV, sigma) )
     np.savetxt(outname, tot, fmt=['%.5e','%0.5e'], delimiter=' ')
     
     return
