@@ -132,9 +132,9 @@ def sapphire_scan():
 
     # Write input parameters to a text file
     scanparser.write_info(args)
-        
+
     # Main parallel execution block
-    with mp.Pool(processes=mp.cpu_count()) as pool:
+    with mp.Pool(processes=min(args.max_cpus, mp.cpu_count())) as pool:
         results = pool.starmap(process_mass, [(mass, args) for mass in args.masses_GeV])
 
     # save results to txt file

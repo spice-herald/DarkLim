@@ -6,6 +6,7 @@ class Defaults:
     def __init__(self):
         
         self.results_dir = './results/'
+        self.max_cpus = 24
 
         self.nexp = 100
         self.t_days = 5 / 60 / 24.
