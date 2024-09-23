@@ -4,6 +4,7 @@ import os
 import scipy.stats as stats
 import defaults
 from darklim import constants
+import datetime
 
 
 
@@ -141,3 +142,26 @@ def get_scan_parameters():
     
     return args
     
+
+def write_info(args):
+    
+    if not os.path.exists(args.results_dir):
+        os.makedirs(args.results_dir)
+
+    f = open(args.results_dir + 'info.txt', 'w')
+    f.write(datetime.datetime.now().strftime('%m/%d/%Y, %H:%M:%S') + '\n\n')
+    f.write(f'Detector material: {args.target}\n')
+    f.write(f'Exposure time: {args.t_days} days\n')
+    f.write(f'Detector volume: {args.volume_cm3} cm^3\n')
+    f.write(f'Detector mass: {args.target_mass_kg} kg\n')
+    f.write(f'Number of devices: {args.n_sensors}\n')
+    f.write(f'Coincidence level: {args.coincidence}\n')
+    f.write(f'Time window (s): {args.window_s}\n')
+    f.write(f'Baseline energy resolution (eV): {args.baseline_res_eV}\n')
+    f.write(f'Sigma above baseline for detection per sensor: {args.nsigma}\n')
+    f.write(f'Dark matter masses (GeV/c2): ' + str(args.masses_GeV) + '\n')
+    f.write(f'Default cross section (cm2): {args.sigma0:.4f}\n')
+    f.write(f'Detector gain: 1\n')
+    f.write('ELF model: ' + str(args.elf_model) + '\n')
+    f.write('ELF params: ' + str(args.elf_params) + '\n') 
+    f.close()
