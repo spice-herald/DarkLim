@@ -13,3 +13,4 @@ Al2O3_density = 3.98
 GaAs_density = 5.32
 GaAs_light_fraction = 0.60
 GaAs_average_phonon_energy_eV = 0.022
+Si_density =  2.329

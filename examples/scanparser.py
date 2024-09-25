@@ -41,6 +41,8 @@ def convert_scan_parameters(args):
 
     if args.target == 'Al2O3':
         density_gcm3 = constants.Al2O3_density
+    elif args.target == 'Si':
+        density_gcm3 = constants.Si_density
 
     args.target_mass_kg = args.volume_cm3 * density_gcm3 * 1e-3
     args.exposure_kgd = args.target_mass_kg * args.t_days
@@ -96,7 +98,7 @@ def get_scan_parameters():
                         help='Exposure in days')
 
     parser.add_argument('--target', type=str, default=df.target,
-                        choices=['Al2O3'],
+                        choices=['Al2O3', 'Si'],
                         help='Target material')
 
     parser.add_argument('--volume_cm3', type=float, default=df.volume_cm3,
