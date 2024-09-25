@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy import stats, special
+from scipy.interpolate import interp1d
 
 import mendeleev
 from darklim import constants
@@ -11,7 +12,10 @@ from darklim.sensitivity._plotting import RatePlot
 import darklim.elf._elf as elf
 import darklim.detector._detector as detector
 import time
-np.random.seed(int(time.time()))
+
+E_LOW_GLOBAL_KEV = 1e-6
+E_HIGH_GLOBAL_KEV = 100.
+NPTS_GLOBAL = int(1e5)
 
 __all__ = [
     "calculate_substrate_mass",
@@ -157,7 +161,7 @@ class SensEst(object):
 
     """
 
-    def __init__(self, m_det, time_elapsed, eff=1, tm="Si", gain=1):#, signal_name='SI-NR'):
+    def __init__(self, m_det, time_elapsed, eff=1, tm="Si", gain=1, seed=None):#, signal_name='SI-NR'):
         """
         Initialization of the SensEst class.
 
@@ -185,6 +189,9 @@ class SensEst(object):
         self._backgrounds = []
         self._background_labels = []
         
+        if seed is not None:
+            np.random.seed(seed)
+
         #self.signal_name = signal_name
         
         #self.signal = None
@@ -294,8 +301,8 @@ class SensEst(object):
         self._backgrounds = []
 
 
-    def run_sim(self, threshold, e_high=1., e_low=1e-6, m_dms=np.geomspace(0.01, 2, num=5),
-                nexp=1, npts=1000, plot_bkgd=False, res=None, verbose=False, sigma0=1e-41,
+    def run_sim(self, threshold, e_high=E_HIGH_GLOBAL_KEV, e_low=E_LOW_GLOBAL_KEV, m_dms=np.geomspace(0.01, 2, num=5),
+                nexp=1, npts=NPTS_GLOBAL, plot_bkgd=False, res=None, verbose=False, sigma0=1e-41,
                 elf_model=None, elf_params=None, elf_target=None,
                 gaas_params=None, return_only_drde=False):
 
@@ -437,30 +444,41 @@ class SensEst(object):
 
         sigs = []
 
-        en_interp = np.geomspace(e_low, e_high, num=npts) # keV
-        rate_interp = []
+        en_interp_wide = np.geomspace(max(e_low, threshold), e_high, num=npts)
+        rate_interp_wide = [None for _ in range(len(m_dms))]
 
         for ii in range(len(m_dms)):
 
             t_start = time.time()
             try:
-                rate_temp = drdefunction[ii](en_interp) * self.exposure
+                rate_temp = drdefunction[ii](en_interp_wide) * self.exposure
             except ValueError:
-                rate_temp = np.array([drdefunction[ii](en) for en in en_interp]) * self.exposure
+                rate_temp = np.array([drdefunction[ii](en) for en in en_interp_wide]) * self.exposure
 
-            rate_interp.append(rate_temp)
+            rate_interp_wide[ii] = rate_temp
 
             print(f'Finished mass {ii}. Took {(time.time()-t_start)/60:.2f} minutes.')
 
         for jj in range(nexp):
             
             evts_sim = self._generate_background(
-                en_interp, plot_bkgd=(plot_bkgd and jj==0))
+                en_interp_wide, plot_bkgd=(plot_bkgd and jj==0))
             if jj == 0:
-                print(f'In the first pseudoexperiment, we simulated {len(evts_sim)} events')
+                print(f'In the first pseudoexperiment for mass {m_dms[0]} GeV, we simulated {len(evts_sim)} events')
+
+            # Combine original en_interp with event energies and sort them
+            combined_energies = np.unique(np.concatenate((en_interp_wide, evts_sim)))
+            min_event, max_event = min(evts_sim), max(evts_sim)
+            en_interp = combined_energies[(combined_energies >= min_event) & (combined_energies <= max_event)]
+
+            # Define interpolation function based on en_interp and rate_interp
+            rate_interp = [None for _ in range(len(m_dms))]
+            for ii in range(len(m_dms)):
+                interp_func = interp1d(en_interp_wide, rate_interp_wide[ii], kind='linear', bounds_error=True)
+                rate_interp[ii] = np.copy(interp_func(en_interp))
 
             sig_temp, _, _ = optimuminterval(
-                evts_sim[evts_sim >= threshold], # evt energies
+                evts_sim, # evt energies
                 en_interp, # efficiency curve energies
                 np.ones_like(en_interp), # efficiency curve values
                 m_dms, # mass list
@@ -471,7 +489,7 @@ class SensEst(object):
                 gauss_width=10, # if smearing, number of sigma to go out to
                 verbose=(verbose*(jj==0)), # print outs
 #                drdefunction=drdefunction, # lambda function for dRdE(E)
-#                hard_threshold=0., # hard threshold for energies
+                hard_threshold=threshold, # hard threshold for energies
                 sigma0=sigma0, # Starting guess for sigma
                 en_interp=en_interp,
                 rate_interp=rate_interp,

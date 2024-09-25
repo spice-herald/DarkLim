@@ -58,56 +58,21 @@ def plot_dm_rates(m_dms,dm_rates,raw_dm_rates,sigma0,savename=None):
 def process_mass(mass, args):
     # All the code that processes the mass value goes here, extracted from the original loop.
 
-    SE = darklim.sensitivity.SensEst(args.target_mass_kg, args.t_days, tm=args.target, eff=1., gain=1.)
+    SE = darklim.sensitivity.SensEst(args.target_mass_kg, args.t_days, tm=args.target, eff=1., gain=1., seed=(int(time.time() + mass*1e6)))
     SE.reset_sim()
-    SE.add_flat_bkgd(1) # flat background of 1 DRU
-    SE.add_nfold_lee_bkgd(m=args.n_sensors, n=args.coincidence, w=args.window_s)
+    #SE.add_flat_bkgd(1) # flat background of 1 DRU
+    SE.add_nfold_lee_bkgd(m=args.n_sensors, n=args.coincidence, w=args.window_s, e0=0.41e-3, R=28.5)
 
     per_device_threshold_keV = args.nsigma * args.baseline_res_eV * 1e-3
     threshold_keV = args.coincidence * per_device_threshold_keV
 
-    # First, figure out what the maximum energy from this dRdE is
-    e_high_keV = 100. # keV
-    e_low_keV = 1e-6 # keV
-    drdefunction = SE.run_sim(
-        threshold_keV,
-        e_high=e_high_keV,
-        e_low=e_low_keV,
-        m_dms=[mass],
-        sigma0=args.sigma0,
-        elf_model=args.elf_model,
-        elf_target=args.target,
-        elf_params=args.elf_params,
-        return_only_drde=True,
-#            gaas_params=None
-        )
-    drdefunction = drdefunction[0]
-
-    e_high_guesses = np.geomspace(e_low_keV, e_high_keV, 3000)
-    skip = False
-    try:
-        drdefunction_guesses = drdefunction(e_high_guesses)
-    except ValueError:
-        drdefunction_guesses = np.array([drdefunction(en) for en in e_high_guesses])
-    indices = np.where(drdefunction_guesses > 0)
-    if len(indices[0]) == 0:
-        e_high_keV = threshold_keV * 1.1
-    else:
-        j = int(indices[0][-1])
-        e_high_keV = e_high_guesses[j] * 1.1
-        if e_high_keV < threshold_keV:
-            e_high_keV = threshold_keV * 1.1
-
-    if skip:
-        sigma = np.inf
-    else:
-        _, sigma = SE.run_sim(
+    _, sigma = SE.run_sim(
             threshold_keV,
-            e_high=e_high_keV,
-            e_low=1e-6,
+            #e_high=e_high_keV,
+            #e_low=1e-6,
             m_dms=[mass],
             nexp=args.nexp,
-            npts=100000,
+            #npts=100000,
             plot_bkgd=False,
             res=None,
             verbose=True,
@@ -117,7 +82,7 @@ def process_mass(mass, args):
             elf_params=args.elf_params,
             return_only_drde=False,
 #            gaas_params=None
-        )
+    )
 
     print(f'Done mass = {mass}, sigma = {sigma}')
 
