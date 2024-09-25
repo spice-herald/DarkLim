@@ -1,7 +1,7 @@
 from IPython.utils import io
 import numpy as np
 import sys
-sys.path.insert(0, '/global/cfs/cdirs/lz/users/vvelan/Test/DarkELF/')
+sys.path.insert(0, '/home/vvelan/DarkELF/')
 from darkelf import darkelf
 from darklim import constants
 
