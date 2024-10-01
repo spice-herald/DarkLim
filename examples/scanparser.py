@@ -88,6 +88,9 @@ def get_scan_parameters():
     parser.add_argument('--results_dir', type=str, default=df.results_dir,
                         help='Output directory')
 
+    parser.add_argument('--fake', type=str, default=0,
+                        help='Ignore this')
+
     parser.add_argument('--max_cpus', type=int, default=df.max_cpus,
                         help='Maximum number of CPU cores to use')
 

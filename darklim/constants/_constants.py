@@ -9,6 +9,7 @@ rho0_dm = 0.3 # local DM density [GeV/cm^3]
 
 bandgap_GaAs_eV = 1.42
 bandgap_Al2O3_eV = 8.8
+bandgap_Si_eV = 1.12
 Al2O3_density = 3.98
 GaAs_density = 5.32
 GaAs_light_fraction = 0.60

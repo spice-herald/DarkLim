@@ -11,7 +11,7 @@ class Defaults:
         self.nexp = 100
         self.t_days = 5 / 60 / 24.
 
-        self.target = 'Al2O3'
+        self.target = 'Si'
         self.volume_cm3 = 1.
 
         self.n_sensors = 1
@@ -21,7 +21,7 @@ class Defaults:
         
         self.baseline_res_eV = 0.1
         
-        self.masses_GeV = [3e-4, 1e3, 50]
+        self.masses_GeV = [1e-4, 1e2, 35]
         self.sigma0 = 1e-35
 
         self.elf_params_NR = {}

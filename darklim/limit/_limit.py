@@ -473,7 +473,7 @@ def optimuminterval(eventenergies, effenergies, effs, masslist, exposure,
     ehigh = max(effenergies)
 
     if en_interp is None:
-        en_interp = np.geomspace(elow, ehigh, int(1e5))
+        en_interp = np.geomspace(elow, ehigh, int(1e4))
 
     event_inds = (eventenergies > elow) & (eventenergies < ehigh)
 

@@ -61,7 +61,7 @@ def process_mass(mass, args):
     SE = darklim.sensitivity.SensEst(args.target_mass_kg, args.t_days, tm=args.target, eff=1., gain=1., seed=(int(time.time() + mass*1e6)))
     SE.reset_sim()
     #SE.add_flat_bkgd(1) # flat background of 1 DRU
-    SE.add_nfold_lee_bkgd(m=args.n_sensors, n=args.coincidence, w=args.window_s, e0=0.41e-3, R=28.5)
+    SE.add_nfold_lee_bkgd(m=args.n_sensors, n=args.coincidence, w=args.window_s)#, e0=0.41e-3, R=28.5)
 
     per_device_threshold_keV = args.nsigma * args.baseline_res_eV * 1e-3
     threshold_keV = args.coincidence * per_device_threshold_keV
