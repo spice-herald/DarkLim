@@ -168,7 +168,7 @@ def write_info(args):
     f.write(f'Baseline energy resolution (eV): {args.baseline_res_eV}\n')
     f.write(f'Sigma above baseline for detection per sensor: {args.nsigma}\n')
     f.write(f'Dark matter masses (GeV/c2): ' + str(args.masses_GeV) + '\n')
-    f.write(f'Default cross section (cm2): {args.sigma0:.4f}\n')
+    f.write(f'Default cross section (cm2): {args.sigma0:.4e}\n')
     f.write(f'Detector gain: 1\n')
     f.write('ELF model: ' + str(args.elf_model) + '\n')
     f.write('ELF params: ' + str(args.elf_params) + '\n') 

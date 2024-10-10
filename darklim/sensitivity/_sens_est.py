@@ -304,7 +304,7 @@ class SensEst(object):
     def run_sim(self, threshold, e_high=E_HIGH_GLOBAL_KEV, e_low=E_LOW_GLOBAL_KEV, m_dms=np.geomspace(0.01, 2, num=5),
                 nexp=1, npts=NPTS_GLOBAL, plot_bkgd=False, res=None, verbose=False, sigma0=1e-41,
                 elf_model=None, elf_params=None, elf_target=None,
-                gaas_params=None, return_only_drde=False):
+                gaas_params=None, return_only_drde=False, force_e_max=None):
 
         """
         Method for running the simulation for getting the sensitivity
@@ -352,7 +352,7 @@ class SensEst(object):
 
         if elf_model is None:
 
-            drdefunction = [(lambda x: drde_wimp_obs( x, m, sigma0, self.tm, self.gain )) for m in m_dms ]
+            drdefunction = [(lambda x, m=m: drde_wimp_obs( x, m, sigma0, self.tm, self.gain )) for m in m_dms ]
 
         elif elf_model == 'electron' and elf_target == 'Al2O3':
 
@@ -457,8 +457,6 @@ class SensEst(object):
 
             rate_interp_wide[ii] = rate_temp
 
-            print(f'Finished mass {ii}. Took {(time.time()-t_start)/60:.2f} minutes.')
-
         for jj in range(nexp):
             
             evts_sim = self._generate_background(
@@ -468,7 +466,13 @@ class SensEst(object):
 
             # Combine original en_interp with event energies and sort them
             combined_energies = np.unique(np.concatenate((en_interp_wide, evts_sim)))
-            min_event, max_event = min(evts_sim), max(evts_sim)
+            if len(evts_sim) > 0:
+                min_event, max_event = min(evts_sim), max(evts_sim)
+            else:
+                min_event = -1 * np.inf
+                max_event = np.inf
+            if force_e_max is not None:
+                max_event = force_e_max
             en_interp = combined_energies[(combined_energies >= min_event) & (combined_energies <= max_event)]
 
             # Define interpolation function based on en_interp and rate_interp
