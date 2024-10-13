@@ -5,7 +5,7 @@ from scipy.interpolate import interp1d
 
 import mendeleev
 from darklim import constants
-from darklim.limit._limit import drde, optimuminterval, fc_limits, get_fc_ul, get_signal_rate
+from darklim.limit._limit import drde, optimuminterval, fc_limits, get_fc_ul, get_signal_rate, gauss_smear
 from darklim.sensitivity._random_sampling import pdf_sampling
 from darklim.sensitivity._plotting import RatePlot
 
@@ -295,6 +295,25 @@ class SensEst(object):
         self._backgrounds.append(nfold_lee)
         self._background_labels.append('{:d}-fold LEE in {:d} devices'.format(n,m))
 
+    def add_power_bkgd(self, amplitude, abs_power):
+        """
+        Method for adding a falling power law background to the simulation.
+
+        Parameters
+        ----------
+        amplitude : float
+            The background amplitude
+        abs_power : float
+            The absolute value of the exponent for this distribution
+            
+        The background is R_DRU = amplitude * keV^(-abs_power) / m_det_kg
+
+        """
+
+        power_bkgd = lambda x: amplitude * x**(-1*abs_power) / self.m_det
+        self._backgrounds.append(power_bkgd)
+        self._background_labels.append('Falling Power Law')
+
     def reset_sim(self):
         """Method for resetting the simulation to its initial state."""
 
@@ -380,6 +399,32 @@ class SensEst(object):
                                                     suppress_darkelf_output=elf_suppress, gain=self.gain)
                 for m in m_dms]
 
+        elif elf_model == 'electron' and elf_target == 'Si':
+
+            elf_mediator = elf_params['mediator'] if 'mediator' in elf_params else 'massless'
+            elf_kcut = elf_params['kcut'] if 'kcut' in elf_params else 0
+            elf_method = elf_params['method'] if 'method' in elf_params else 'grid'
+            elf_screening = elf_params['withscreening'] if 'withscreening' in elf_params else True
+            elf_suppress = elf_params['suppress_darkelf_output'] if 'suppress_darkelf_output' in elf_params else False
+
+            drdefunction = \
+                [elf.get_dRdE_lambda_Si_electron(mX_eV=m*1e9, sigmae=sigma0, mediator=elf_mediator,
+                                                    kcut=elf_kcut, method=elf_method, withscreening=elf_screening,
+                                                    suppress_darkelf_output=elf_suppress, gain=self.gain)
+                for m in m_dms]
+
+        elif elf_model == 'phonon' and elf_target == 'Si':
+
+            elf_mediator = elf_params['mediator'] if 'mediator' in elf_params else 'massless'
+            elf_suppress = elf_params['suppress_darkelf_output'] if 'suppress_darkelf_output' in elf_params else False
+            elf_darkphoton = elf_params['dark_photon'] if 'dark_photon' in elf_params else False
+
+            drdefunction = \
+                [elf.get_dRdE_lambda_Si_phonon(mX_eV=m*1e9, sigman=sigma0, mediator=elf_mediator,
+                                                    dark_photon=elf_darkphoton,
+                                                    suppress_darkelf_output=elf_suppress, gain=self.gain)
+                for m in m_dms]
+
         elif elf_model == 'electron' and elf_target == 'GaAs':
 
             elf_mediator = elf_params['mediator'] if 'mediator' in elf_params else 'massless'
@@ -449,7 +494,6 @@ class SensEst(object):
 
         for ii in range(len(m_dms)):
 
-            t_start = time.time()
             try:
                 rate_temp = drdefunction[ii](en_interp_wide) * self.exposure
             except ValueError:
@@ -471,15 +515,18 @@ class SensEst(object):
             else:
                 min_event = -1 * np.inf
                 max_event = np.inf
-            if force_e_max is not None:
-                max_event = force_e_max
-            en_interp = combined_energies[(combined_energies >= min_event) & (combined_energies <= max_event)]
+            en_interp = combined_energies[combined_energies >= min_event]
 
             # Define interpolation function based on en_interp and rate_interp
-            rate_interp = [None for _ in range(len(m_dms))]
+            rate_interp = np.zeros((len(m_dms), len(en_interp)))
             for ii in range(len(m_dms)):
                 interp_func = interp1d(en_interp_wide, rate_interp_wide[ii], kind='linear', bounds_error=True)
-                rate_interp[ii] = np.copy(interp_func(en_interp))
+                rate_temp = np.copy(interp_func(en_interp))
+                if res is None:
+                    rate_interp[ii] = rate_temp
+                else:
+                    rate_interp[ii] = \
+                        gauss_smear(en_interp, rate_temp, res, gauss_width=5)
 
             sig_temp, _, _ = optimuminterval(
                 evts_sim, # evt energies
