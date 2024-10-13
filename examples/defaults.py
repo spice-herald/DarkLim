@@ -8,20 +8,21 @@ class Defaults:
         self.results_dir = './results/'
         self.max_cpus = 24
 
-        self.nexp = 100
-        self.t_days = 5 / 60 / 24.
+        self.nexp = 1000
+        self.t_days = 1 / 3600 / 24.
 
         self.target = 'Si'
-        self.volume_cm3 = 1.
+        self.volume_cm3 = 0.1
 
         self.n_sensors = 1
         self.coincidence = 1
         self.window_s = 1e-6
         self.nsigma = 5
         
-        self.baseline_res_eV = 0.1
+        self.baseline_res_eV = 0.2
         
-        self.masses_GeV = [1e-4, 1e2, 35]
+        self.masses_GeV = [3e-3, 2e1, 24]
+
         self.sigma0 = 1e-35
 
         self.elf_params_NR = {}

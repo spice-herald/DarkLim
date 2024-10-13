@@ -1,4 +1,5 @@
 import numpy as np
+from datetime import datetime
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 import math
@@ -6,37 +7,50 @@ import math
 curves_dir = 'ExistingLimits/'
 
 # Some figure setup
-mpl.rcParams.update({'font.size': 20})
+mpl.rcParams.update({'font.size': 17})
 mpl.rcParams.update({'axes.linewidth': 2})
-fig, ax = plt.subplots(1, 1, figsize=(11, 11))
-xmin = 1e-2; xmax = 1e7;
-ymin = 1e-48; ymax = 1e-20;
+fig, ax = plt.subplots(1, 1, figsize=(14,11))
+xmin = 5e-1; xmax = 2e3
+ymin = 1e-34; ymax = 1e-18
 
 # Existing limits
-m_limit, x_limit = np.loadtxt(curves_dir + 'SENSEI_Migdal_NR.txt').transpose()
-ax.plot(m_limit, x_limit, '--', lw=1.5, label='SENSEI Migdal')
 m_limit, x_limit = np.loadtxt(curves_dir + 'CRESST_III_2019.txt').transpose()
-ax.plot(m_limit*1e3, x_limit, '--', lw=1.5, label='CRESST III')
-m_limit, x_limit = np.loadtxt(curves_dir + 'Darkside50_Migdal_2023.txt').transpose()
-ax.plot(m_limit*1e3, x_limit, '--', lw=1.5, label='Darkside Migdal')
+ax.plot(m_limit*1e3, x_limit, '--', lw=1.5, label='CRESST 2019')
+m_limit, x_limit = np.loadtxt(curves_dir + 'CRESSTIII-Si-2022_cm.txt').transpose()
+ax.plot(m_limit*1e3, x_limit, '--', lw=1.5, label='CRESST 2022')
+m_limit, x_limit = np.loadtxt(curves_dir + 'CRESST_III_2024.txt').transpose()
+ax.plot(m_limit*1e3, x_limit, '--', lw=1.5, label='CRESST 2024')
 m_limit, x_limit = np.loadtxt(curves_dir + 'LZ_SI_2022.txt').transpose()
-ax.plot(m_limit*1e3, x_limit, '--', lw=1.5, label='LZ')
+ax.plot(m_limit*1e3, x_limit, '--', lw=1.5, label='LZ 2022')
 
 # Simulation
-m_limit, x_limit = np.loadtxt('results/sapphire_oi_NR_1h_low_bkgd/HeRALD_FC_0d_1device_1fold_100mus.txt').transpose()
-ax.plot(m_limit*1e3, x_limit, 'k--', lw=3, label='NR Low Bkgd')
 
-m_limit, x_limit = np.loadtxt('results/sapphire_oi_phonon_massive_1h_low_bkgd/HeRALD_FC_0d_1device_1fold_100mus.txt').transpose()
-ax.plot(m_limit*1e3, x_limit, 'g--', lw=3, label='Multiphonon Low Bkgd')
+for (baseline_meV, color) in \
+    zip([370, 200, 100, 80, 50, 30, 20],
+        ['#d62728', '#ff7f0e', '#bcbd22', '#2ca02c', '#17becf', '#1f77b4','#e377c2', '#9467bd', '#8c564b']):
+        
+    #m_limit, x_limit = np.loadtxt(f'results/sapphire_1sec_{baseline_meV}meV_NR/limit.txt').transpose()
+    #ax.plot(m_limit*1e3, x_limit, '-', color=color, lw=3, label=f'E_threshold = {baseline_meV*5} meV')
 
-m_limit, x_limit = np.loadtxt('results/sapphire_oi_NR_1h/HeRALD_FC_0d_1device_1fold_100mus.txt').transpose()
-ax.plot(m_limit*1e3, x_limit, 'k-', lw=3, label='NR')
+    try:
+        m_limit, x_limit = np.loadtxt(f'results/sapphire_power_bkgd_1sec_{baseline_meV}meV_NR/limit.txt').transpose()
+        ax.plot(m_limit*1e3, x_limit, '-', color=color, lw=2.5, label=f'E_threshold = {baseline_meV*5} meV')
+    except FileNotFoundError:
+        pass
 
-m_limit, x_limit = np.loadtxt('results/sapphire_oi_phonon_massive_1h/HeRALD_FC_0d_1device_1fold_100mus.txt').transpose()
-ax.plot(m_limit*1e3, x_limit, 'g-', lw=3, label='Multiphonon')
+    #m_limit, x_limit = np.loadtxt(f'results/sapphire_1sec_{baseline_meV}meV_phonon_massive/limit.txt').transpose()
+    #ax.plot(m_limit*1e3, x_limit, '--', color=color, lw=3)
 
-m_limit, x_limit = np.loadtxt('results/limit.txt').transpose()
-ax.plot(m_limit*1e3, x_limit, 'r-', lw=3, label='Test')
+    try:
+        m_limit, x_limit = np.loadtxt(f'results/sapphire_power_bkgd_1sec_{baseline_meV}meV_phonon_massive/limit.txt').transpose()
+        ax.plot(m_limit*1e3, x_limit, '--', color=color, lw=2.5)
+    except FileNotFoundError:
+        pass
+
+# Print the current date and time
+now = datetime.now()
+now = now.strftime("%Y-%m-%d %H:%M:%S")
+#ax.text(0.97, 0.97, f'Plot made at {now}', transform=ax.transAxes, ha='right', va='top')
 
 ax.set_xscale('log')
 ax.set_xlim([xmin, xmax])
@@ -44,8 +58,10 @@ ax.set_yscale('log')
 ax.set_ylim([ymin, ymax])
 ax.set_xlabel('DM Mass [MeV]')
 ax.set_ylabel('DM-nucleon [cm2]')
-ax.legend(loc='lower left', fontsize=14)
+ax.legend(loc='best', fontsize=17)
+
+#ax.text(2e1, 1e-22, 'Al2O3, 0.4 grams, 1 second', fontsize=25)
 
 fig.tight_layout()
-fig.savefig('sapphire_NR.png')
+fig.savefig('sapphire_NR_group.png')
 
