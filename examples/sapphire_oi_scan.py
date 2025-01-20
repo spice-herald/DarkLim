@@ -62,7 +62,7 @@ def process_mass(mass, args):
     #SE.add_nfold_lee_bkgd(m=args.n_sensors, n=args.coincidence, w=args.window_s, e0=0.41e-3, R=33.)
     #SE.add_nfold_lee_bkgd(m=args.n_sensors, n=args.coincidence, w=args.window_s, e0=3.81e-3, R=0.0226)
     SE.add_power_bkgd(1.4e-8, 5.77)
-    SE.add_power_bkgd(7.51e-11, 2.72)
+    SE.add_power_bkgd(0.107, 2.72)
 
     per_device_threshold_keV = args.nsigma * args.baseline_res_eV * 1e-3
     threshold_keV = args.coincidence * per_device_threshold_keV
