@@ -688,8 +688,10 @@ class SensEst(object):
         drdefunction = None
 
         if use_drdefunction and elf_model is None:
-
-            drdefunction = [(lambda x: drde_wimp_obs( x, m, sigma0, self.tm, self.gain )) for m in m_dms ]
+            if verbose:
+                print('Using default WIMP NR signal model.')
+            #drdefunction = [(lambda x: drde_wimp_obs( x, m, sigma0, self.tm, self.gain )) for m in m_dms ]
+            drdefunction = [ lambda x,m: drde_wimp_obs( x, m, sigma0, self.tm, self.gain ) for m in m_dms ]
 
         elif elf_model == 'electron' and elf_target == 'GaAs':
 

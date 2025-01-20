@@ -59,8 +59,8 @@ def run_scan_point(nexp,time_elapsed,mass_det,n_devices,coinc,window,change_box=
     else:
         known_bkgs = [0,1]
     
-    #m_dms = np.geomspace(0.005, 2, num=25)
-    m_dms = np.concatenate((np.geomspace(0.08, 0.280, num=15),np.array([0.300]),np.geomspace(0.320, 2, num=12)))
+    m_dms = np.geomspace(0.08, 2, num=3)
+    #m_dms = np.concatenate((np.geomspace(0.08, 0.280, num=15),np.array([0.300]),np.geomspace(0.320, 2, num=12)))
     #print(m_dms)
     sigma0 = 1e-36
     
@@ -99,10 +99,11 @@ def run_scan_point(nexp,time_elapsed,mass_det,n_devices,coinc,window,change_box=
         npts=int(1e4),
         plot_bkgd=False,
         res=np.sqrt(n_devices)*energy_res,
-        verbose=False,
+        verbose=True,
         sigma0=sigma0,
         use_drdefunction=True,
-        pltname='ULs_{:0.0f}d_{:d}device_{:d}fold_{:0.0f}mus'.format(time_elapsed,n_devices,coinc,window/1e-6)
+        pltname='ULs_{:0.0f}d_{:d}device_{:d}fold_{:0.0f}mus'.format(time_elapsed,n_devices,coinc,window/1e-6),
+        savedir=savedir
         #pltname=None
     )
     
@@ -132,7 +133,8 @@ def helium_scan(results_dir):
     #times = np.array([1,2,5,10,20,50,75,100,200,500]) # d
     #times = np.linspace(1,250,num=20, endpoint=True) # d
     
-    times = np.concatenate( (np.array([1,2,5,10]), np.linspace(15,400,num=20, endpoint=True), np.array([30,183,365])) ) #d
+    #times = np.concatenate( (np.array([1,2,5,10]), np.linspace(15,400,num=20, endpoint=True), np.array([30,183,365])) ) #d
+    times = np.array([10])
     times = np.sort(times)
     #times = np.array([30,183,365]) # 1, 6, and 12 months
     
@@ -143,8 +145,8 @@ def helium_scan(results_dir):
     exposures = times*mass_det
     
     n_devices = 4
-    coinc = np.arange(2,5)
-    #coinc = np.array([1])
+    #coinc = np.arange(2,5)
+    coinc = np.array([2])
     window = 100e-6 # s
     
     for t in times:
