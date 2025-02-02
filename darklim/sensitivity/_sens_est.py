@@ -295,6 +295,30 @@ class SensEst(object):
         self._backgrounds.append(nfold_lee)
         self._background_labels.append('{:d}-fold LEE in {:d} devices'.format(n,m))
 
+    def add_nfold_powerlaw_lee_bkgd(self,m=1,n=1,w=100e-6):
+        """
+        Method for adding n-fold coincidence bkg assuming 
+        power-law distributed LEE. loads in pregenerated templates.
+
+        Parameters
+        ----------
+        m : int
+            Total number of devices
+        n : int
+            Coincidence level
+        w : float
+            Coincidence window length in seconds. 
+        """
+        fin = '/global/cfs/cdirs/lz/users/haselsco/TESSERACT_Limits/DarkLim_vetriupdate/examples/LEE_templates/LEE_bkg_{:d}device_{:d}fold_{:0.0f}mus.txt'.format(m,n,w/1e-6)
+        template = np.loadtxt(fin,skiprows=1)
+        interp_func = interp1d(template[:,0],template[:,1],
+                               fill_value='extrapolate',
+                               assume_sorted=True)
+        
+        nfold_power_lee = lambda x: interp_func(x) / self.m_det
+        self._backgrounds.append(nfold_power_lee)
+        self._background_labels.append('{:d}-fold Power-law LEE in {:d} devices'.format(n,m))
+    
     def add_power_bkgd(self, amplitude, abs_power):
         """
         Method for adding a falling power law background to the simulation.
@@ -318,7 +342,7 @@ class SensEst(object):
         """Method for resetting the simulation to its initial state."""
 
         self._backgrounds = []
-
+        self._background_labels = []
 
     def run_sim(self, threshold, e_high=E_HIGH_GLOBAL_KEV, e_low=E_LOW_GLOBAL_KEV, m_dms=np.geomspace(0.01, 2, num=5),
                 nexp=1, npts=NPTS_GLOBAL, plot_bkgd=False, res=None, verbose=False, sigma0=1e-41,
