@@ -57,15 +57,16 @@ def plot_dm_rates(m_dms,dm_rates,raw_dm_rates,sigma0,savename=None):
 def process_mass(mass, args):
     # All the code that processes the mass value goes here, extracted from the original loop.
 
-    SE = darklim.sensitivity.SensEst(args.target_mass_kg, args.t_days, tm=args.target, eff=1., gain=1., seed=(int(time.time() + mass*1e6)))
+    SE = darklim.sensitivity.SensEst(args.target_mass_kg, args.t_days, tm=args.target, eff=1., gain=0.15, seed=(int(time.time() + mass*1e6)))
     SE.reset_sim()
     #SE.add_nfold_lee_bkgd(m=args.n_sensors, n=args.coincidence, w=args.window_s, e0=0.41e-3, R=33.)
     #SE.add_nfold_lee_bkgd(m=args.n_sensors, n=args.coincidence, w=args.window_s, e0=3.81e-3, R=0.0226)
-    
-    # replace these with switch to grab pre-made n-fold templates
-    SE.add_power_bkgd(1.4e-8, 5.77)
-    SE.add_power_bkgd(7.51e-11, 2.72)
+    #SE.add_power_bkgd(1.4e-8, 5.77)
+    #SE.add_power_bkgd(0.107, 2.72)
 
+    SE.add_flat_bkgd(1) # flat background of 1 DRU
+    SE.add_nfold_powerlaw_lee_bkgd(m=args.n_sensors,n=args.coincidence,w=args.window_s)
+    
     per_device_threshold_keV = args.nsigma * args.baseline_res_eV * 1e-3
     threshold_keV = args.coincidence * per_device_threshold_keV
 
@@ -77,7 +78,8 @@ def process_mass(mass, args):
             nexp=args.nexp,
             #npts=100000,
             plot_bkgd=False,
-            res=args.baseline_res_eV*1e-3,
+            #res=args.baseline_res_eV*1e-3,
+            res=np.sqrt(args.n_sensors)*args.baseline_res_eV*1e-3,
             verbose=True,
             sigma0=args.sigma0,
             elf_model=args.elf_model,

@@ -396,7 +396,8 @@ class SensEst(object):
         if elf_model is None:
 
             drdefunction = [(lambda x, m=m: drde_wimp_obs( x, m, sigma0, self.tm, self.gain )) for m in m_dms ]
-
+            #drdefunction = [ lambda x,m: drde_wimp_obs( x, m, sigma0, self.tm, self.gain ) for m in m_dms ]
+            
         elif elf_model == 'electron' and elf_target == 'Al2O3':
 
             elf_mediator = elf_params['mediator'] if 'mediator' in elf_params else 'massless'

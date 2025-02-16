@@ -2,7 +2,7 @@ import argparse
 import numpy as np
 import os
 import scipy.stats as stats
-import defaults
+import helium_defaults as defaults
 from darklim import constants
 import datetime
 
@@ -43,6 +43,8 @@ def convert_scan_parameters(args):
         density_gcm3 = constants.Al2O3_density
     elif args.target == 'Si':
         density_gcm3 = constants.Si_density
+    elif args.target == 'He':
+        density_gcm3 = constants.LHe_density
 
     args.target_mass_kg = args.volume_cm3 * density_gcm3 * 1e-3
     args.exposure_kgd = args.target_mass_kg * args.t_days
