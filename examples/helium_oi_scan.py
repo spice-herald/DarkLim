@@ -102,10 +102,12 @@ def helium_scan():
     
     # Force some parameters
     args.target = 'He'
-
+    args.elf_model = None
     # Write input parameters to a text file
     scanparser.write_info(args)
 
+    print('running over masses:',args.masses_GeV)
+    
     # Main parallel execution block
     with mp.Pool(processes=min(args.max_cpus, mp.cpu_count())) as pool:
         results = pool.starmap(process_mass, [(mass, args) for mass in args.masses_GeV])

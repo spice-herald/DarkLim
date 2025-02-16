@@ -850,13 +850,13 @@ class SensEst(object):
         
         # option to plot distribution of ULs:
         if pltname is not None:
-            fig, ax = plt.subplots(1,figsize=(4,3))
+            fig, ax = plt.subplots(1,figsize=(6,4))
             plt.hist(uls,bins=20,range=(0,max(uls)))
             ax.axvline(median_ul,ls='--',color='red')
             ax.set_xlabel('Upper Limit [Events]')
             ax.set_xlim(0,max(uls))
-            outdir = '/global/cfs/cdirs/lz/users/vvelan/Test/DarkLim/examples/'
-            plt.savefig(outdir+pltname+'.png',dpi=300, facecolor='white',bbox_inches='tight')
+            #outdir = '/global/cfs/cdirs/lz/users/haselsco/TESSERACT_Limits/DarkLim_vetriupdate/examples/'
+            plt.savefig(savedir+pltname+'.png', facecolor='white',bbox_inches='tight')
         
         # expected bkg rate, made to match m_dm len just to make analysis easier
         exp_bkg = np.full_like(m_dms,median_exp)

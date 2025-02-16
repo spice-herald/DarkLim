@@ -640,9 +640,9 @@ def get_fc_ul(known_bkg_func, eventenergies, threshold, ehigh, exposure, verbose
     
     if verbose:
         print('elow, ehigh = {:0.3e}, {:0.3e} keV'.format(threshold,ehigh))
-        print('exp bkg =',exp_bkg,'evts')
-        print('n_obs above threhsold =',n_obs,'evts')
-        print('-->FC 90% CL UL =',ul,'evts')
+        print('exp bkg = {:0.3e} evts'.format(exp_bkg))
+        print('n_obs above threhsold = {:d}'.format(n_obs))
+        print('-->FC 90% CL UL = {:0.2f} evts'.format(ul))
     
     return n_obs, exp_bkg, ul
 
@@ -704,9 +704,7 @@ def get_signal_rate(effenergies, effs, masslist, exposure,
             ax.legend(loc='lower left',frameon=False)
             ax.set_title('m={:0.3f}GeV,\n rate over threshold={:0.3e} evts'.format(mass,signal_rates[ii]))
             #outdir = '/global/cfs/cdirs/lz/users/vvelan/Test/DarkLim/examples/'
-            outdir = '/global/cfs/cdirs/lz/users/haselsco/TESSERACT_Limits/DarkLim_vetriupdate/examples/'
-
-
-            plt.savefig(outdir+savedir+'/testplot_{:0.3f}GeV.png'.format(mass),facecolor='white',bbox_inches='tight')
+            #outdir = '/global/cfs/cdirs/lz/users/haselsco/TESSERACT_Limits/DarkLim_vetriupdate/examples/'
+            plt.savefig(savedir+'/recoilenergy_{:0.3f}GeV.png'.format(mass),facecolor='white',bbox_inches='tight')
  
     return signal_rates, raw_signal_rates
