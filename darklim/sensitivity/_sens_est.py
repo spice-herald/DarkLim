@@ -338,6 +338,27 @@ class SensEst(object):
         self._backgrounds.append(power_bkgd)
         self._background_labels.append('Falling Power Law')
 
+    def add_shifted_power_bkgd(self, amplitude, abs_power, shift):
+        """
+        Method for adding a shifted falling power law background to the simulation.
+
+        Parameters
+        ----------
+        amplitude : float
+            The background amplitude in 1/kg/day
+        abs_power : float
+            The absolute value of the exponent for this distribution
+        shift : float
+            The shift in keV to apply to the power law
+            
+        The background is R_DRU = amplitude * keV^(-abs_power) / m_det_kg
+
+        """
+
+        shifted_power_bkgd = lambda x: amplitude * (abs_power - 1) * shift**(abs_power - 1) * (x + shift)**(-1*abs_power) / self.m_det
+        self._backgrounds.append(shifted_power_bkgd)
+        self._background_labels.append('Shifted Falling Power Law')
+
     def reset_sim(self):
         """Method for resetting the simulation to its initial state."""
 
