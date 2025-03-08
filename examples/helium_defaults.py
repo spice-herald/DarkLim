@@ -12,16 +12,21 @@ class Defaults:
         self.nexp = 10
         self.t_days = 1 / 3600 / 24.
 
+        self.detector = '4-1cm2'
+        
         self.target = 'He'
-        self.volume_cm3 = 9/0.14 # made to make LHe mass = 9 grams
+        self.volume_cm3 = 7.65 # made to make LHe mass = 9 grams
 
-        self.n_sensors = 1
-        self.coincidence = 1
+        self.n_sensors = 4
+        self.coincidence = 4
         self.window_s = 100e-6
         self.nsigma = 5
+
+        self.per_device_threshold_keV = 1e-3
         
-        self.baseline_res_eV = 0.373 # eV
-        
+        self.baseline_res_eV = 0.200 # eV
+
+        #self.masses_GeV = [0.08, 2, 3] # specifies min, max, number of masses
         #self.masses_GeV = [3e-3, 2e1, 24]
         self.masses_GeV = [0.08, 2, 12] # specifies min, max, number of masses
         #self.masses_GeV = [1, 1, 1] # specifies min, max, number of masses

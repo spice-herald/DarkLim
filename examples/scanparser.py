@@ -114,10 +114,16 @@ def get_scan_parameters():
 
     parser.add_argument('--coincidence', type=int, default=df.coincidence,
                         help='Coincidence level between sensors')
-
+    
+    parser.add_argument('--detector', type=str, default=df.detector,
+                        help='LHe detector config')
+    
     parser.add_argument('--window_s', type=float, default=df.window_s,
                         help='Coincidence window (seconds)')
 
+    parser.add_argument('--per_device_threshold_keV', type=float, default=df.per_device_threshold_keV,
+                        help='Assumed per-sensor threshold in keV for Run57 templates')
+    
     parser.add_argument('--nsigma', type=float, default=df.nsigma,
                         help=('Number of sigma for detection above baseline ' + 
                               'in one sensor. For coincidence in multiple ' + 
@@ -161,6 +167,7 @@ def write_info(args):
     f = open(args.results_dir + 'info.txt', 'w')
     f.write(datetime.datetime.now().strftime('%m/%d/%Y, %H:%M:%S') + '\n\n')
     f.write(f'Detector material: {args.target}\n')
+    f.write(f'Detector arrangement: {args.detector}\n')
     f.write(f'Exposure time [days]: {args.t_days}\n')
     f.write(f'Detector volume [cm^3]: {args.volume_cm3}\n')
     f.write(f'Detector mass [kg]: {args.target_mass_kg}\n')
@@ -169,6 +176,7 @@ def write_info(args):
     f.write(f'Time window [s]: {args.window_s}\n')
     f.write(f'Baseline energy resolution [eV]: {args.baseline_res_eV}\n')
     f.write(f'Sigma above baseline for detection per sensor: {args.nsigma}\n')
+    f.write(f'Threshold per sensor [keV]: {args.per_device_threshold_keV}\n')
     f.write(f'Dark matter masses [GeV/c2]: ' + str(args.masses_GeV) + '\n')
     f.write(f'Default cross section [cm2]: {args.sigma0:.4e}\n')
     f.write(f'Detector gain: 1\n')

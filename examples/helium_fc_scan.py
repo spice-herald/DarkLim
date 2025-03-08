@@ -73,13 +73,17 @@ def process_mass(mass, args):
     #SE.add_power_bkgd(0.107, 2.72)
 
     SE.add_flat_bkgd(1) # flat background of 1 DRU
-    SE.add_nfold_powerlaw_lee_bkgd(m=args.n_sensors,n=args.coincidence,w=args.window_s)
+    #SE.add_nfold_powerlaw_lee_bkgd(m=args.n_sensors,n=args.coincidence,w=args.window_s)
+    #SE.add_nfold_powerlaw_lee_bkgd(m=args.n_sensors,n=args.coincidence,w=args.window_s)
+    SE.add_run57_lee_bkgd(detector=args.detector,m=args.coincidence,w=args.window_s,thres=args.per_device_threshold_keV)
     
-    per_device_threshold_keV = args.nsigma * args.baseline_res_eV * 1e-3
+    #per_device_threshold_keV = args.nsigma * args.baseline_res_eV * 1e-3
+    per_device_threshold_keV = args.per_device_threshold_keV
     threshold_keV = args.coincidence * per_device_threshold_keV
 
     # set max energy considered based on DM recoil spectrum:
-    ehigh = darklim.sensitivity.edep_to_eobs(darklim.limit.drde_max_q(mass, tm=args.target),he_gain) + 10*np.sqrt(args.n_sensors)*args.baseline_res_eV * 1e-3
+    #ehigh = darklim.sensitivity.edep_to_eobs(darklim.limit.drde_max_q(mass, tm=args.target),he_gain) + 10*np.sqrt(args.n_sensors)*args.baseline_res_eV * 1e-3
+    ehigh = darklim.sensitivity.edep_to_eobs(darklim.limit.drde_max_q(mass, tm=args.target),he_gain) + 10*np.sqrt(args.coincidence)*args.baseline_res_eV * 1e-3
     print('ROI max: {:0.3f} keV for max DM mass of {:0.3f} GeV.'.format(ehigh,mass))
     
     """
@@ -113,7 +117,7 @@ def process_mass(mass, args):
         #npts=int(1e4),
         plot_bkgd=False,
         res=np.sqrt(args.n_sensors)*args.baseline_res_eV*1e-3,
-        verbose=False,
+        verbose=True,
         sigma0=args.sigma0,
         use_drdefunction=True,
         pltname='ULs_{:0.0f}d_{:d}device_{:d}fold_{:0.0f}mus'.format(args.t_days,args.n_sensors,args.coincidence,args.window_s/1e-6),
