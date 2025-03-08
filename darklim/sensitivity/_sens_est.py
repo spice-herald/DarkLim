@@ -319,7 +319,7 @@ class SensEst(object):
         self._backgrounds.append(nfold_power_lee)
         self._background_labels.append('{:d}-fold Power-law LEE in {:d} devices'.format(n,m))
 
-    def add_run57_lee_bkgd(self,detector='4-1cm2',m=4,w=100e-6,thres=1e-3):
+    def add_run57_lee_bkgd(self,detector='4-1cm2',m=4,w=100e-6,thres=1.00e-3):
         """
         loads in pregenerated templates for 4-fold coincidence of 
         devices with Run57 LEE.
@@ -328,11 +328,13 @@ class SensEst(object):
         fin = '/global/cfs/cdirs/lz/users/haselsco/TESSERACT_Limits/DarkLim_vetriupdate/examples/Run57_LEE_templates/LEE_bkg_{:s}_{:d}fold_{:0.0f}mus_{:0.2e}keV.txt'.format(detector,m,w/1e-6,thres)
         template = np.loadtxt(fin,skiprows=1)
         interp_func = interp1d(template[:,0],template[:,1],
-                               fill_value='extrapolate',
+                               bounds_error=False,
+                               #fill_value='extrapolate',
+                               fill_value=0,
                                assume_sorted=True)
         
-        nfold_power_lee = lambda x: interp_func(x) / self.m_det
-        self._backgrounds.append(nfold_power_lee)
+        lee_template = lambda x: interp_func(x) / self.m_det
+        self._backgrounds.append(lee_template)
         self._background_labels.append('{:d}-fold Run57 LEE w/{:0.2} eV threshold/device'.format(m,thres*1000))
     
     def add_power_bkgd(self, amplitude, abs_power):
@@ -846,7 +848,7 @@ class SensEst(object):
                 print('Running toy number {}...'.format(ii))
             
             # generate a toy:
-            evts_sim = self._generate_background(en_interp, plot_bkgd=plot_bkgd and ii==0)
+            evts_sim = self._generate_background(en_interp, verbose=verbose, plot_bkgd=plot_bkgd and ii==0)
             
             # get its FC UL:
             obs[ii], exp[ii], uls[ii] = get_fc_ul(

@@ -15,8 +15,6 @@ import datetime
 
 import multiprocessing as mp
 
-he_gain = 0.15
-
 
 ##################################################################
 
@@ -65,7 +63,12 @@ def process_mass(mass, args):
     else:
         known_bkgs = [0,1]
     
-    SE = darklim.sensitivity.SensEst(args.target_mass_kg, args.t_days, tm=args.target, eff=1., gain=he_gain, seed=(int(time.time() + mass*1e6)))
+    SE = darklim.sensitivity.SensEst(args.target_mass_kg, 
+                                     args.t_days, 
+                                     tm=args.target, 
+                                     eff=1., 
+                                     gain=args.he_gain, 
+                                     seed=(int(time.time() + mass*1e6)))
     SE.reset_sim()
     #SE.add_nfold_lee_bkgd(m=args.n_sensors, n=args.coincidence, w=args.window_s, e0=0.41e-3, R=33.)
     #SE.add_nfold_lee_bkgd(m=args.n_sensors, n=args.coincidence, w=args.window_s, e0=3.81e-3, R=0.0226)
@@ -82,8 +85,8 @@ def process_mass(mass, args):
     threshold_keV = args.coincidence * per_device_threshold_keV
 
     # set max energy considered based on DM recoil spectrum:
-    #ehigh = darklim.sensitivity.edep_to_eobs(darklim.limit.drde_max_q(mass, tm=args.target),he_gain) + 10*np.sqrt(args.n_sensors)*args.baseline_res_eV * 1e-3
-    ehigh = darklim.sensitivity.edep_to_eobs(darklim.limit.drde_max_q(mass, tm=args.target),he_gain) + 10*np.sqrt(args.coincidence)*args.baseline_res_eV * 1e-3
+    #ehigh = darklim.sensitivity.edep_to_eobs(darklim.limit.drde_max_q(mass, tm=args.target),args.he_gain) + 10*np.sqrt(args.n_sensors)*args.baseline_res_eV * 1e-3
+    ehigh = darklim.sensitivity.edep_to_eobs(darklim.limit.drde_max_q(mass, tm=args.target),args.he_gain) + 10*np.sqrt(args.coincidence)*args.baseline_res_eV * 1e-3
     print('ROI max: {:0.3f} keV for max DM mass of {:0.3f} GeV.'.format(ehigh,mass))
     
     """
@@ -115,7 +118,7 @@ def process_mass(mass, args):
         m_dms=[mass],
         nexp=args.nexp,
         #npts=int(1e4),
-        plot_bkgd=False,
+        plot_bkgd=True,
         res=np.sqrt(args.n_sensors)*args.baseline_res_eV*1e-3,
         verbose=True,
         sigma0=args.sigma0,
@@ -146,7 +149,7 @@ def helium_scan():
     # Force some parameters
     args.target = 'He'
     args.elf_model = None
-    # Write input parameters to a text file
+    # Write input parameters to a text file - if results dir doesn't exist, gets created here
     scanparser.write_info(args)
 
     print('running over masses:',args.masses_GeV)

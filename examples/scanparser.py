@@ -117,6 +117,9 @@ def get_scan_parameters():
     
     parser.add_argument('--detector', type=str, default=df.detector,
                         help='LHe detector config')
+
+    parser.add_argument('--he_gain', type=float, default=df.he_gain,
+                        help='LHe gain factor')
     
     parser.add_argument('--window_s', type=float, default=df.window_s,
                         help='Coincidence window (seconds)')
