@@ -8,14 +8,14 @@ class Defaults:
         #self.results_dir = './results/'
         self.results_dir = '/global/cfs/cdirs/lz/users/haselsco/TESSERACT_Limits/DarkLim_vetriupdate/examples/results/'
         
-        self.max_cpus = 1
+        #self.max_cpus = 1
         #self.masses_GeV = [0.010,0.010,1] # specifies min, max, number of masses
-        self.masses_GeV = [1,1,1] # specifies min, max, number of masses
+        #self.masses_GeV = [1,1,1] # specifies min, max, number of masses
         
-        #self.max_cpus = 24
-        #self.masses_GeV = [0.005, 10, 24] # specifies min, max, number of masses
+        self.max_cpus = 48
+        self.masses_GeV = [0.005, 10, 48] # specifies min, max, number of masses
         
-        self.nexp = 100
+        self.nexp = 1000
         self.t_days = 1
 
         self.detector = '4-1cm2'

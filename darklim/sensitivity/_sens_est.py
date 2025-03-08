@@ -848,7 +848,9 @@ class SensEst(object):
                 print('Running toy number {}...'.format(ii))
             
             # generate a toy:
-            evts_sim = self._generate_background(en_interp, verbose=verbose, plot_bkgd=plot_bkgd and ii==0)
+            # note that this generates evts in the energy range e_low to e_high, but we only
+            # count those above 'threshold' to get the toy expt's FC UL below
+            evts_sim = self._generate_background(en_interp, verbose=False, plot_bkgd=plot_bkgd and ii==0)
             
             # get its FC UL:
             obs[ii], exp[ii], uls[ii] = get_fc_ul(
