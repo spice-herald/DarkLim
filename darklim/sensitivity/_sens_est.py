@@ -215,6 +215,24 @@ class SensEst(object):
         self._backgrounds.append(flat_bkgd)
         self._background_labels.append('{:0.2f} DRU Bkg'.format(flat_rate))
 
+    def add_cutoff_flat_bkgd(self, he_gain, flat_rate):
+        """
+        flat bkg that cuts off at 20 eV in Helium
+
+        Parameters
+        ----------
+        flat_rate : float
+            The flat background rate, in units of events/kg/kev/day
+            (DRU).
+
+        """
+        cut_energy = 20e-3*he_gain
+        cutoff_bkgd = lambda x: np.heaviside(x - cut_energy, flat_rate)
+        # np.heaviside(en_interp - threshold, 1)
+        #flat_bkgd = lambda x: flat_rate * np.ones(len(x))
+        self._backgrounds.append(cutoff_bkgd)
+        self._background_labels.append('Cutoff {:0.2f} DRU Bkg'.format(flat_rate))
+
     def add_noise_bkgd(self, sigma, n_win, fs):
         """
         Method for adding a noise background to the simulation.
