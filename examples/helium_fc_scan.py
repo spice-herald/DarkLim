@@ -75,10 +75,10 @@ def process_mass(mass, args):
     #SE.add_power_bkgd(1.4e-8, 5.77)
     #SE.add_power_bkgd(0.107, 2.72)
 
-    SE.add_flat_bkgd(1) # flat background of 1 DRU
+    SE.add_flat_bkgd(10) # flat background of 10 DRU
     #SE.add_nfold_powerlaw_lee_bkgd(m=args.n_sensors,n=args.coincidence,w=args.window_s)
     #SE.add_nfold_powerlaw_lee_bkgd(m=args.n_sensors,n=args.coincidence,w=args.window_s)
-    SE.add_run57_lee_bkgd(detector=args.detector,m=args.coincidence,w=args.window_s,thres=args.per_device_threshold_keV)
+    SE.add_run57_lee_bkgd(detector=args.detector,window='var',part='wpart',thres=args.per_device_threshold_keV)
     
     #per_device_threshold_keV = args.nsigma * args.baseline_res_eV * 1e-3
     per_device_threshold_keV = args.per_device_threshold_keV
@@ -123,7 +123,8 @@ def process_mass(mass, args):
         verbose=True,
         sigma0=args.sigma0,
         use_drdefunction=True,
-        pltname='ULs_{:0.0f}d_{:d}device_{:d}fold_{:0.0f}mus'.format(args.t_days,args.n_sensors,args.coincidence,args.window_s/1e-6),
+        #pltname='ULs_{:0.0f}d_{:d}device_{:d}fold_{:0.0f}mus'.format(args.t_days,args.n_sensors,args.coincidence,args.window_s/1e-6),
+        pltname='ULs_{:0.0f}d{:d}fold'.format(args.t_days,args.coincidence),
         savedir=args.results_dir
         #pltname=None
     )

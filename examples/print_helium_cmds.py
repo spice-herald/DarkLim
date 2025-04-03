@@ -12,7 +12,7 @@ def print_helium_cmds():
     detectors = ['24-0.5cm2'] #,'4-0.5cm2','16-0.5cm2','24-0.5cm2']
     
     he_gains = [0.15, 0.30]
-    per_device_thresholds = np.arange(0.2,1.2,0.2) * 1e-3 # keV
+    per_device_thresholds = np.arange(0.4,1.2,0.2) * 1e-3 # keV
     energy_resolutions = [0.200]
     windows = [100e-6] # seconds
 
