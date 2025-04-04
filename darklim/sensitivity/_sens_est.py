@@ -227,7 +227,7 @@ class SensEst(object):
 
         """
         cut_energy = 20e-3*he_gain
-        cutoff_bkgd = lambda x: np.heaviside(x - cut_energy, flat_rate)
+        cutoff_bkgd = lambda x: np.heaviside(x - cut_energy, 1)*flat_rate
         # np.heaviside(en_interp - threshold, 1)
         #flat_bkgd = lambda x: flat_rate * np.ones(len(x))
         self._backgrounds.append(cutoff_bkgd)
