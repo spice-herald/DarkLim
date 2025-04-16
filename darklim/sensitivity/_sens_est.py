@@ -1024,8 +1024,8 @@ class SensEst(object):
         nevts_exp = rtot * self.exposure
         nevts_sim = np.random.poisson(nevts_exp)
         if verbose:
-            print('expect {:0.1f} evts'.format(nevts_exp))
-            print('created {:0.1f} evts'.format(nevts_sim))
+            print('expect {:0.3f} evts'.format(nevts_exp))
+            print('created {:0.3f} evts'.format(nevts_sim))
         
         evts_sim = pdf_sampling(
             tot_bkgd_func, (e_low, e_high), npoints=npts, nsamples=nevts_sim,
