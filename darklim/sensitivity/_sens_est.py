@@ -215,7 +215,7 @@ class SensEst(object):
         self._backgrounds.append(flat_bkgd)
         self._background_labels.append('{:0.2f} DRU Bkg'.format(flat_rate))
 
-    def add_cutoff_flat_bkgd(self, he_gain, flat_rate):
+    def add_cutoff_flat_bkgd(self, he_gain, flat_rate, include_discrim=False, photon_eff=0.15):
         """
         flat bkg that cuts off at 20 eV in Helium
 
@@ -227,9 +227,26 @@ class SensEst(object):
 
         """
         cut_energy = 20e-3*he_gain
-        cutoff_bkgd = lambda x: np.heaviside(x - cut_energy, 1)*flat_rate
+        assumed_photon_eff = 0.95 #value from concept paper
+        if include_discrim:
+            fin = '/global/cfs/cdirs/lz/users/haselsco/TESSERACT_Limits/DarkLim_vetriupdate/examples/ER_leakage.txt'
+            leakage = np.loadtxt(fin,skiprows=1)
+            es = leakage[:,0]
+            f = leakage[:,1]
+            emask = es>20e-3
+            #leakage[:,1][emask] = leakage[:,1][emask]*photon_eff/assumed_photon_eff # adjusts leakage based on assumed light collection
+            fnew = f*assumed_photon_eff/photon_eff
+            fnew[fnew>0.5] = 0.5
+            interp_func = interp1d(es*he_gain,np.log(fnew), #interp in log space
+                                   fill_value='extrapolate',
+                                   assume_sorted=True)
+            cutoff_bkgd = lambda x: np.heaviside(x - cut_energy, 1)*flat_rate*np.exp(interp_func(x))
+        else:
+            cutoff_bkgd = lambda x: np.heaviside(x - cut_energy, 1)*flat_rate
+        
         # np.heaviside(en_interp - threshold, 1)
         #flat_bkgd = lambda x: flat_rate * np.ones(len(x))
+        
         self._backgrounds.append(cutoff_bkgd)
         self._background_labels.append('Cutoff {:0.2f} DRU Bkg'.format(flat_rate))
 
@@ -338,7 +355,7 @@ class SensEst(object):
         self._background_labels.append('{:d}-fold Power-law LEE in {:d} devices'.format(n,m))
 
     #def add_run57_lee_bkgd(self,detector='4-1cm2',m=4,w=100e-6,thres=1.00e-3):
-    def add_run57_lee_bkgd(self,detector='4-1cm2',window='fixed',part='nopart',thres=0.8e-3):
+    def add_run57_lee_bkgd(self,detector='4-1cm2',window='fixed',part='nopart',thres=0.8e-3,scale_by=1):
         """
         loads in pregenerated templates for 4-fold coincidence of 
         devices with Run57 LEE.
@@ -348,7 +365,7 @@ class SensEst(object):
         fname = 'LEE_bkg_{:s}_{:s}_{:s}_{:0.2e}keV.txt'.format(detector,window,part,thres)
         #fname = 'Run57_LEE_templates_test/LEE_bkg_{:s}_{:d}fold_{:0.0f}mus_{:0.2e}keV.txt'.format(detector,m,w/1e-6,thres)
         template = np.loadtxt(basedir+fname,skiprows=1)
-        interp_func = interp1d(template[:,0],template[:,1],
+        interp_func = interp1d(template[:,0],template[:,1]*scale_by,
                                bounds_error=False,
                                #fill_value='extrapolate',
                                fill_value=0,
@@ -757,9 +774,9 @@ class SensEst(object):
         
         return m_dms, sig, ul
     
-    def run_fast_fc_sim(self, known_bkgs_list, threshold, e_high, e_low=1e-6, m_dms=None, nexp=1, npts=1000,
+    def run_fast_fc_sim(self, known_bkgs_list, threshold, e_high, e_low=1e-6, m_dms=None, nexp=1, npts=10000,
                 plot_bkgd=False, res=None, verbose=False, sigma0=1e-41,use_drdefunction=False,pltname=None,
-                elf_model=None, elf_params=None, elf_target=None, savedir=None, return_only_drde=False, gaas_params=None):
+                elf_model=None, elf_params=None, elf_target=None, savedir=None, return_only_drde=False, gaas_params=None,eff_scale=1):
         """
         Faster version of the above, avoiding repeat calculations of signal rates.
         """
@@ -871,8 +888,15 @@ class SensEst(object):
             # generate a toy:
             # note that this generates evts in the energy range e_low to e_high, but we only
             # count those above 'threshold' to get the toy expt's FC UL below
-            evts_sim = self._generate_background(en_interp, verbose=False, plot_bkgd=plot_bkgd and ii==0)
-            
+            evts_sim = self._generate_background(en_interp, verbose=True, plot_bkgd=plot_bkgd and ii==0)
+
+            #print('\nDEBUG: {:d} evts from _generate_backgrond().'.format(len(evts_sim)))
+            #print('DEBUG: {:d} are above threshold (= {:0.4f} keV).'.format(len(evts_sim[evts_sim>threshold]),threshold))
+            #print(evts_sim)
+            #print('')
+            #print(evts_sim[evts_sim<threshold])
+            #print('')
+
             # get its FC UL:
             obs[ii], exp[ii], uls[ii] = get_fc_ul(
                 known_bkgd_func, 
@@ -882,7 +906,6 @@ class SensEst(object):
                 self.exposure, 
                 verbose=verbose
             )
-        
         median_ul = np.median(uls)
         median_obs = np.median(obs)
         median_exp = np.median(exp)
@@ -890,11 +913,19 @@ class SensEst(object):
         print('Median N Obs =\t {:0.2f} evts'.format(median_obs))
         print('Median 90% CL UL =\t {:0.2f} evts'.format(median_ul))
 
+        if pltname is not None:
+            fig, ax = plt.subplots(1,figsize=(6,4))
+            plt.hist(obs,bins=20,range=(min(obs),max(obs)))
+            ax.axvline(median_exp,ls='--',color='red')
+            ax.set_xlabel('Number of observed events')
+            ax.set_xlim(min(obs),max(obs))
+            ax.set_title('Median expected = {:0.1f} evts'.format(median_exp))
+            plt.savefig(savedir+'toys_'+pltname+'.png', facecolor='white',bbox_inches='tight')
 
         # get signal rates at the reference xsec for each DM mass:
         dm_rates, raw_dm_rates = get_signal_rate(
             en_interp, # efficiency curve energies
-            np.heaviside(en_interp - threshold, 1), # efficiency curve values
+            np.heaviside(en_interp - threshold, 1)*eff_scale, # efficiency curve values
             m_dms, # mass list
             self.exposure, #exposure
             tm=self.tm, # target material
@@ -908,7 +939,7 @@ class SensEst(object):
         )
 
         if verbose:
-            print('DM signal rates:',dm_rates)
+            print('DM signal rates at xsec {:0.2e} cm2:'.format(sigma0),dm_rates)
         
         # option to plot distribution of ULs:
         if pltname is not None:
@@ -917,8 +948,9 @@ class SensEst(object):
             ax.axvline(median_ul,ls='--',color='red')
             ax.set_xlabel('Upper Limit [Events]')
             ax.set_xlim(0,max(uls))
+            ax.set_title('Median UL = {:0.1f} evts'.format(median_ul))
             #outdir = '/global/cfs/cdirs/lz/users/haselsco/TESSERACT_Limits/DarkLim_vetriupdate/examples/'
-            plt.savefig(savedir+pltname+'.png', facecolor='white',bbox_inches='tight')
+            plt.savefig(savedir+'ULs_'+pltname+'.png', facecolor='white',bbox_inches='tight')
         
         # expected bkg rate, made to match m_dm len just to make analysis easier
         exp_bkg = np.full_like(m_dms,median_exp)
@@ -929,6 +961,7 @@ class SensEst(object):
             print('Median sigma ULs',median_sig)
         
         return m_dms, median_sig, median_ul, dm_rates, raw_dm_rates, exp_bkg
+
     
     def generate_background(self, e_high, e_low=1e-6, npts=1000,
                             plot_bkgd=False,verbose=False):
@@ -1024,6 +1057,7 @@ class SensEst(object):
         nevts_exp = rtot * self.exposure
         nevts_sim = np.random.poisson(nevts_exp)
         if verbose:
+            print('in energy range {:0.3e}-{:0.3e} keV: '.format(e_low,e_high))
             print('expect {:0.3f} evts'.format(nevts_exp))
             print('created {:0.3f} evts'.format(nevts_sim))
         

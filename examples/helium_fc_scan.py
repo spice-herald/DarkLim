@@ -77,9 +77,22 @@ def plot_bkgs(masses, args):
                                      gain=args.he_gain)
     SE.reset_sim()
     
-    # bkgs:
-    SE.add_cutoff_flat_bkgd(args.he_gain, 10/args.he_gain)
-    SE.add_run57_lee_bkgd(detector=args.detector,window='var',part='wpart',thres=args.per_device_threshold_keV)
+    # backgrounds:
+    eff_scale = 1
+    
+    # backgrounds:
+    if args.er_discrim==0: # without ER discrimination:
+        print('No ER discrimination assumed.')
+        eff_scale = 1
+        SE.add_cutoff_flat_bkgd(args.he_gain, 10/args.he_gain, include_discrim=False)
+        SE.add_run57_lee_bkgd(detector=args.detector,window='var',part='wpart',thres=args.per_device_threshold_keV,scale_by=eff_scale)
+
+    # w/ discrimination - includes leakage fraction, use 0.5 signal efficiency with this!
+    if args.er_discrim==1:
+        print('Using ER discrimination at 50% WIMP acceptance!')
+        eff_scale = 0.5 
+        SE.add_cutoff_flat_bkgd(args.he_gain, 10/args.he_gain, include_discrim=True, photon_eff=0.15)
+        SE.add_run57_lee_bkgd(detector=args.detector,window='var',part='wpart',thres=args.per_device_threshold_keV,scale_by=eff_scale)
     
     per_device_threshold_keV = args.per_device_threshold_keV
     threshold_keV = args.coincidence * per_device_threshold_keV
@@ -144,8 +157,8 @@ def plot_bkgs(masses, args):
     
     ax.set_xlim(masses[pos_mask].min(),masses[pos_mask].max())
     ax.set_xscale('log')
-    ax.set_ylim(exp_cts[pos_mask].min(),exp_cts[pos_mask].max())
-    ax.set_yscale('linear')
+    ax.set_ylim(1e-3,exp_cts[pos_mask].max()*1.1)
+    ax.set_yscale('log')
     ax.tick_params(axis='both',which='both')
     ax.set_xlabel('DM Mass [GeV]',fontsize=14)
     ax.set_ylabel('Expected Background in Exposure [cts]',fontsize=14)
@@ -172,10 +185,24 @@ def process_mass(mass, args):
                                      gain=args.he_gain, 
                                      seed=(int(time.time() + mass*1e6)))
     SE.reset_sim()
+
+    eff_scale = 1
     
-    # bkgs:
-    SE.add_cutoff_flat_bkgd(args.he_gain, 10/args.he_gain)
-    SE.add_run57_lee_bkgd(detector=args.detector,window='var',part='wpart',thres=args.per_device_threshold_keV)
+    # backgrounds:
+    if args.er_discrim==0: # without ER discrimination:
+        print('No ER discrimination assumed.')
+        eff_scale = 1
+        SE.add_cutoff_flat_bkgd(args.he_gain, 10/args.he_gain, include_discrim=False)
+        SE.add_run57_lee_bkgd(detector=args.detector,window='var',part='wpart',thres=args.per_device_threshold_keV,scale_by=eff_scale)
+
+    # w/ discrimination - includes leakage fraction, use 0.5 signal efficiency with this!
+    if args.er_discrim==1:
+        print('Using ER discrimination at 50% WIMP acceptance!')
+        eff_scale = 0.5 
+        SE.add_cutoff_flat_bkgd(args.he_gain, 10/args.he_gain, include_discrim=True, photon_eff=0.15)
+        SE.add_run57_lee_bkgd(detector=args.detector,window='var',part='wpart',thres=args.per_device_threshold_keV,scale_by=eff_scale)
+
+    ######
     
     #per_device_threshold_keV = args.nsigma * args.baseline_res_eV * 1e-3
     per_device_threshold_keV = args.per_device_threshold_keV
@@ -187,6 +214,8 @@ def process_mass(mass, args):
     print('ROI max: {:0.3f} keV for max DM mass of {:0.3f} GeV.'.format(ehigh,mass))
     
 
+    plot_name = '{:0.3f}GeV'.format(mass)
+    
     # run
     m_dm, sig, ul, dm_rates, raw_dm_rates, exp_bkg = SE.run_fast_fc_sim(
         known_bkgs,
@@ -195,15 +224,15 @@ def process_mass(mass, args):
         e_low=1e-5, #threshold,
         m_dms=[mass],
         nexp=args.nexp,
-        #npts=int(1e4),
+        npts=50000, # this needs to be at least 10000!!
         plot_bkgd=False,
         res=np.sqrt(args.n_sensors)*args.baseline_res_eV*1e-3,
         verbose=True,
         sigma0=args.sigma0,
         use_drdefunction=True,
-        #pltname='ULs_{:0.0f}d_{:d}device_{:d}fold_{:0.0f}mus'.format(args.t_days,args.n_sensors,args.coincidence,args.window_s/1e-6),
-        pltname='ULs_{:0.0f}d{:d}fold'.format(args.t_days,args.coincidence),
-        savedir=args.results_dir
+        pltname=plot_name,
+        savedir=args.results_dir,
+        eff_scale=eff_scale
         #pltname=None
     )
 
@@ -214,7 +243,7 @@ def process_mass(mass, args):
     
     print(f'Done mass = {mass}, sigma = {sig}')
 
-    return mass, sig, dm_rates/raw_dm_rates
+    return mass, sig/eff_scale, dm_rates/raw_dm_rates
 
 
     
@@ -222,7 +251,7 @@ def helium_scan():
 
     save = True
 
-    plot_bkg_only = True
+    plot_bkg_only = False
     
     # Read command-line arguments
     args = scanparser.get_scan_parameters()

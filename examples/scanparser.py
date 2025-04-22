@@ -92,7 +92,7 @@ def get_scan_parameters():
 
     parser.add_argument('--fake', type=str, default=0,
                         help='Ignore this')
-
+    
     parser.add_argument('--max_cpus', type=int, default=df.max_cpus,
                         help='Maximum number of CPU cores to use')
 
@@ -126,6 +126,9 @@ def get_scan_parameters():
 
     parser.add_argument('--per_device_threshold_keV', type=float, default=df.per_device_threshold_keV,
                         help='Assumed per-sensor threshold in keV for Run57 templates')
+
+    parser.add_argument('--er_discrim', type=int, default=0,
+                        help='Use ER discrimination in He projection')
     
     parser.add_argument('--nsigma', type=float, default=df.nsigma,
                         help=('Number of sigma for detection above baseline ' + 
@@ -182,6 +185,7 @@ def write_info(args):
     f.write(f'Threshold per sensor [keV]: {args.per_device_threshold_keV}\n')
     f.write(f'Dark matter masses [GeV/c2]: ' + str(args.masses_GeV) + '\n')
     f.write(f'Default cross section [cm2]: {args.sigma0:.4e}\n')
+    f.write(f'Use helium ER discrimination: {args.er_discrim}\n')
     f.write(f'Detector gain: 1\n')
     f.write('ELF model: ' + str(args.elf_model) + '\n')
     f.write('ELF params: ' + str(args.elf_params) + '\n') 

@@ -69,7 +69,13 @@ def FC_ints_raw(n, b, alpha=0.1, verbosity=0):
     muR_min = .25*((m-np.sqrt((m**2)+4*n))**2)-b_eff-2
     muR_min = max(0., muR_min)
     muR_max = .25*((m+np.sqrt((m**2)+4*n))**2)-b_eff+10.
-    muR_max = max(10., muR_max)
+    #muR_max = max(10., muR_max)
+
+    if b_eff>500:
+        muR_max = max(50., muR_max)
+    else:
+        muR_max = max(10., muR_max)
+    
     if (muR_max - muR_min)/0.005 < 8000.:
         mu_range = np.arange(muR_min, muR_max, 0.005)
     else:
