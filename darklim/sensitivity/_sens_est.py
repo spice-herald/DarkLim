@@ -250,6 +250,24 @@ class SensEst(object):
         self._backgrounds.append(cutoff_bkgd)
         self._background_labels.append('Cutoff {:0.2f} DRU Bkg'.format(flat_rate))
 
+    def add_neutrino_nr_bkgd(self, he_gain):
+        """
+        neutrino CEvNS background
+        """
+        
+        fin = '/global/cfs/cdirs/lz/users/haselsco/TESSERACT_Limits/DarkLim_vetriupdate/examples/neutrino_cevns_background.txt'
+        rate = np.loadtxt(fin,skiprows=1)
+        e_keV = rate[:,0]
+        r = rate[:,1]
+        interp_func = interp1d(e_keV*he_gain,r, #interp in log space
+                               fill_value=0.0,
+                               bounds_error=False,
+                               assume_sorted=True)
+        nu_bkgd = lambda x: interp_func(x)
+        
+        self._backgrounds.append(nu_bkgd)
+        self._background_labels.append('Neutrino CEvNS Background')
+    
     def add_noise_bkgd(self, sigma, n_win, fs):
         """
         Method for adding a noise background to the simulation.

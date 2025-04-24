@@ -63,13 +63,10 @@ def plot_dm_rates(m_dms,dm_rates,raw_dm_rates,sigma0,savename=None):
     
     return
 
-def plot_bkgs(masses, args):
-
-    if args.coincidence==1: # if coinc is 1, LEE is 'unknown'
-        known_bkgs = [0]
-    else:
-        known_bkgs = [0,1]
-    
+def plot_bkgs(masses, args, plot_wimps=True):
+    '''
+    function to plot backgrounds and signal
+    '''
     SE = darklim.sensitivity.SensEst(args.target_mass_kg, 
                                      args.t_days, 
                                      tm=args.target, 
@@ -85,15 +82,23 @@ def plot_bkgs(masses, args):
         print('No ER discrimination assumed.')
         eff_scale = 1
         SE.add_cutoff_flat_bkgd(args.he_gain, 10/args.he_gain, include_discrim=False)
+        SE.add_neutrino_nr_bkgd(args.he_gain)
         SE.add_run57_lee_bkgd(detector=args.detector,window='var',part='wpart',thres=args.per_device_threshold_keV,scale_by=eff_scale)
+        known_bkgs = [0,1,2]
 
+        # LEE only:
+        #SE.add_run57_lee_bkgd(detector=args.detector,window='var',part='wpart',thres=args.per_device_threshold_keV,scale_by=eff_scale)
+        #known_bkgs = [0]
+        
     # w/ discrimination - includes leakage fraction, use 0.5 signal efficiency with this!
     if args.er_discrim==1:
         print('Using ER discrimination at 50% WIMP acceptance!')
         eff_scale = 0.5 
         SE.add_cutoff_flat_bkgd(args.he_gain, 10/args.he_gain, include_discrim=True, photon_eff=0.15)
+        SE.add_neutrino_nr_bkgd(args.he_gain)
         SE.add_run57_lee_bkgd(detector=args.detector,window='var',part='wpart',thres=args.per_device_threshold_keV,scale_by=eff_scale)
-    
+        known_bkgs = [0,1,2]
+        
     per_device_threshold_keV = args.per_device_threshold_keV
     threshold_keV = args.coincidence * per_device_threshold_keV
 
@@ -114,17 +119,38 @@ def plot_bkgs(masses, args):
     # individual bkgs:
     for ii, bkgd in enumerate(SE._backgrounds):
         plt.plot(en_interp,bkgd(en_interp),ls='--',label=SE._background_labels[ii])
-
     #total bkg:
     tot_bkgd_func = lambda x: np.stack([bkgd(x) for bkgd in SE._backgrounds], axis=1,).sum(axis=1)
     plt.plot(en_interp,tot_bkgd_func(en_interp),ls='-',label='Total Bkg')
 
+    # plot WIMPs 
+    if plot_wimps:
+        sigma0 = 1e-39
+        #m_dms = np.array([masses[0],np.median(masses),masses[-1]]) # just plot 3 signal spectra
+        m_dms = np.array([0.05,0.5,1])
+        drdefunction = [ lambda x,m: darklim.sensitivity.drde_wimp_obs( x, m, sigma0, args.target, args.he_gain ) for m in m_dms ]
+        wimpe_low, wimpe_high = 1e-4, 10
+        wimp_en_interp = np.geomspace(wimpe_low,wimpe_high, num=10000)
+        
+        n_lines = len(m_dms)
+        cmap = matplotlib.colormaps['Purples']
+        wimpcolors = cmap(np.linspace(0.5, 1, n_lines))
+        ###################################################################
+        
+        # plot WIMP shapes for comparison - note these have He gain and energy resolution for a single device applied
+        for ii, mass in enumerate(m_dms):
+            init_rate = drdefunction[ii](wimp_en_interp,mass)    
+            smeared_rate = darklim.limit.gauss_smear(wimp_en_interp, init_rate, np.sqrt(args.coincidence)*args.baseline_res_eV * 1e-3)
+            plt.plot(wimp_en_interp,smeared_rate,
+                     ls='--', color=wimpcolors[ii],alpha=0.8,
+                     label='{:.0f} MeV WIMP'.format(mass*1000))
+    
     # threshold line
     ax.axvline(threshold_keV,ls='--',color='grey',alpha=0.4)
 
     ax.set_xlim(e_low, e_high)
     ax.set_xscale('log')
-    ax.set_ylim(1e-8,1e13)
+    ax.set_ylim(1e-8,1e8)
     ax.set_yscale('log')
     ax.tick_params(axis='both',which='both')
     ax.legend(loc='upper right', frameon=False,ncol=1,fontsize=12)
@@ -146,7 +172,7 @@ def plot_bkgs(masses, args):
         rtot = np.trapz(tot_bkgd_func(en_interp2), x=en_interp2)
         exp_cts[i] = rtot * SE.exposure
 
-        print( '{:0.2f} GeV expected bkg in [{:0.3f},{:0.3f}] eV: \t{:0.4f} evts'.format(mass,
+        print( '{:0.3f} GeV; Expected bkg in [{:0.3f},{:0.3f}] eV: \t{:0.4f} evts'.format(mass,
                                                                                        threshold_keV*1000,
                                                                                        roi_uppers[i]*1000,
                                                                                         exp_cts[i]) )
@@ -162,6 +188,7 @@ def plot_bkgs(masses, args):
     ax.tick_params(axis='both',which='both')
     ax.set_xlabel('DM Mass [GeV]',fontsize=14)
     ax.set_ylabel('Expected Background in Exposure [cts]',fontsize=14)
+    ax.grid(axis='both',which='both',lw=0.3,ls='--')
     
     outname = args.results_dir + 'cts_vs_mass.png'
     plt.savefig(outname,facecolor='white',bbox_inches='tight')
@@ -173,10 +200,10 @@ def plot_bkgs(masses, args):
 def process_mass(mass, args):
     # All the code that processes the mass value goes here, extracted from the original loop.
 
-    if args.coincidence==1: # if coinc is 1, LEE is 'unknown'
-        known_bkgs = [0]
-    else:
-        known_bkgs = [0,1]
+    #if args.coincidence==1: # if coinc is 1, LEE is 'unknown'
+    #    known_bkgs = [0]
+    #else:
+    #    known_bkgs = [0,1]
     
     SE = darklim.sensitivity.SensEst(args.target_mass_kg, 
                                      args.t_days, 
@@ -193,15 +220,25 @@ def process_mass(mass, args):
         print('No ER discrimination assumed.')
         eff_scale = 1
         SE.add_cutoff_flat_bkgd(args.he_gain, 10/args.he_gain, include_discrim=False)
-        SE.add_run57_lee_bkgd(detector=args.detector,window='var',part='wpart',thres=args.per_device_threshold_keV,scale_by=eff_scale)
+        SE.add_neutrino_nr_bkgd(args.he_gain)
+        SE.add_run57_lee_bkgd(detector=args.detector,window='var',part='wpart',
+                              thres=args.per_device_threshold_keV,scale_by=eff_scale)
+        known_bkgs = [0,1,2]
 
+        # LEE only
+        #SE.add_run57_lee_bkgd(detector=args.detector,window='var',part='wpart',
+        #                      thres=args.per_device_threshold_keV,scale_by=eff_scale)
+        #known_bkgs = [0]
+        
     # w/ discrimination - includes leakage fraction, use 0.5 signal efficiency with this!
     if args.er_discrim==1:
         print('Using ER discrimination at 50% WIMP acceptance!')
         eff_scale = 0.5 
         SE.add_cutoff_flat_bkgd(args.he_gain, 10/args.he_gain, include_discrim=True, photon_eff=0.15)
-        SE.add_run57_lee_bkgd(detector=args.detector,window='var',part='wpart',thres=args.per_device_threshold_keV,scale_by=eff_scale)
-
+        SE.add_neutrino_nr_bkgd(args.he_gain)
+        SE.add_run57_lee_bkgd(detector=args.detector,window='var',part='wpart',
+                              thres=args.per_device_threshold_keV,scale_by=eff_scale)
+        known_bkgs = [0,1,2]
     ######
     
     #per_device_threshold_keV = args.nsigma * args.baseline_res_eV * 1e-3
@@ -251,7 +288,7 @@ def helium_scan():
 
     save = True
 
-    plot_bkg_only = False
+    plot_bkg_only = True
     
     # Read command-line arguments
     args = scanparser.get_scan_parameters()
