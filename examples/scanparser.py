@@ -45,6 +45,8 @@ def convert_scan_parameters(args):
         density_gcm3 = constants.Si_density
     elif args.target == 'He':
         density_gcm3 = constants.LHe_density
+    elif args.target == 'GaAs':
+        density_gcm3 = constants.GaAs_density
 
     args.target_mass_kg = args.volume_cm3 * density_gcm3 * 1e-3
     args.exposure_kgd = args.target_mass_kg * args.t_days
@@ -61,6 +63,9 @@ def convert_scan_parameters(args):
     elif args.elf[0] == 'phonon':
         args.elf_model = 'phonon'
         args.elf_params = df.elf_params_phonon
+    elif args.elf[0] == 'absorption':
+        args.elf_model = 'absorption'
+        args.elf_params = df.elf_params_absorption
 
     if args.elf_model is not None:
         for i, s in enumerate(args.elf[1:]):
@@ -139,6 +144,16 @@ def get_scan_parameters():
 
     parser.add_argument('--baseline_res_eV', type=float, default=df.baseline_res_eV,
                         help='Baseline energy resolution (eV)')
+
+    parser.add_argument('--PD_energy_resolution', type=float, default=df.PD_energy_resolution,
+                        help='PD energy resolution (keV)')
+
+    parser.add_argument('--GaAs_energy_resolution', type=float, default=df.GaAs_energy_resolution,
+                        help='GaAs energy resolution (keV)')
+
+
+    parser.add_argument('--e_high_keV', type=float, default=df.e_high_keV,
+                        help='Highest possible energy (keV)')
 
     parser.add_argument('--masses_GeV', type=float, nargs=3, default=df.masses_GeV,
                         help=('DM masses in GeV. Three arguments: minimum ' + 
