@@ -514,6 +514,12 @@ def optimuminterval(eventenergies, effenergies, effs, masslist, exposure,
             except ValueError:
                 rate = np.array([drdefunction[ii](en) for en in en_interp]) * exposure
 
+            if res is not None:
+                print('Warning: you have provided `drdefunction`, but Gaussian smearing is still applied.')
+                print('  This is not recommended. Instead, set `rate_interp` and include the smearing, or ' +
+                      'include the smearing in the `drdefunction` itself.')
+                rate = gauss_smear(en_interp, rate, res, gauss_width=gauss_width)
+
         else:
             rate = rate_interp[ii]
  
