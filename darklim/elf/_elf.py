@@ -1,7 +1,7 @@
 from IPython.utils import io
 import numpy as np
 import sys
-sys.path.insert(0, '/global/cfs/cdirs/lz/users/haselsco/TESSERACT_Limits/DarkELF/')
+sys.path.insert(0, '/home/vvelan/DarkELF/')
 from darkelf import darkelf
 from darklim import constants
 
@@ -12,6 +12,7 @@ __all__ = [
     "get_dRdE_lambda_Al2O3_phonon",
     "get_dRdE_lambda_GaAs_phonon",
     "get_dRdE_lambda_Si_phonon",
+    "get_dRdE_lambda_Al2O3_absorption",
 ]
 
 def get_dRdE_lambda_Al2O3_electron(mX_eV=1e8, mediator='massless', sigmae=1e-31, kcut=0, method='grid', withscreening=True, suppress_darkelf_output=False, gain=1.):
@@ -308,4 +309,92 @@ def get_dRdE_lambda_Si_phonon(mX_eV=1e8, mediator='massless', sigman=1e-31, dark
     fun = lambda keV : silicon._dR_domega_multiphonons_no_single(keV * 1000 / gain, sigman=sigman, dark_photon=dark_photon) * \
             (1000 / 365.25) / gain
 
+    return fun
+
+
+
+def get_dRdE_lambda_Al2O3_absorption(mX_eV=1., kappa=1e-15, res_eV=0.1, suppress_darkelf_output=False):
+    """
+    Function to get an anonymous lambda function, which calculates dRdE
+    for DM absorption in Al2O3 given only deposited energy.
+
+    Parameters
+    ----------
+    mX_eV : float
+        Dark matter mass in eV
+    kappa : float
+        DM absorption strength (unitless)
+    res_eV : float
+        Energy resolution in eV (default 0.1 eV)
+    suppress_darkelf_output : bool
+        Whether to suppress the (useful but long) output that DarkELF gives
+        when loading a material's properties.
+
+    Returns
+    -------
+    fun : lambda function
+        A function to calculate dRdE in DRU given E in keV
+
+    """
+
+    # Set up DarkELF Al2O3 object for absorption
+    if suppress_darkelf_output:
+        print('WARNING: You are suppressing DarkELF output')
+        with io.capture_output() as captured:
+            sapphire = darkelf(target='Al2O3', filename="Al2O3_mermin.dat")
+    else:
+        sapphire = darkelf(target='Al2O3', filename="Al2O3_mermin.dat")
+
+    sapphire.update_params(mX=mX_eV)
+    R_kgday = sapphire.R_absorption(kappa) / 365.25
+    
+    res_keV = res_eV / 1000.
+    E0_keV = mX_eV / 1000.
+    fun = lambda keV: R_kgday / np.sqrt(2 * np.pi * res_keV**2) * np.exp(-(keV - E0_keV)**2 / (2 * res_keV**2))
+        
+    return fun
+
+
+
+
+def get_dRdE_lambda_GaAs_absorption(mX_eV=1., kappa=1e-15, res_eV=0.1, suppress_darkelf_output=False):
+    """
+    Function to get an anonymous lambda function, which calculates dRdE
+    for DM absorption in GaAs given only deposited energy.
+
+    Parameters
+    ----------
+    mX_eV : float
+        Dark matter mass in eV
+    kappa : float
+        DM absorption strength (unitless)
+    res_eV : float
+        Energy resolution in eV (default 0.1 eV)
+    suppress_darkelf_output : bool
+        Whether to suppress the (useful but long) output that DarkELF gives
+        when loading a material's properties.
+
+    Returns
+    -------
+    fun : lambda function
+        A function to calculate dRdE in DRU given E in keV
+
+    """
+
+    # Set up DarkELF Al2O3 object for absorption
+    if suppress_darkelf_output:
+        print('WARNING: You are suppressing DarkELF output')
+        with io.capture_output() as captured:
+            gaas = darkelf(target='GaAs',filename="GaAs_mermin.dat",phonon_filename="GaAs_epsphonon_data10K.dat")
+
+    else:
+        gaas = darkelf(target='GaAs',filename="GaAs_mermin.dat",phonon_filename="GaAs_epsphonon_data10K.dat")
+
+    gaas.update_params(mX=mX_eV)
+    R_kgday = gaas.R_absorption(kappa) / 365.25
+    
+    res_keV = res_eV / 1000.
+    E0_keV = mX_eV / 1000.
+    fun = lambda keV: R_kgday / np.sqrt(2 * np.pi * res_keV**2) * np.exp(-(keV - E0_keV)**2 / (2 * res_keV**2))
+        
     return fun
