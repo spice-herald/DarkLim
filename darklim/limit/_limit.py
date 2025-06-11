@@ -386,7 +386,16 @@ def gauss_smear(x, f, res, nres=1e5, gauss_width=10):
     e_conv = np.arange(-gauss_width * res + x2[0], gauss_width * res + x2[-1], spacing)
     s = interpolate.interp1d(e_conv, sce)
 
-    return s(x)
+    try:
+        y = s(x)
+    except ValueError as e: 
+        # The problem is that sometimes, x is just barely outside the interpolation range.
+        # So clip x to the interpolation range.
+        x_clipped = np.clip(x, e_conv[0], e_conv[-1])
+        y = s(x_clipped)
+
+    return y
+
 
 
 def optimuminterval(eventenergies, effenergies, effs, masslist, exposure,
