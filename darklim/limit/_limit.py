@@ -389,7 +389,6 @@ def gauss_smear(x, f, res, nres=1e5, gauss_width=10):
     return s(x)
 
 
-
 def optimuminterval(eventenergies, effenergies, effs, masslist, exposure,
                     tm="Si", cl=0.9, res=None, gauss_width=10, verbose=False,
                     drdefunction=None, hard_threshold=0.0, sigma0=1e-41,
@@ -481,9 +480,10 @@ def optimuminterval(eventenergies, effenergies, effs, masslist, exposure,
     oi_energy0 = np.zeros(len(masslist))
     oi_energy1 = np.zeros(len(masslist))
 
+
     for ii, mass in enumerate(masslist):
         if verbose:
-            print(f"On mass {ii+1} of {len(masslist)}.")
+            print(f"On mass {ii+1} of {len(masslist)}. E_high is {ehigh*1e3:.3f} eV, E_low is {elow*1e3:.3f} eV.")
 
         if drdefunction is None and rate_interp is None:
             exp = effs * exposure
@@ -507,10 +507,12 @@ def optimuminterval(eventenergies, effenergies, effs, masslist, exposure,
 
         else:
             rate = rate_interp[ii]
-
+ 
         integ_rate = integrate.cumtrapz(rate, x=en_interp, initial=0)
 
         tot_rate = integ_rate[-1]
+        if verbose:
+            print(f"Total rate for mass {mass} GeV: {tot_rate:.3e} events.")
 
         x_val_fcn = interpolate.interp1d(
             en_interp,
@@ -541,6 +543,14 @@ def optimuminterval(eventenergies, effenergies, effs, masslist, exposure,
                 oi_energy1[ii] = eventenergies[event_inds][possiblewimp][endpoint1-1] if endpoint1-1 < len(fc) else ehigh
             except:
                 pass
+            
+        if verbose:
+            print(f"Optimum interval for mass {mass} GeV: [{oi_energy0[ii]*1e3:.3f}, {oi_energy1[ii]*1e3:.3f}] eV")
+            print(f'Endpoints: {endpoint0}, {endpoint1}')
+            print(f"UL output: {uloutput:.3f} events")
+            print(f"Cross section upper limit for mass {mass} GeV: {sigma[ii]:.3e} cm^2")
+            print(f'Event FC values: {fc}')
+            print('\n')
 
     return sigma, oi_energy0, oi_energy1
 
