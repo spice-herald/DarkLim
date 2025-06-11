@@ -468,6 +468,7 @@ class SensEst(object):
         self._backgrounds = []
         self._background_labels = []
 
+
     def run_sim(self, threshold, e_high=E_HIGH_GLOBAL_KEV, e_low=E_LOW_GLOBAL_KEV, m_dms=np.geomspace(0.01, 2, num=5),
                 nexp=1, npts=NPTS_GLOBAL, plot_bkgd=False, res=None, verbose=False, sigma0=1e-41,
                 elf_model=None, elf_params=None, elf_target=None,
@@ -511,17 +512,42 @@ class SensEst(object):
 
         """
 
-        ########################
-        # Get the dRdE lambda function to convert E (keV) to dRdE (DRU)
-        ########################
+        #################################################################
+        # Get the dRdE lambda function to convert E (keV) to dRdE (DRU) #
+        #################################################################
 
         drdefunction = None
+        smear_after_drdefun = False
 
-        if elf_model is None:
-
-            drdefunction = [(lambda x, m=m: drde_wimp_obs( x, m, sigma0, self.tm, self.gain )) for m in m_dms ]
-            #drdefunction = [ lambda x,m: drde_wimp_obs( x, m, sigma0, self.tm, self.gain ) for m in m_dms ]
+        if self.tm == 'GaAs':
             
+            drdefunction = []
+            mediator = elf_params['mediator'] if 'mediator' in elf_params else 'NR'
+
+            for i, m in enumerate(m_dms):
+                E_GaAs_bins, dRdE_GaAs_obs = detector.DM_spectrum_GaAs(m*1e9, sigma0, mediator=mediator,
+                        e_high=e_high, N_PDs=gaas_params['N_PDs'],
+                        E_th_PD=gaas_params['E_th_PD'], E_res_PD=gaas_params['E_res_PD'],
+                        E_th_GaAs=gaas_params['E_th_GaAs'], E_res_GaAs=gaas_params['E_res_GaAs'],
+                        collection_efficiency=gaas_params['collection_efficiency'],
+                        rng=np.random.default_rng())
+                
+                interp_func = interp1d(E_GaAs_bins, dRdE_GaAs_obs,
+                               bounds_error=False,
+                               fill_value=0.,
+                               assume_sorted=True)
+        
+                drdefunction.append(lambda x: interp_func(x))
+
+        elif elf_model == 'absorption' and elf_target == 'Al2O3':
+
+            elf_suppress = elf_params['suppress_darkelf_output'] if 'suppress_darkelf_output' in elf_params else False
+
+            drdefunction = \
+                [elf.get_dRdE_lambda_Al2O3_absorption(mX_eV=m*1e9, kappa=sigma0,
+                        res_eV=(res*1e3), suppress_darkelf_output=elf_suppress)
+                    for m in m_dms]
+
         elif elf_model == 'electron' and elf_target == 'Al2O3':
 
             elf_mediator = elf_params['mediator'] if 'mediator' in elf_params else 'massless'
@@ -574,137 +600,110 @@ class SensEst(object):
                                                     suppress_darkelf_output=elf_suppress, gain=self.gain)
                 for m in m_dms]
 
-        elif elf_model == 'electron' and elf_target == 'GaAs':
+        else:
 
-            elf_mediator = elf_params['mediator'] if 'mediator' in elf_params else 'massless'
-            elf_kcut = elf_params['kcut'] if 'kcut' in elf_params else 0
-            elf_method = elf_params['method'] if 'method' in elf_params else 'grid'
-            elf_screening = elf_params['withscreening'] if 'withscreening' in elf_params else True
-            elf_suppress = elf_params['suppress_darkelf_output'] if 'suppress_darkelf_output' in elf_params else False
-
-            drdefunction = \
-                [elf.get_dRdE_lambda_GaAs_electron(mX_eV=m*1e9, sigmae=sigma0, mediator=elf_mediator,
-                                                    kcut=elf_kcut, method=elf_method, withscreening=elf_screening,
-                                                    suppress_darkelf_output=elf_suppress, gain=self.gain)
-                for m in m_dms]
-
-        elif elf_model == 'phonon' and elf_target == 'GaAs':
-            
-            elf_mediator = elf_params['mediator'] if 'mediator' in elf_params else 'massless'
-            elf_suppress = elf_params['suppress_darkelf_output'] if 'suppress_darkelf_output' in elf_params else False
-            elf_darkphoton = elf_params['dark_photon'] if 'dark_photon' in elf_params else False
-            
-            drdefunction = \
-                [elf.get_dRdE_lambda_GaAs_phonon(mX_eV=m*1e9, sigman=sigma0, mediator=elf_mediator,
-                                                    dark_photon=elf_darkphoton,
-                                                    suppress_darkelf_output=elf_suppress, gain=self.gain)
-                for m in m_dms]
-
-        # If appropriate, convert dRdE from deposited energy to observed energy
-        if self.tm == 'GaAs' and gaas_params is not None:
-
-            for j, m in enumerate(m_dms):
-                E_deposited_keV_arr = np.geomspace(0.1e-3, 800, int(1e4))
-                try:
-                    dRdE_deposited_DRU_arr = drdefunction[j](E_deposited_keV_arr)
-                except ValueError:
-                    dRdE_deposited_DRU_arr = np.array([drdefunction[j](en) for en in E_deposited_keV_arr])
-
-
-                check = sum(dRdE_deposited_DRU_arr > 0)
-                if check == 0:
-                    continue
-
-                E_observed_keV_arr, dRdE_observed_DRU_arr, _ = \
-                    detector.convert_dRdE_dep_to_obs_gaas(E_deposited_keV_arr, dRdE_deposited_DRU_arr,
-                                                     pce=gaas_params['pce'],
-                                                     lce_per_channel=gaas_params['lce_per_channel'],
-                                                     res=gaas_params['res'],
-                                                     n_coincidence_light=gaas_params['n_coincidence_light'],
-                                                     calorimeter_threshold_eV=gaas_params['calorimeter_threshold_eV'],
-                                                     coincidence_window_us=gaas_params['coincidence_window_us'],
-                                                     phonon_tau_us=gaas_params['phonon_tau_us'])
-
-                drdefunction[j] = lambda E: np.interp(E, E_observed_keV_arr, dRdE_observed_DRU_arr, left=0., right=0.)
+            drdefunction = [(lambda x, m=m: drde_wimp_obs( x, m, sigma0, self.tm, self.gain )) for m in m_dms ]
+            smear_after_drdefun = True
 
         # Optionally, just return the anonymous lambda function without doing anything else
         if return_only_drde:
             return drdefunction
 
-        ##########################################
-        # For each pseudoexperiment, calculate the
-        # limit using the optimum interval method.
-        ##########################################
+        
+        ################################
+        # Loop over dark matter masses #
+        ################################
 
-        sigs = []
-
-        en_interp_wide = np.geomspace(max(e_low, threshold), e_high, num=npts)
-        rate_interp_wide = [None for _ in range(len(m_dms))]
+        # Container to hold the observed limits for each pseudoexperiment
+        sigs_all = np.zeros((len(m_dms), nexp)) 
 
         for ii in range(len(m_dms)):
 
+            # Calculate dRdE across the entire energy range
+            en_interp_wide = np.geomspace(max(e_low, threshold), e_high, npts)
             try:
-                rate_temp = drdefunction[ii](en_interp_wide) * self.exposure
+                rate_interp_wide = drdefunction[ii](en_interp_wide) * self.exposure
             except ValueError:
-                rate_temp = np.array([drdefunction[ii](en) for en in en_interp_wide]) * self.exposure
+                rate_interp_wide = np.array([drdefunction[ii](en) for en in en_interp_wide]) * self.exposure
 
-            rate_interp_wide[ii] = rate_temp
-
-        for jj in range(nexp):
-            
-            evts_sim = self._generate_background(
-                en_interp_wide, plot_bkgd=(plot_bkgd and jj==0))
-            if jj == 0:
-                print(f'In the first pseudoexperiment for mass {m_dms[0]} GeV, we simulated {len(evts_sim)} events')
-
-            # Combine original en_interp with event energies and sort them
-            combined_energies = np.unique(np.concatenate((en_interp_wide, evts_sim)))
-            if len(evts_sim) > 0:
-                min_event, max_event = min(evts_sim), max(evts_sim)
+            # Determine the DM cutoff energy, and restrict the energy range to be
+            # slightly above this cutoff energy (x10 resolution, or x1.2 energy)
+            max_energy_DM = max(en_interp_wide[rate_interp_wide > 0])
+            if res is None:
+                max_energy_DM *= 1.2
             else:
-                min_event = -1 * np.inf
-                max_event = np.inf
-            en_interp = combined_energies[combined_energies >= min_event]
+                max_energy_DM += 10 * res
+                
+            en_interp = np.geomspace(en_interp_wide[0], max_energy_DM, npts)
+            try:
+                rate_interp = drdefunction[ii](en_interp) * self.exposure
+            except ValueError:
+                rate_interp = np.array([drdefunction[ii](en) for en in en_interp]) * self.exposure
+
+            if res is not None and smear_after_drdefun:
+                rate_interp = gauss_smear(en_interp, rate_interp, res, gauss_width=5)
 
             # Define interpolation function based on en_interp and rate_interp
-            rate_interp = np.zeros((len(m_dms), len(en_interp)))
-            for ii in range(len(m_dms)):
-                interp_func = interp1d(en_interp_wide, rate_interp_wide[ii], kind='linear', bounds_error=True)
-                rate_temp = np.copy(interp_func(en_interp))
-                if res is None:
-                    rate_interp[ii] = rate_temp
-                else:
-                    rate_interp[ii] = \
-                        gauss_smear(en_interp, rate_temp, res, gauss_width=5)
+            # rate_interp = np.zeros((len(m_dms), len(en_interp)))
+            # for ii in range(len(m_dms)):
+            #     interp_func = interp1d(en_interp_wide, rate_interp_wide[ii], kind='linear', bounds_error=True)
+            #     rate_temp = np.copy(interp_func(en_interp))
+            #     if res is None:
+            #         rate_interp[ii] = rate_temp
+            #     else:
+            #         rate_interp[ii] = \
+            #             gauss_smear(en_interp, rate_temp, res, gauss_width=5)
 
-            sig_temp, _, _ = optimuminterval(
-                evts_sim, # evt energies
-                en_interp, # efficiency curve energies
-                np.ones_like(en_interp), # efficiency curve values
-                m_dms, # mass list
-                self.exposure, #exposure
-                tm=self.tm, # target material
-                cl=0.9, # C.L.
-                res=res, # include smearing of DM spectrum
-                gauss_width=10, # if smearing, number of sigma to go out to
-                verbose=(verbose*(jj==0)), # print outs
-#                drdefunction=drdefunction, # lambda function for dRdE(E)
-                hard_threshold=threshold, # hard threshold for energies
-                sigma0=sigma0, # Starting guess for sigma
-                en_interp=en_interp,
-                rate_interp=rate_interp,
-            )
+            # # Combine original en_interp with event energies and sort them
+            # combined_energies = np.unique(np.concatenate((en_interp_wide, evts_sim)))
+            # if len(evts_sim) > 0:
+            #     min_event, max_event = min(evts_sim), max(evts_sim)
+            #     min_event = -1 * np.inf
+            # else:
+            #     min_event = -1 * np.inf
+            #     max_event = np.inf
+            # en_interp = combined_energies[(combined_energies >= min_event)]
 
-            sigs.append(sig_temp)
+            ###############################
+            # Loop over pseudoexperiments #
+            ###############################
+
+            for jj in range(nexp):
+            
+                evts_sim = self._generate_background(
+                    en_interp, plot_bkgd=(plot_bkgd and jj==0))
+                if jj == 0 and verbose:
+                    print(f'In the first pseudoexperiment for mass {m_dms[ii]} GeV, we simulated {len(evts_sim)} events')
+
+                sig_temp, _, _ = optimuminterval(
+                    evts_sim, # evt energies
+                    en_interp, # efficiency curve energies
+                    np.ones_like(en_interp), # efficiency curve values
+                    m_dms[ii], # mass
+                    self.exposure, # exposure
+                    tm=self.tm, # target material
+                    cl=0.9, # C.L.
+#                    res=res, # include smearing of DM spectrum (disabled)
+#                    gauss_width=10, # if smearing, number of sigma to go out to (disabled)
+                    verbose=(verbose*(jj==0)), # print outs
+#                    drdefunction=drdefunction, # lambda function for dRdE(E) (disabled)
+                    hard_threshold=threshold, # hard threshold for energies
+                    sigma0=sigma0, # Starting guess for sigma
+                    en_interp=en_interp, # Pre-calculated dRdE x-values
+                    rate_interp=rate_interp[np.newaxis, :], # Pre-calculated dRdE y-values
+                )
+
+                sigs_all[ii].append(sig_temp[0])
 
         ########################
         # Get median limit and return
         ########################
 
-        sig = np.median(np.stack(sigs, axis=1), axis=1)
+        sig = np.median(np.array(sigs_all), axis=1)
 
         return m_dms, sig
     
+
     def run_sim_fc(self, known_bkgs_list, threshold, e_high, e_low=1e-6, m_dms=None, nexp=1, npts=1000,
                 plot_bkgd=False, res=None, verbose=False, sigma0=1e-41,use_drdefunction=False,pltname=None):
         """
