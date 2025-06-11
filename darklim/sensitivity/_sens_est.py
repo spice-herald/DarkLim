@@ -392,6 +392,35 @@ class SensEst(object):
         lee_template = lambda x: interp_func(x) / self.m_det
         self._backgrounds.append(lee_template)
         self._background_labels.append('4-fold Run57 LEE w/{:0.2} eV threshold/device'.format(thres*1000))
+
+
+    def add_lee_bkgd_from_file(self, filename, scale_by=1):
+        """
+        Method for adding an arbitrary LEE background from a text file. This could
+        be used for any background that is target mass-independent.
+
+        Parameters
+        ----------
+        filename : str
+            The path to the file containing the LEE background data.
+            The file should contain two columns: energy (keV) and rate
+            (events/keV/day). It could optionally have more columns, but
+            these will be ignored; the first two must be energy and rate.
+        scale_by : float, optional
+            A scaling factor to apply to the background rates. Default is 1.
+
+        """
+
+        template = np.loadtxt(filename, skiprows=1)
+        interp_func = interp1d(template[:, 0], template[:, 1] * scale_by,
+                               bounds_error=False,
+                               fill_value=0,
+                               assume_sorted=True)
+
+        lee_template = lambda x: interp_func(x) / self.m_det
+        self._backgrounds.append(lee_template)
+        self._background_labels.append('LEE Background from {}'.format(filename))
+    
     
     def add_power_bkgd(self, amplitude, abs_power):
         """
