@@ -481,7 +481,7 @@ def optimuminterval(eventenergies, effenergies, effs, masslist, exposure,
     ehigh = max(effenergies)
 
     if en_interp is None:
-        en_interp = np.geomspace(elow, ehigh, int(1e4))
+        en_interp = np.geomspace(elow, ehigh, int(1e5))
 
     event_inds = (eventenergies > elow) & (eventenergies < ehigh)
 
@@ -537,8 +537,8 @@ def optimuminterval(eventenergies, effenergies, effs, masslist, exposure,
             fc = x_vals/tot_rate
             fc[fc > 1] = 1
 
-            cdf_max = 1 - 1e-6
-            possiblewimp = fc <= cdf_max
+            #cdf_max = 1 - 1e-6
+            possiblewimp = (fc <= 1.)
             fc = fc[possiblewimp]
 
             if len(fc) == 0:
