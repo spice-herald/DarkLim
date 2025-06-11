@@ -59,17 +59,14 @@ def process_mass(mass, args):
 
     SE = darklim.sensitivity.SensEst(args.target_mass_kg, args.t_days, tm=args.target, eff=1., gain=1., seed=(int(time.time() + mass*1e6)))
     SE.reset_sim()
-    #SE.add_nfold_lee_bkgd(m=args.n_sensors, n=args.coincidence, w=args.window_s, e0=0.41e-3, R=33.)
-    #SE.add_nfold_lee_bkgd(m=args.n_sensors, n=args.coincidence, w=args.window_s, e0=3.81e-3, R=0.0226)
-    SE.add_power_bkgd(1.4e-8, 5.77)
-    SE.add_power_bkgd(0.107, 2.72)
+    SE.add_run57_lee_bkgd(fin='Run57_LEE_templates/combined_spectra_shared57_CRESST_extrap.txt', scale_by=(args.volume_cm3/0.1/20))
 
     per_device_threshold_keV = args.nsigma * args.baseline_res_eV * 1e-3
     threshold_keV = args.coincidence * per_device_threshold_keV
 
     _, sigma = SE.run_sim(
             threshold_keV,
-            e_high=50e-3,
+            e_high=0.25,
             #e_low=1e-6,
             m_dms=[mass],
             nexp=args.nexp,
