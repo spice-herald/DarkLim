@@ -54,19 +54,20 @@ def plot_dm_rates(m_dms,dm_rates,raw_dm_rates,sigma0,savename=None):
 
 
 
-def process_mass(mass, args):
+def process_mass(mass, mid, args):
     # All the code that processes the mass value goes here, extracted from the original loop.
 
     SE = darklim.sensitivity.SensEst(args.target_mass_kg, args.t_days, tm=args.target, eff=1., gain=1., seed=(int(time.time() + mass*1e6)))
     SE.reset_sim()
-    SE.add_run57_lee_bkgd(fin='Run57_LEE_templates/combined_spectra_shared57_CRESST_extrap.txt', scale_by=(args.volume_cm3/0.1/20))
+    SE.add_lee_bkgd_from_file('Run57_LEE_templates/combined_spectra_shared57_CRESST_extrap.txt', scale_by=(args.volume_cm3/args.LEE_improvement))
 
     per_device_threshold_keV = args.nsigma * args.baseline_res_eV * 1e-3
     threshold_keV = args.coincidence * per_device_threshold_keV
 
+    print(f'Starting mass ID {mid}')
     _, sigma = SE.run_sim(
             threshold_keV,
-            e_high=0.25,
+            e_high=args.e_high_keV,
             #e_low=1e-6,
             m_dms=[mass],
             nexp=args.nexp,
@@ -79,10 +80,11 @@ def process_mass(mass, args):
             elf_target=args.target,
             elf_params=args.elf_params,
             return_only_drde=False,
+            adjust_threshold=True,
 #            gaas_params=None
     )
 
-    print(f'Done mass = {mass}, sigma = {sigma}')
+    print(f'Done mass = {mass}, sigma = {sigma} (mass ID = {mid})')
 
     return mass, sigma
 
@@ -100,8 +102,9 @@ def sapphire_scan():
     scanparser.write_info(args)
 
     # Main parallel execution block
+    n_masses = len(args.masses_GeV)
     with mp.Pool(processes=min(args.max_cpus, mp.cpu_count())) as pool:
-        results = pool.starmap(process_mass, [(mass, args) for mass in args.masses_GeV])
+        results = pool.starmap(process_mass, [(mass, mid, args) for (mass, mid) in zip(args.masses_GeV, range(n_masses))])
 
     # save results to txt file
     sigma = np.zeros_like(args.masses_GeV)

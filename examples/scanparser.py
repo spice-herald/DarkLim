@@ -2,7 +2,7 @@ import argparse
 import numpy as np
 import os
 import scipy.stats as stats
-import helium_defaults as defaults
+import defaults
 from darklim import constants
 import datetime
 
@@ -151,6 +151,8 @@ def get_scan_parameters():
     parser.add_argument('--GaAs_energy_resolution', type=float, default=df.GaAs_energy_resolution,
                         help='GaAs energy resolution (keV)')
 
+    parser.add_argument('--LEE_improvement', type=float, default=df.LEE_improvement,
+                        help='LEE Improvement (>= 1)')
 
     parser.add_argument('--e_high_keV', type=float, default=df.e_high_keV,
                         help='Highest possible energy (keV)')
