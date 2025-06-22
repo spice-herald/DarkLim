@@ -6,10 +6,10 @@ class Defaults:
     def __init__(self):
         
         self.results_dir = './results/'
-        self.max_cpus = 1
+        self.max_cpus = 12
 
         self.nexp = 50
-        self.t_days = 500
+        self.t_days = 1. / 1440
 
         self.target = 'Al2O3'
         self.volume_cm3 = 0.009375
@@ -19,12 +19,13 @@ class Defaults:
         self.window_s = 1e-6
         self.nsigma = 5
         
-        self.baseline_res_eV = 64e-3
+        self.baseline_res_eV = 14.3e-3
         self.PD_energy_resolution = np.inf
         self.GaAs_energy_resolution = np.inf
-        self.e_high_keV = 1e-3
+        self.e_high_keV = 1.
+        self.LEE_improvement = 20.
 
-        self.masses_GeV = [20e-3, 20e-3, 1]
+        self.masses_GeV = [1e-6, 10, 72]
 
         self.sigma0 = 1e-31
 

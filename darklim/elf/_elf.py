@@ -1,9 +1,10 @@
 from IPython.utils import io
 import numpy as np
 import sys
-sys.path.insert(0, '/home/vvelan/DarkELF/')
+sys.path.insert(0, '/home/vvelan/Test/DarkELF/')
 from darkelf import darkelf
 from darklim import constants
+import time
 
 __all__ = [
     "get_dRdE_lambda_Al2O3_electron",
@@ -13,6 +14,8 @@ __all__ = [
     "get_dRdE_lambda_GaAs_phonon",
     "get_dRdE_lambda_Si_phonon",
     "get_dRdE_lambda_Al2O3_absorption",
+    "convert_sigmae_to_sigman",
+    "convert_sigman_to_sigmae",
 ]
 
 def get_dRdE_lambda_Al2O3_electron(mX_eV=1e8, mediator='massless', sigmae=1e-31, kcut=0, method='grid', withscreening=True, suppress_darkelf_output=False, gain=1.):
@@ -69,7 +72,7 @@ def get_dRdE_lambda_Al2O3_electron(mX_eV=1e8, mediator='massless', sigmae=1e-31,
 
 
 
-def get_dRdE_lambda_Al2O3_phonon(mX_eV=1e8, mediator='massless', sigman=1e-31, dark_photon=False, suppress_darkelf_output=False, gain=1.):
+def get_dRdE_lambda_Al2O3_phonon(mX_eV=1e8, mediator='massless', sigma=1e-31, dark_photon=False, suppress_darkelf_output=False):
     """
     Function to get an anonymous lambda function, which calculates dRdE
     for DM-nuclear scattering via phonons in Al2O3 given only deposited energy.
@@ -81,8 +84,9 @@ def get_dRdE_lambda_Al2O3_phonon(mX_eV=1e8, mediator='massless', sigman=1e-31, d
     mediator : str
         Dark photon mediator mass. Must be "massive" (infinity) or
         "massless" (zero).
-    sigman : float
-        DM-nucleon scattering cross section in cm^2
+    sigma : float
+        If dark photon: DM-electron scattering cross section in cm^2
+        If scalar: DM-nucleon scattering cross section in cm^2
     dark_photon : bool
         Whether to treat this as a dark photon
     suppress_darkelf_output : bool
@@ -107,14 +111,46 @@ def get_dRdE_lambda_Al2O3_phonon(mX_eV=1e8, mediator='massless', sigman=1e-31, d
     # Create anonymous function to get rate with only deposited energy
     # Note DarkELF expects recoil energies and WIMP masses in eV, and returns rates in counts/kg/yr/eV
     # But DarkLim expects recoil energies in keV, WIMP masses in GeV, and rates in counts/kg/day/keV (DRU)
-    sapphire.update_params(mX=mX_eV, mediator=mediator)
-    fun = lambda keV : sapphire._dR_domega_multiphonons_no_single(keV * 1000 / gain, sigman=sigman, dark_photon=dark_photon) * \
-            (1000 / 365.25) / gain
+    
+    # Scalar nucleon interaction with massive mediator (the "standard" NR interaction)
+    if mediator == 'massive' and not dark_photon:
+        sapphire.update_params(mX=mX_eV, mediator=mediator)
+        fun = lambda keV : (sapphire._dR_domega_multiphonons_SI(keV * 1000, sigma, dark_photon) + 
+                            sapphire._dR_domega_coherent_single(keV * 1000, sigma, dark_photon)) * (1000 / 365.25)
+        
+    # Scalar nucleon interaction with massless mediator
+    elif mediator == 'massless' and not dark_photon:
+        sapphire.update_params(mX=mX_eV, mediator=mediator)
+        fun = lambda keV : (sapphire._dR_domega_multiphonons_SI(keV * 1000, sigma, dark_photon) + 
+                            sapphire._dR_domega_coherent_single(keV * 1000, sigma, dark_photon)) * (1000 / 365.25)
+        
+    # Dark photon interaction with massive mediator
+    elif mediator == 'massive' and dark_photon:
+        sapphire.update_params(mX=mX_eV, mediator=mediator)
+        sigmae = sigma
+        sigman = convert_sigmae_to_sigman(sigmae, mX_eV, mediator)
 
+        # Only use the multiphonon part above the single-phonon maximum energy
+        E_cutoff_single_phonon_eV = 0.199
+        fun = lambda keV : sapphire._dR_domega_multiphonons_SI(keV * 1000, sigman, dark_photon) * (1000 / 365.25) * \
+            np.heaviside(keV * 1000 - E_cutoff_single_phonon_eV, 1)
+    
+    # Dark photon interaction with massless mediator
+    elif mediator == 'massless' and dark_photon:
+        sapphire.update_params(mX=mX_eV, mediator=mediator)
+        sigmae = sigma
+        sigman = convert_sigmae_to_sigman(sigmae, mX_eV, mediator)
+
+        # Add both single-phonon and multiphonon, but only use the
+        # multiphonon part above the single-phonon maximum energy
+        E_cutoff_single_phonon_eV = 0.199
+        fun = lambda keV : (1000 / 365.25) * \
+            (sapphire._dR_domega_multiphonons_SI(keV * 1000, sigman, dark_photon) * np.heaviside(keV * 1000 - E_cutoff_single_phonon_eV, 1) + 
+             sapphire.dRdomega_phonon(keV * 1000, sigmae))
+    
     return fun
 
-
-
+    
 def get_dRdE_lambda_GaAs_electron(mX_eV=1e8, mediator='massless', sigmae=1e-31, kcut=0, method='grid', withscreening=True, suppress_darkelf_output=False, gain=1.):
     """
     Function to get an anonymous lambda function, which calculates dRdE
@@ -398,3 +434,71 @@ def get_dRdE_lambda_GaAs_absorption(mX_eV=1., kappa=1e-15, res_eV=0.1, suppress_
     fun = lambda keV: R_kgday / np.sqrt(2 * np.pi * res_keV**2) * np.exp(-(keV - E0_keV)**2 / (2 * res_keV**2))
         
     return fun
+
+
+
+def convert_sigmae_to_sigman(sigmae, mX_eV, mediator):
+    """
+    Convert DM-electron cross section to DM-nucleon cross section.
+    
+    Parameters
+    ----------
+    sigmae : float
+        DM-electron scattering cross section in cm^2
+    mX_eV : float
+        Dark matter mass in eV
+    mediator : str
+        Dark photon mediator mass. Must be "massive" (infinity) or
+        "massless" (zero).
+        
+    Returns
+    -------
+    sigman : float
+        DM-nucleon scattering cross section in cm^2
+    """
+
+    mu_chi_p_eV = (mX_eV * constants.m_proton_GeV * 1e9) / (mX_eV + constants.m_proton_GeV * 1e9)
+    mu_chi_e_eV = (mX_eV * constants.m_electron_GeV * 1e9) / (mX_eV + constants.m_electron_GeV * 1e9)
+    
+    if mediator == 'massive':
+        sigman = sigmae * (mu_chi_p_eV / mu_chi_e_eV)**2
+    elif mediator == 'massless':
+        q0_e_eV = constants.alpha_fine_structure * constants.m_electron_GeV * 1e9
+        q0_p_eV = constants.v0_sun / constants.speed_of_light * mu_chi_p_eV
+        sigman = sigmae * (mu_chi_p_eV / mu_chi_e_eV)**2 * (q0_e_eV / q0_p_eV)**4
+        
+    return sigman
+
+
+def convert_sigman_to_sigmae(sigman, mX_eV, mediator):
+    """
+    Convert DM-nucleon cross section to DM-electron cross section.
+    
+    Parameters
+    ----------
+    sigman : float
+        DM-nucleon scattering cross section in cm^2
+    mX_eV : float
+        Dark matter mass in eV
+    mediator : str
+        Dark photon mediator mass. Must be "massive" (infinity) or
+        "massless" (zero).
+        
+    Returns
+    -------
+    sigmae : float
+        DM-electron scattering cross section in cm^2
+        
+    """
+    
+    mu_chi_p_eV = (mX_eV * constants.m_proton_GeV * 1e9) / (mX_eV + constants.m_proton_GeV * 1e9)
+    mu_chi_e_eV = (mX_eV * constants.m_electron_GeV * 1e9) / (mX_eV + constants.m_electron_GeV * 1e9)
+
+    if mediator == 'massive':
+        sigmae = sigman * (mu_chi_e_eV / mu_chi_p_eV)**2
+    elif mediator == 'massless':
+        q0_e_eV = constants.alpha_fine_structure * constants.m_electron_GeV * 1e9
+        q0_p_eV = constants.v0_sun / constants.speed_of_light * mu_chi_p_eV
+        sigmae = sigman * (mu_chi_e_eV / mu_chi_p_eV)**2 * (q0_p_eV / q0_e_eV)**4
+
+    return sigmae

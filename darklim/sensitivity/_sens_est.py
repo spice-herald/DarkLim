@@ -1,6 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from scipy import stats, special
+from scipy import stats, special, integrate
 from scipy.interpolate import interp1d
 
 import mendeleev
@@ -8,10 +8,12 @@ from darklim import constants
 from darklim.limit._limit import drde, optimuminterval, fc_limits, get_fc_ul, get_signal_rate, gauss_smear
 from darklim.sensitivity._random_sampling import pdf_sampling
 from darklim.sensitivity._plotting import RatePlot
+from darklim.feldman_cousins import FC_ints
 
 import darklim.elf._elf as elf
 import darklim.detector._detector as detector
 import time
+
 
 E_LOW_GLOBAL_KEV = 1e-6
 E_HIGH_GLOBAL_KEV = 100.
@@ -472,7 +474,7 @@ class SensEst(object):
     def run_sim(self, threshold, e_high=E_HIGH_GLOBAL_KEV, e_low=E_LOW_GLOBAL_KEV, m_dms=np.geomspace(0.01, 2, num=5),
                 nexp=1, npts=NPTS_GLOBAL, plot_bkgd=False, res=None, verbose=False, sigma0=1e-41,
                 elf_model=None, elf_params=None, elf_target=None,
-                gaas_params=None, return_only_drde=False, force_e_max=None):
+                gaas_params=None, return_only_drde=False, return_fc=False, adjust_threshold=False):
 
         """
         Method for running the simulation for getting the sensitivity
@@ -569,10 +571,12 @@ class SensEst(object):
             elf_darkphoton = elf_params['dark_photon'] if 'dark_photon' in elf_params else False
 
             drdefunction = \
-                [elf.get_dRdE_lambda_Al2O3_phonon(mX_eV=m*1e9, sigman=sigma0, mediator=elf_mediator,
+                [elf.get_dRdE_lambda_Al2O3_phonon(mX_eV=m*1e9, sigma=sigma0, mediator=elf_mediator,
                                                     dark_photon=elf_darkphoton,
-                                                    suppress_darkelf_output=elf_suppress, gain=self.gain)
+                                                    suppress_darkelf_output=elf_suppress)
                 for m in m_dms]
+
+            smear_after_drdefun = True
 
         elif elf_model == 'electron' and elf_target == 'Si':
 
@@ -616,6 +620,8 @@ class SensEst(object):
 
         # Container to hold the observed limits for each pseudoexperiment
         sigs_all = np.zeros((len(m_dms), nexp)) 
+        sigs_fc = np.zeros_like(sigs_all)
+        print(f'Starting the loop over {len(m_dms)} dark matter masses with {nexp} pseudoexperiments each')
 
         for ii in range(len(m_dms)):
 
@@ -626,6 +632,12 @@ class SensEst(object):
             except ValueError:
                 rate_interp_wide = np.array([drdefunction[ii](en) for en in en_interp_wide]) * self.exposure
 
+            if np.trapz(rate_interp_wide, en_interp_wide) == 0:
+                sigs_all[ii] = np.full(nexp, np.inf)
+                sigs_fc[ii] = np.full(nexp, np.inf)
+                print(f'Skipping mass {m_dms[ii]} GeV as the total rate is zero')
+                continue
+
             # Determine the DM cutoff energy, and restrict the energy range to be
             # slightly above this cutoff energy (x10 resolution, or x1.2 energy)
             max_energy_DM = max(en_interp_wide[rate_interp_wide > 0])
@@ -633,15 +645,33 @@ class SensEst(object):
                 max_energy_DM *= 1.2
             else:
                 max_energy_DM += 10 * res
-                
+
             en_interp = np.geomspace(en_interp_wide[0], max_energy_DM, npts)
+
+            # Optionally, update the energy threshold to give 120k background events
+            if adjust_threshold:
+                N_above_threshold = self._get_average_bkgd_events_vs_threshold(en_interp)
+                if N_above_threshold[0] > 120_000:
+                    new_threshold = np.interp(120_000, np.flip(N_above_threshold), np.flip(en_interp))
+                    print(f'Adjusted threshold from {en_interp_wide[0]:.3e} to {new_threshold:.3e} keV to give ~120k background events')
+                    en_interp = np.geomspace(new_threshold, max_energy_DM, npts)
+
+            # Re-calculate the DM rate with the new energy range
             try:
                 rate_interp = drdefunction[ii](en_interp) * self.exposure
             except ValueError:
                 rate_interp = np.array([drdefunction[ii](en) for en in en_interp]) * self.exposure
 
+            # Optionally, smear the DM spectrum
             if res is not None and smear_after_drdefun:
                 rate_interp = gauss_smear(en_interp, rate_interp, res, gauss_width=5)
+
+            # Since we've made updates to the energy range, check the DM is still detectable
+            if np.trapz(rate_interp, en_interp) == 0:
+                sigs_all[ii] = np.full(nexp, np.inf)
+                sigs_fc[ii] = np.full(nexp, np.inf)
+                print(f'Skipping mass {m_dms[ii]} GeV as the total rate is zero')
+                continue
 
             # Define interpolation function based on en_interp and rate_interp
             # rate_interp = np.zeros((len(m_dms), len(en_interp)))
@@ -679,7 +709,7 @@ class SensEst(object):
                     evts_sim, # evt energies
                     en_interp, # efficiency curve energies
                     np.ones_like(en_interp), # efficiency curve values
-                    m_dms[ii], # mass
+                    [m_dms[ii]], # mass
                     self.exposure, # exposure
                     tm=self.tm, # target material
                     cl=0.9, # C.L.
@@ -692,16 +722,27 @@ class SensEst(object):
                     en_interp=en_interp, # Pre-calculated dRdE x-values
                     rate_interp=rate_interp[np.newaxis, :], # Pre-calculated dRdE y-values
                 )
-
-                sigs_all[ii].append(sig_temp[0])
+                
+                sigs_all[ii][jj] = sig_temp[0]
+                
+                # fc_range = FC_ints(len(evts_sim), 0., alpha=0.1)
+                # fc_upper = fc_range[1]
+                # if fc_range[0] > 0:
+                #     fc_upper = FC_ints(len(evts_sim), 0., alpha=0.2)[1]
+                # sigs_fc[ii][jj] = fc_upper / len(evts_sim) * sigma0
 
         ########################
         # Get median limit and return
         ########################
 
-        sig = np.median(np.array(sigs_all), axis=1)
+        sig = np.median(sigs_all, axis=1)
+        sig_fc = np.median(sigs_fc, axis=1)
+        print(f'For masses {m_dms}, the median limits are: {sig}')
 
-        return m_dms, sig
+        if return_fc:
+            return m_dms, sigs_all, sigs_fc, sig, sig_fc
+        else:
+            return m_dms, sig
     
 
     def run_sim_fc(self, known_bkgs_list, threshold, e_high, e_low=1e-6, m_dms=None, nexp=1, npts=1000,
@@ -876,7 +917,7 @@ class SensEst(object):
             elf_darkphoton = elf_params['dark_photon'] if 'dark_photon' in elf_params else False
 
             drdefunction = \
-                [elf.get_dRdE_lambda_Al2O3_phonon(mX_eV=m*1e9, sigman=sigma0, mediator=elf_mediator,
+                [elf.get_dRdE_lambda_Al2O3_phonon(mX_eV=m*1e9, sigma=sigma0, mediator=elf_mediator,
                                                     dark_photon=elf_darkphoton,
                                                     suppress_darkelf_output=elf_suppress, gain=self.gain)
                 for m in m_dms]
@@ -1115,6 +1156,60 @@ class SensEst(object):
             self._plot_bkgd(evts_sim, en_interp, tot_bkgd_func, nbins=nbins)
 
         return evts_sim
+    
+
+    def _get_average_bkgd_events_vs_threshold(self, en_interp):
+        """
+        Hidden method for generating the average number of background events,
+        as we vary the energy threshold.
+
+        Parameters
+        ----------
+        en_interp : ndarray
+            The energies at which the total simulated background rate
+            will be interpolated, in units of keV.
+
+        Returns
+        -------
+        n_evts : ndarray
+            The number of background events expected in the
+            energy range [en_interp[i], en_interp[-1]] for the given
+            exposure.
+
+        Raises
+        ------
+        ValueError
+            If `self._backgrounds` is an empty list (no backgrounds
+            have been added).
+
+        """
+
+        if len(self._backgrounds) == 0:
+            raise ValueError(
+                "No backgrounds have been added, "
+                "add some using the methods of SensEst."
+            )
+
+        e_high = en_interp.max()
+        e_low = en_interp.min()
+        npts = len(en_interp)
+
+        tot_bkgd = np.zeros(npts)
+
+        for bkgd in self._backgrounds:
+            tot_bkgd += bkgd(en_interp)
+
+        tot_bkgd_func = lambda x: np.stack(
+            [bkgd(x) for bkgd in self._backgrounds], axis=1,
+        ).sum(axis=1)
+
+        drde_total = tot_bkgd_func(en_interp) * self.exposure
+        N_evts_above_threshold = \
+            -1 * np.flip(integrate.cumtrapz(np.flip(drde_total), np.flip(en_interp)))
+        N_evts_above_threshold = np.append(N_evts_above_threshold, 0)
+
+        return N_evts_above_threshold
+
 
     def _plot_bkgd(self, evts, en_interp, tot_bkgd_func, nbins=100):
         """

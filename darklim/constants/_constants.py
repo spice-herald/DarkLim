@@ -16,3 +16,8 @@ GaAs_light_fraction = 0.60
 GaAs_average_phonon_energy_eV = 0.022
 Si_density =  2.329
 LHe_density = 0.14
+
+m_proton_GeV = 0.9382720813
+m_electron_GeV = 0.0005109989461
+alpha_fine_structure = 1/137.035999084
+speed_of_light = 299792458 # m/s
