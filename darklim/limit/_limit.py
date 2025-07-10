@@ -543,8 +543,7 @@ def optimuminterval(eventenergies, effenergies, effs, masslist, exposure,
             fc = x_vals/tot_rate
             fc[fc > 1] = 1
 
-            #cdf_max = 1 - 1e-6
-            possiblewimp = (fc <= 1.)
+            possiblewimp = (fc < 1.)
             fc = fc[possiblewimp]
 
             if len(fc) == 0:
