@@ -532,6 +532,7 @@ class SensEst(object):
                         E_th_PD=gaas_params['E_th_PD'], E_res_PD=gaas_params['E_res_PD'],
                         E_th_GaAs=gaas_params['E_th_GaAs'], E_res_GaAs=gaas_params['E_res_GaAs'],
                         collection_efficiency=gaas_params['collection_efficiency'],
+                        GaAs_gamma_energy=gaas_params['GaAs_gamma_energy'],
                         rng=np.random.default_rng())
                 
                 interp_func = interp1d(E_GaAs_bins, dRdE_GaAs_obs,
