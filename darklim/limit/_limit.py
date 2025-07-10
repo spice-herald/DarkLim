@@ -527,7 +527,7 @@ def optimuminterval(eventenergies, effenergies, effs, masslist, exposure,
 
         tot_rate = integ_rate[-1]
         if verbose:
-            print(f"Total rate for mass {mass} GeV: {tot_rate:.3e} events.")
+            print(f"Total integrated rate for mass {mass} GeV: {tot_rate:.3e} events.")
 
         x_val_fcn = interpolate.interp1d(
             en_interp,
@@ -550,22 +550,17 @@ def optimuminterval(eventenergies, effenergies, effs, masslist, exposure,
             if len(fc) == 0:
                 fc = np.asarray([0, 1])
 
-            try:
-                uloutput, endpoint0, endpoint1 = upper(fc, cl=cl)
-                sigma[ii] = (sigma0 / tot_rate) * uloutput
+            uloutput, endpoint0, endpoint1 = upper(fc, cl=cl)
+            sigma[ii] = (sigma0 / tot_rate) * uloutput
 
-                oi_energy0[ii] = eventenergies[event_inds][possiblewimp][endpoint0-1] if endpoint0>0 else elow # endpoint==0 means the start of the SM integration range
-                oi_energy1[ii] = eventenergies[event_inds][possiblewimp][endpoint1-1] if endpoint1-1 < len(fc) else ehigh
-            except:
-                pass
+            energies_roi = eventenergies[event_inds][possiblewimp]
+            oi_energy0[ii] = energies_roi[endpoint0-1] if endpoint0>0 else elow # endpoint==0 means the start of the SM integration range
+            oi_energy1[ii] = energies_roi[endpoint1-1] if (len(energies_roi) > 0 and endpoint1-1 < len(fc)) else ehigh
             
-        if verbose:
-            print(f"Optimum interval for mass {mass} GeV: [{oi_energy0[ii]*1e3:.3f}, {oi_energy1[ii]*1e3:.3f}] eV")
-            print(f'Endpoints: {endpoint0}, {endpoint1}')
-            print(f"UL output: {uloutput:.3f} events")
-            print(f"Cross section upper limit for mass {mass} GeV: {sigma[ii]:.3e} cm^2")
-            print(f'Event FC values: {fc}')
-            print('\n')
+            if verbose:
+                print(f"Optimum interval for mass {mass} GeV: [{oi_energy0[ii]*1e3:.3f}, {oi_energy1[ii]*1e3:.3f}] eV")
+                print(f"Endpoints: {endpoint0}, {endpoint1}. UL output: {uloutput:.3f} events")
+                print(f"Cross section upper limit for mass {mass} GeV: {sigma[ii]:.3e} cm^2")
 
     return sigma, oi_energy0, oi_energy1
 
