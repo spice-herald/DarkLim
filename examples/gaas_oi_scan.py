@@ -59,21 +59,22 @@ def process_mass(mass, args):
 
     SE = darklim.sensitivity.SensEst(args.target_mass_kg, args.t_days, tm=args.target, eff=1., gain=1., seed=(int(time.time() + mass*1e6)))
     SE.reset_sim()
-    SE.add_run57_lee_bkgd(fin='/home/vvelan/DarkLim/examples/required_performance_bigger_3p5sigma/background_spectrum_3fold.txt', scale_by=8.)
-#    SE.add_flat_bkgd(10.)
+    SE.add_lee_bkgd_from_file(args.LEE_filename, scale_by=(1/args.LEE_improvement*12.))
 
-    gaas_params = {'N_PDs': 2,
-                   'E_th_PD': args.PD_energy_resolution * args.nsigma,
+    gaas_params = {'N_PDs': 1,
+                   'E_th_PD': args.PD_energy_threshold,
                    'E_res_PD': args.PD_energy_resolution,
-                   'E_th_GaAs': args.GaAs_energy_resolution * args.nsigma,
+                   'E_th_GaAs': args.GaAs_energy_threshold,
                    'E_res_GaAs': args.GaAs_energy_resolution,
-                   'collection_efficiency': 0.25}
+                   'collection_efficiency': 0.75,
+                   'GaAs_gamma_energy': 1.33e-3,
+                   }
 
     threshold_keV = gaas_params['E_th_GaAs']
 
     _, sigma = SE.run_sim(
             threshold_keV,
-            e_high=0.2,
+            e_high=args.e_high_keV,
             #e_low=1e-6,
             m_dms=[mass],
             nexp=args.nexp,
@@ -87,6 +88,7 @@ def process_mass(mass, args):
             elf_params=args.elf_params,
             return_only_drde=False,
             gaas_params=gaas_params,
+            adjust_threshold=False,
     )
 
     print(f'Done mass = {mass}, sigma = {sigma}')

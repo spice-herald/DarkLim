@@ -148,12 +148,21 @@ def get_scan_parameters():
     parser.add_argument('--PD_energy_resolution', type=float, default=df.PD_energy_resolution,
                         help='PD energy resolution (keV)')
 
+    parser.add_argument('--PD_energy_threshold', type=float, default=df.PD_energy_threshold,
+                        help='PD energy threshold (keV)')
+    
     parser.add_argument('--GaAs_energy_resolution', type=float, default=df.GaAs_energy_resolution,
                         help='GaAs energy resolution (keV)')
+    
+    parser.add_argument('--GaAs_energy_threshold', type=float, default=df.GaAs_energy_threshold,
+                        help='GaAs energy threshold (keV)')
 
     parser.add_argument('--LEE_improvement', type=float, default=df.LEE_improvement,
                         help='LEE Improvement (>= 1)')
-
+    
+    parser.add_argument('--LEE_filename', type=str, default=df.LEE_filename,
+                        help='LEE filename')
+    
     parser.add_argument('--e_high_keV', type=float, default=df.e_high_keV,
                         help='Highest possible energy (keV)')
 
