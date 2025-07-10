@@ -14,6 +14,7 @@ from multiprocessing import Pool
 import time
 import pickle
 from time import localtime, strftime
+from scipy.special import gamma
 
 
 
@@ -160,7 +161,7 @@ def Lindhard(E_keV):
 
 
 def calculate_electron_hole_pairs(E_recoil,
-                                  GaAs_band_gap=1.5e-3,
+                                  GaAs_band_gap=(constants.bandgap_GaAs_eV*1e-3),
                                   GaAs_Fano=0.12,
                                   GaAs_gamma_energy=0.9e-3,
                                   pt='ER',
@@ -206,6 +207,7 @@ def DM_spectrum_GaAs(m_DM_eV, sigma, mediator='NR', e_high=100.,
                      N_PDs = 1, E_th_PD = 0.9e-3, E_res_PD = 0.18e-3, E_th_GaAs = 0.9e-3, E_res_GaAs = 0.18e-3,
                      collection_efficiency=0.34, GaAs_QE=0.6, GaAs_gamma_energy=0.9e-3,
                      rng=np.random.default_rng(12345), n_sim = 1_000_000, verbose=False, plot=False,
+                     verbose_return=False
                      ): 
     """
     Generate the DM spectrum for GaAs based on the given mass and cross-section.
@@ -229,7 +231,10 @@ def DM_spectrum_GaAs(m_DM_eV, sigma, mediator='NR', e_high=100.,
 
     R_integrated = np.trapz(dRdE_DM_DRU, E_DM_keV)
     if R_integrated == 0:
-        return E_DM_keV, np.zeros_like(dRdE_DM_DRU)
+        if verbose_return:
+            return E_DM_keV, np.zeros_like(dRdE_DM_DRU), np.zeros_like(dRdE_DM_DRU), np.zeros_like(dRdE_DM_DRU), np.zeros_like(dRdE_DM_DRU), np.zeros_like(dRdE_DM_DRU), np.zeros_like(dRdE_DM_DRU), np.zeros_like(dRdE_DM_DRU), np.zeros_like(dRdE_DM_DRU), np.zeros_like(dRdE_DM_DRU), np.zeros_like(dRdE_DM_DRU), np.zeros_like(dRdE_DM_DRU), np.zeros_like(dRdE_DM_DRU), np.zeros_like(dRdE_DM_DRU) 
+        else:
+            return E_DM_keV, np.zeros_like(dRdE_DM_DRU)
 
     pdf_DM = np.array(dRdE_DM_DRU) / R_integrated  # Normalize the differential rate to get a PDF
     cdf_DM = np.cumsum(pdf_DM * np.append(np.array([0.]), np.diff(E_DM_keV)))
@@ -302,7 +307,10 @@ def DM_spectrum_GaAs(m_DM_eV, sigma, mediator='NR', e_high=100.,
 
     fraction_detected = sum(detected) / n_sim
     if sum(detected) == 0:
-        return E_DM_keV, np.zeros_like(dRdE_DM_DRU)
+        if verbose_return:
+            return E_DM_keV, np.zeros_like(dRdE_DM_DRU), E_recoil, N_eh, N_photons, N_photons_PD_A, N_photons_PD_B, N_photons_sink, E_PD_A_keV, E_PD_B_keV, E_GaAs_keV, E_GaAs_obs_keV, fraction_in_GaAs, detected
+        else:
+            return E_DM_keV, np.zeros_like(dRdE_DM_DRU)
 
     # Convert simulation to dRdE spectrum for GaAs observed energy
     E_GaAs_bins = np.linspace(min(E_GaAs_obs_keV[detected]) * 0.8, max(E_GaAs_obs_keV[detected]) * 1.2, 300)
@@ -364,7 +372,11 @@ def DM_spectrum_GaAs(m_DM_eV, sigma, mediator='NR', e_high=100.,
         fig.tight_layout()
         fig.show()
 
-    return E_GaAs_bins, dRdE_GaAs_obs
+    if verbose_return:
+        # Return all the arrays for further analysis
+        return E_GaAs_bins, dRdE_GaAs_obs, E_recoil, N_eh, N_photons, N_photons_PD_A, N_photons_PD_B, N_photons_sink, E_PD_A_keV, E_PD_B_keV, E_GaAs_keV, E_GaAs_obs_keV, fraction_in_GaAs, detected
+    else:
+        return E_GaAs_bins, dRdE_GaAs_obs
 
 
 
@@ -373,6 +385,7 @@ def monoenergetic_sim_GaAs(E_keV, recoil = 'ER',
                      N_PDs = 1, E_th_PD = 0.9e-3, E_res_PD = 0.18e-3, E_th_GaAs = 0.9e-3, E_res_GaAs = 0.18e-3,
                      collection_efficiency=0.34, GaAs_QE=0.6, GaAs_gamma_energy=0.9e-3,
                      rng=np.random.default_rng(12345), n_sim = 1_000_000, verbose=False,
+                     verbose_return=False,
                      ): 
     """
     Generate simulated events for a monoenergetic signal in GaAs.
@@ -419,44 +432,28 @@ def monoenergetic_sim_GaAs(E_keV, recoil = 'ER',
             N_eh[i] = calculate_electron_hole_pairs(E_recoil[i], rng=rng)
 
         N_photons[i] = rng.binomial(N_eh[i], GaAs_QE)
+            
+        N_photons_detected = rng.binomial(N_photons[i], collection_efficiency)
+        N_photons_PD_A[i] = rng.binomial(N_photons_detected, 0.5)
+        N_photons_PD_B[i] = N_photons_detected - N_photons_PD_A[i]
+        N_photons_sink[i] = N_photons[i] - N_photons_detected
+
+        E_PD_A_keV[i] = rng.normal(N_photons_PD_A[i] * GaAs_gamma_energy, E_res_PD)
+        E_PD_B_keV[i] = rng.normal(N_photons_PD_B[i] * GaAs_gamma_energy, E_res_PD)
+        
+        E_GaAs_keV[i] = E_recoil[i] - (N_photons_PD_A[i] + N_photons_PD_B[i] + N_photons_sink[i]) * GaAs_gamma_energy
+        E_GaAs_obs_keV[i] = rng.normal(E_GaAs_keV[i], E_res_GaAs)
+
+        fraction_in_GaAs[i] = E_GaAs_keV[i] / E_recoil[i] if E_recoil[i] > 0 else 0
         if N_PDs == 1:
-            N_photons_PD_A[i] = rng.binomial(N_photons[i], collection_efficiency)
-            N_photons_sink[i] = N_photons[i] - N_photons_PD_A[i]
-
-            E_PD_A_keV[i] = rng.normal(N_photons_PD_A[i] * GaAs_gamma_energy, E_res_PD)
-            E_GaAs_keV[i] = E_recoil[i] - (N_photons_PD_A[i] + N_photons_sink[i]) * GaAs_gamma_energy
-            E_GaAs_obs_keV[i] = rng.normal(E_GaAs_keV[i], E_res_GaAs)
-
-            fraction_in_GaAs[i] = E_GaAs_keV[i] / E_recoil[i] if E_recoil[i] > 0 else 0
-            detected[i] = (E_PD_A_keV[i] > E_th_PD) * (E_GaAs_obs_keV[i] > E_th_GaAs)
-            
+            detected[i] = ((E_PD_A_keV[i] > E_th_PD) + (E_PD_B_keV[i] > E_th_PD)) * (E_GaAs_obs_keV[i] > E_th_GaAs)
         elif N_PDs == 2:
-            
-            # Prevent more than N_photons from being detected
-            # Also don't give preference to either PD
-            if rng.random() < 0.5:
-                N_photons_PD_A[i] = rng.binomial(N_photons[i], collection_efficiency/2)
-                N_photons_PD_B[i] = rng.binomial(N_photons[i], collection_efficiency/2)
-                if N_photons_PD_A[i] + N_photons_PD_B[i] > N_photons[i]:
-                    N_photons_PD_B[i] = N_photons[i] - N_photons_PD_A[i]
-            else:
-                N_photons_PD_B[i] = rng.binomial(N_photons[i], collection_efficiency/2)
-                N_photons_PD_A[i] = rng.binomial(N_photons[i], collection_efficiency/2)
-                if N_photons_PD_A[i] + N_photons_PD_B[i] > N_photons[i]:
-                    N_photons_PD_A[i] = N_photons[i] - N_photons_PD_B[i]
-
-            N_photons_sink[i] = N_photons[i] - (N_photons_PD_A[i] + N_photons_PD_B[i])
-
-            E_PD_A_keV[i] = rng.normal(N_photons_PD_A[i] * GaAs_gamma_energy, E_res_PD)
-            E_PD_B_keV[i] = rng.normal(N_photons_PD_B[i] * GaAs_gamma_energy, E_res_PD)
-            
-            E_GaAs_keV[i] = E_recoil[i] - (N_photons_PD_A[i] + N_photons_PD_B[i] + N_photons_sink[i]) * GaAs_gamma_energy
-            E_GaAs_obs_keV[i] = rng.normal(E_GaAs_keV[i], E_res_GaAs)
-
-            fraction_in_GaAs[i] = E_GaAs_keV[i] / E_recoil[i] if E_recoil[i] > 0 else 0
             detected[i] = (E_PD_A_keV[i] > E_th_PD) * (E_PD_B_keV[i] > E_th_PD) * (E_GaAs_obs_keV[i] > E_th_GaAs)
 
-    return E_GaAs_obs_keV, E_PD_A_keV, E_PD_B_keV, detected
+    if verbose_return:
+        return N_eh, N_photons, N_photons_PD_A, N_photons_PD_B, N_photons_sink, E_GaAs_keV, E_GaAs_obs_keV, E_PD_A_keV, E_PD_B_keV, detected, fraction_in_GaAs
+    else:
+        return E_GaAs_obs_keV, E_PD_A_keV, E_PD_B_keV, detected
 
 
 
