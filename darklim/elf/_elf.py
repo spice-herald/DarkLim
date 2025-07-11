@@ -1,7 +1,7 @@
 from IPython.utils import io
 import numpy as np
 import sys
-sys.path.insert(0, '/home/vvelan/Test/DarkELF/')
+sys.path.insert(0, '/home/vvelan/DarkELF/')
 from darkelf import darkelf
 from darklim import constants
 import time
@@ -13,6 +13,7 @@ __all__ = [
     "get_dRdE_lambda_Al2O3_phonon",
     "get_dRdE_lambda_GaAs_phonon",
     "get_dRdE_lambda_Si_phonon",
+    "get_dRdE_lambda_GaAs_absorption",
     "get_dRdE_lambda_Al2O3_absorption",
     "convert_sigmae_to_sigman",
     "convert_sigman_to_sigmae",
@@ -377,9 +378,9 @@ def get_dRdE_lambda_Al2O3_absorption(mX_eV=1., kappa=1e-15, res_eV=0.1, suppress
     if suppress_darkelf_output:
         print('WARNING: You are suppressing DarkELF output')
         with io.capture_output() as captured:
-            sapphire = darkelf(target='Al2O3', filename="Al2O3_mermin.dat")
+            sapphire = darkelf(target='Al2O3', filename="Al2O3_mermin.dat", phonon_filename="Al2O3_epsphonon_o.dat")
     else:
-        sapphire = darkelf(target='Al2O3', filename="Al2O3_mermin.dat")
+        sapphire = darkelf(target='Al2O3', filename="Al2O3_mermin.dat", phonon_filename="Al2O3_epsphonon_o.dat")
 
     sapphire.update_params(mX=mX_eV)
     R_kgday = sapphire.R_absorption(kappa) / 365.25
