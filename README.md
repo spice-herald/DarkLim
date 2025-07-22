@@ -14,4 +14,6 @@ To install the most recent development version of DarkLim from source, clone thi
 
 If using a shared Python installation, you may want to add the `--user` flag to the above line(s).
 
+If the above installation fails using python 3.10, you may be able to install it using the instructions found on [the TESSERACT wiki](https://wiki.physik.uzh.ch/tesseract/doku.php?id=tessyoverview&s[]=darklim)
+
 **NOTE:** This package also requires a Fortran compiler if installing from source (or a wheel is not available for your setup). We recommend installing `gfortran`, which can be done via `sudo apt-get install gfortran` on Linux or `brew install gcc` on macOS.
