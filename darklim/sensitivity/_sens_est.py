@@ -12,8 +12,6 @@ from darklim.feldman_cousins import FC_ints
 
 import darklim.elf._elf as elf
 import darklim.detector._detector as detector
-import time
-
 
 E_LOW_GLOBAL_KEV = 1e-6
 E_HIGH_GLOBAL_KEV = 100.
@@ -551,6 +549,8 @@ class SensEst(object):
                         res_eV=(res*1e3), suppress_darkelf_output=elf_suppress)
                     for m in m_dms]
 
+            smear_after_drdefun = True
+
         elif elf_model == 'electron' and elf_target == 'Al2O3':
 
             elf_mediator = elf_params['mediator'] if 'mediator' in elf_params else 'massless'
@@ -673,27 +673,6 @@ class SensEst(object):
                 sigs_fc[ii] = np.full(nexp, np.inf)
                 print(f'Skipping mass {m_dms[ii]} GeV as the total rate is zero')
                 continue
-
-            # Define interpolation function based on en_interp and rate_interp
-            # rate_interp = np.zeros((len(m_dms), len(en_interp)))
-            # for ii in range(len(m_dms)):
-            #     interp_func = interp1d(en_interp_wide, rate_interp_wide[ii], kind='linear', bounds_error=True)
-            #     rate_temp = np.copy(interp_func(en_interp))
-            #     if res is None:
-            #         rate_interp[ii] = rate_temp
-            #     else:
-            #         rate_interp[ii] = \
-            #             gauss_smear(en_interp, rate_temp, res, gauss_width=5)
-
-            # # Combine original en_interp with event energies and sort them
-            # combined_energies = np.unique(np.concatenate((en_interp_wide, evts_sim)))
-            # if len(evts_sim) > 0:
-            #     min_event, max_event = min(evts_sim), max(evts_sim)
-            #     min_event = -1 * np.inf
-            # else:
-            #     min_event = -1 * np.inf
-            #     max_event = np.inf
-            # en_interp = combined_energies[(combined_energies >= min_event)]
 
             ###############################
             # Loop over pseudoexperiments #
