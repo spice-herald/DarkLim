@@ -1,0 +1,13 @@
+GaAs_Development_1
+- GaAs Detector Physics (electron-hole pair creation, and light/phonon production)
+- Signal Detection Efficiency vs Energy (basic)
+--- Trigger Efficiency
+- Optimum Filter Coincidence using Analytical Techniques (rho Function in QETpy, energy suppression as a function of time mis-modeling)
+- Simulating 2-channel waveforms and using an OF for coincidence (also see simulate*.py files, which are newer)
+--- Delta Delta Chi2 development
+- Simulating 3-channel waveforms
+
+GaAs_Development_2
+- Signal Detection Efficiency vs Energy (advanced)
+- Estimating coincident rate of LEE backgrounds above a certain energy, usually using a 30 microsecond coincidence window
+- Single-Mass DarkLim Tests (see /home/vvelan/Sensitivity_Results/darklim_debugging/)
