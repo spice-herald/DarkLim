@@ -14,4 +14,6 @@ To install the most recent development version of DarkLim from source, clone thi
 
 If using a shared Python installation, you may want to add the `--user` flag to the above line(s).
 
+Some functionality in this package requires [DarkELF](https://github.com/tongylin/DarkELF)  
+
 **NOTE:** This package also requires a Fortran compiler if installing from source (or a wheel is not available for your setup). We recommend installing `gfortran`, which can be done via `sudo apt-get install gfortran` on Linux or `brew install gcc` on macOS.
