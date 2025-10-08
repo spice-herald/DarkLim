@@ -1,4 +1,5 @@
 import numpy as np
+from darklim.utils import get_cache_path
 
 # Paper version
 # Nova SuperCDMS 
@@ -128,7 +129,7 @@ CRESSTlimit_2019=np.array([[0.1602, 1.03290e-32],[0.1634, 2.55305e-33],[0.1667, 
 [100.5130, 1.59946e-42]])
 
 #CRESSTIII 2024
-CRESSTIII_2024= np.array(np.loadtxt("/home/vvelan/DarkLim/examples/ExistingLimits/CRESSTIII-Sapp-2024_cm2.txt"))
+CRESSTIII_2024= np.array(np.loadtxt(get_cache_path("data/ExistingLimits/CRESSTIII-Sapp-2024_cm2.txt")))
 
 #Trigger limit 
 TriggerLimits = np.array([[0.01    ,1],[0.01333521432163324 ,1],[0.01778279410038923 ,1],[0.023713737056616554    ,1.68611045e-26],
