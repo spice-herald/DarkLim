@@ -1,0 +1,945 @@
+Starting mass ID 3
+Confirming we are in the right directory
+ .... Loading files for Al2O3
+Loaded Al2O3_mermin.dat for epsilon in electron regime
+electronic ELF taken or calculated from Y. Sun, H. Xu, B. Da, S.-f. Mao and Z.-j. Ding, Calculations of Energy-Loss Function for 26 Materials, Chinese Journal of Chemical Physics9(2016) 663.
+phonon ELF taken or calculated from  F. Gervais and B. Piriou, Anharmonicity in several-polar-mode crystals:  adjusting phonon self-energy of LO and TO modes in Al2O3 and TiO2 to fit infrared reflectivity,Journal of Physics C Solid State Physics 7 (1974) 2374 and M. Schubert, T.E. Tiwald and C.M. Herzinger, Infrared dielectric anisotropy and phonon modes of sapphire, Phys. Rev. B61(2000) 8187
+Loaded Al2O3_epsphonon_o.dat for epsilon in phonon regime
+Warning, Al2O3_eps_electron_opticallimit.dat does not exist! dielectric function in optical limit not loaded. Needed for absorption calculations in superconductors.
+Warning! Atomic Migdal calculation not present
+Warning! Momentum dependent Zion for Migdal calculation not loaded. Using Z - number of valence electrons.
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al_pDoS.dat for partial densities of states
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/O_pDoS.dat for partial densities of states
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al_Fn.dat for Fn(omega)
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/O_Fn.dat for Fn(omega)
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al2O3_pDoS_anisotropic.dat for partial densities of states
+Al2O3_pDoS_anisotropic.dat
+/home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al2O3_Fn.npy
+Warning! Al2O3_Fn_anisotropic.npy does not exist! Need to calculate Fn(omega) from DoS. Use the function 'F_n_d_precompute' to produce these files 
+Starting the loop over 1 dark matter masses with 30 pseudoexperiments each
+In the first pseudoexperiment for mass 0.0018077686769634343 GeV, we simulated 73403 events
+On mass 1 of 1. E_high is 0.683 eV, E_low is 0.016 eV.
+Total integrated rate for mass 0.0018077686769634343 GeV: 1.047e-02 events.
+Optimum interval for mass 0.0018077686769634343 GeV: [0.112, 0.113] eV
+Endpoints: 43730, 44217. UL output: 3249.805 events
+Cross section upper limit for mass 0.0018077686769634343 GeV: 3.103e-31 cm^2
+For masses [0.0018077686769634343], the median limits are: [3.10770947e-31]
+Done mass = 0.0018077686769634343, sigma = [3.10770947e-31] (mass ID = 3)
+Starting mass ID 15
+Confirming we are in the right directory
+ .... Loading files for Al2O3
+Loaded Al2O3_mermin.dat for epsilon in electron regime
+electronic ELF taken or calculated from Y. Sun, H. Xu, B. Da, S.-f. Mao and Z.-j. Ding, Calculations of Energy-Loss Function for 26 Materials, Chinese Journal of Chemical Physics9(2016) 663.
+phonon ELF taken or calculated from  F. Gervais and B. Piriou, Anharmonicity in several-polar-mode crystals:  adjusting phonon self-energy of LO and TO modes in Al2O3 and TiO2 to fit infrared reflectivity,Journal of Physics C Solid State Physics 7 (1974) 2374 and M. Schubert, T.E. Tiwald and C.M. Herzinger, Infrared dielectric anisotropy and phonon modes of sapphire, Phys. Rev. B61(2000) 8187
+Loaded Al2O3_epsphonon_o.dat for epsilon in phonon regime
+Warning, Al2O3_eps_electron_opticallimit.dat does not exist! dielectric function in optical limit not loaded. Needed for absorption calculations in superconductors.
+Warning! Atomic Migdal calculation not present
+Warning! Momentum dependent Zion for Migdal calculation not loaded. Using Z - number of valence electrons.
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al_pDoS.dat for partial densities of states
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/O_pDoS.dat for partial densities of states
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al_Fn.dat for Fn(omega)
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/O_Fn.dat for Fn(omega)
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al2O3_pDoS_anisotropic.dat for partial densities of states
+Al2O3_pDoS_anisotropic.dat
+/home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al2O3_Fn.npy
+Warning! Al2O3_Fn_anisotropic.npy does not exist! Need to calculate Fn(omega) from DoS. Use the function 'F_n_d_precompute' to produce these files 
+Starting the loop over 1 dark matter masses with 30 pseudoexperiments each
+In the first pseudoexperiment for mass 0.019306977288832506 GeV, we simulated 73755 events
+On mass 1 of 1. E_high is 5.552 eV, E_low is 0.016 eV.
+Total integrated rate for mass 0.019306977288832506 GeV: 1.560e-03 events.
+Optimum interval for mass 0.019306977288832506 GeV: [0.111, 0.115] eV
+Endpoints: 43818, 44675. UL output: 4000.918 events
+Cross section upper limit for mass 0.019306977288832506 GeV: 2.565e-30 cm^2
+For masses [0.019306977288832506], the median limits are: [2.62286906e-30]
+Done mass = 0.019306977288832506, sigma = [2.62286906e-30] (mass ID = 15)
+Starting mass ID 24
+Confirming we are in the right directory
+ .... Loading files for Al2O3
+Loaded Al2O3_mermin.dat for epsilon in electron regime
+electronic ELF taken or calculated from Y. Sun, H. Xu, B. Da, S.-f. Mao and Z.-j. Ding, Calculations of Energy-Loss Function for 26 Materials, Chinese Journal of Chemical Physics9(2016) 663.
+phonon ELF taken or calculated from  F. Gervais and B. Piriou, Anharmonicity in several-polar-mode crystals:  adjusting phonon self-energy of LO and TO modes in Al2O3 and TiO2 to fit infrared reflectivity,Journal of Physics C Solid State Physics 7 (1974) 2374 and M. Schubert, T.E. Tiwald and C.M. Herzinger, Infrared dielectric anisotropy and phonon modes of sapphire, Phys. Rev. B61(2000) 8187
+Loaded Al2O3_epsphonon_o.dat for epsilon in phonon regime
+Warning, Al2O3_eps_electron_opticallimit.dat does not exist! dielectric function in optical limit not loaded. Needed for absorption calculations in superconductors.
+Warning! Atomic Migdal calculation not present
+Warning! Momentum dependent Zion for Migdal calculation not loaded. Using Z - number of valence electrons.
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al_pDoS.dat for partial densities of states
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/O_pDoS.dat for partial densities of states
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al_Fn.dat for Fn(omega)
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/O_Fn.dat for Fn(omega)
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al2O3_pDoS_anisotropic.dat for partial densities of states
+Al2O3_pDoS_anisotropic.dat
+/home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al2O3_Fn.npy
+Warning! Al2O3_Fn_anisotropic.npy does not exist! Need to calculate Fn(omega) from DoS. Use the function 'F_n_d_precompute' to produce these files 
+Starting the loop over 1 dark matter masses with 30 pseudoexperiments each
+In the first pseudoexperiment for mass 0.11406249238513202 GeV, we simulated 73778 events
+On mass 1 of 1. E_high is 40.452 eV, E_low is 0.016 eV.
+Total integrated rate for mass 0.11406249238513202 GeV: 2.365e-03 events.
+Optimum interval for mass 0.11406249238513202 GeV: [1.000, 1.122] eV
+Endpoints: 73775, 73778. UL output: 324.407 events
+Cross section upper limit for mass 0.11406249238513202 GeV: 1.372e-31 cm^2
+For masses [0.11406249238513202], the median limits are: [1.41622778e-31]
+Done mass = 0.11406249238513202, sigma = [1.41622778e-31] (mass ID = 24)
+Starting mass ID 0
+Confirming we are in the right directory
+ .... Loading files for Al2O3
+Loaded Al2O3_mermin.dat for epsilon in electron regime
+electronic ELF taken or calculated from Y. Sun, H. Xu, B. Da, S.-f. Mao and Z.-j. Ding, Calculations of Energy-Loss Function for 26 Materials, Chinese Journal of Chemical Physics9(2016) 663.
+phonon ELF taken or calculated from  F. Gervais and B. Piriou, Anharmonicity in several-polar-mode crystals:  adjusting phonon self-energy of LO and TO modes in Al2O3 and TiO2 to fit infrared reflectivity,Journal of Physics C Solid State Physics 7 (1974) 2374 and M. Schubert, T.E. Tiwald and C.M. Herzinger, Infrared dielectric anisotropy and phonon modes of sapphire, Phys. Rev. B61(2000) 8187
+Loaded Al2O3_epsphonon_o.dat for epsilon in phonon regime
+Warning, Al2O3_eps_electron_opticallimit.dat does not exist! dielectric function in optical limit not loaded. Needed for absorption calculations in superconductors.
+Warning! Atomic Migdal calculation not present
+Warning! Momentum dependent Zion for Migdal calculation not loaded. Using Z - number of valence electrons.
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al_pDoS.dat for partial densities of states
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/O_pDoS.dat for partial densities of states
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al_Fn.dat for Fn(omega)
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/O_Fn.dat for Fn(omega)
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al2O3_pDoS_anisotropic.dat for partial densities of states
+Al2O3_pDoS_anisotropic.dat
+/home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al2O3_Fn.npy
+Warning! Al2O3_Fn_anisotropic.npy does not exist! Need to calculate Fn(omega) from DoS. Use the function 'F_n_d_precompute' to produce these files 
+Starting the loop over 1 dark matter masses with 30 pseudoexperiments each
+In the first pseudoexperiment for mass 0.001 GeV, we simulated 73555 events
+On mass 1 of 1. E_high is 0.683 eV, E_low is 0.016 eV.
+Total integrated rate for mass 0.001 GeV: 2.011e-02 events.
+Optimum interval for mass 0.001 GeV: [0.112, 0.112] eV
+Endpoints: 44069, 44194. UL output: 3293.021 events
+Cross section upper limit for mass 0.001 GeV: 1.638e-31 cm^2
+For masses [0.001], the median limits are: [1.61437667e-31]
+Done mass = 0.001, sigma = [1.61437667e-31] (mass ID = 0)
+Starting mass ID 12
+Confirming we are in the right directory
+ .... Loading files for Al2O3
+Loaded Al2O3_mermin.dat for epsilon in electron regime
+electronic ELF taken or calculated from Y. Sun, H. Xu, B. Da, S.-f. Mao and Z.-j. Ding, Calculations of Energy-Loss Function for 26 Materials, Chinese Journal of Chemical Physics9(2016) 663.
+phonon ELF taken or calculated from  F. Gervais and B. Piriou, Anharmonicity in several-polar-mode crystals:  adjusting phonon self-energy of LO and TO modes in Al2O3 and TiO2 to fit infrared reflectivity,Journal of Physics C Solid State Physics 7 (1974) 2374 and M. Schubert, T.E. Tiwald and C.M. Herzinger, Infrared dielectric anisotropy and phonon modes of sapphire, Phys. Rev. B61(2000) 8187
+Loaded Al2O3_epsphonon_o.dat for epsilon in phonon regime
+Warning, Al2O3_eps_electron_opticallimit.dat does not exist! dielectric function in optical limit not loaded. Needed for absorption calculations in superconductors.
+Warning! Atomic Migdal calculation not present
+Warning! Momentum dependent Zion for Migdal calculation not loaded. Using Z - number of valence electrons.
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al_pDoS.dat for partial densities of states
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/O_pDoS.dat for partial densities of states
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al_Fn.dat for Fn(omega)
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/O_Fn.dat for Fn(omega)
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al2O3_pDoS_anisotropic.dat for partial densities of states
+Al2O3_pDoS_anisotropic.dat
+/home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al2O3_Fn.npy
+Warning! Al2O3_Fn_anisotropic.npy does not exist! Need to calculate Fn(omega) from DoS. Use the function 'F_n_d_precompute' to produce these files 
+Starting the loop over 1 dark matter masses with 30 pseudoexperiments each
+In the first pseudoexperiment for mass 0.010680004325145754 GeV, we simulated 73312 events
+On mass 1 of 1. E_high is 0.683 eV, E_low is 0.016 eV.
+Total integrated rate for mass 0.010680004325145754 GeV: 2.031e-03 events.
+Optimum interval for mass 0.010680004325145754 GeV: [0.111, 0.114] eV
+Endpoints: 43538, 44238. UL output: 3376.650 events
+Cross section upper limit for mass 0.010680004325145754 GeV: 1.663e-30 cm^2
+For masses [0.010680004325145754], the median limits are: [1.62714899e-30]
+Done mass = 0.010680004325145754, sigma = [1.62714899e-30] (mass ID = 12)
+Starting mass ID 25
+Confirming we are in the right directory
+ .... Loading files for Al2O3
+Loaded Al2O3_mermin.dat for epsilon in electron regime
+electronic ELF taken or calculated from Y. Sun, H. Xu, B. Da, S.-f. Mao and Z.-j. Ding, Calculations of Energy-Loss Function for 26 Materials, Chinese Journal of Chemical Physics9(2016) 663.
+phonon ELF taken or calculated from  F. Gervais and B. Piriou, Anharmonicity in several-polar-mode crystals:  adjusting phonon self-energy of LO and TO modes in Al2O3 and TiO2 to fit infrared reflectivity,Journal of Physics C Solid State Physics 7 (1974) 2374 and M. Schubert, T.E. Tiwald and C.M. Herzinger, Infrared dielectric anisotropy and phonon modes of sapphire, Phys. Rev. B61(2000) 8187
+Loaded Al2O3_epsphonon_o.dat for epsilon in phonon regime
+Warning, Al2O3_eps_electron_opticallimit.dat does not exist! dielectric function in optical limit not loaded. Needed for absorption calculations in superconductors.
+Warning! Atomic Migdal calculation not present
+Warning! Momentum dependent Zion for Migdal calculation not loaded. Using Z - number of valence electrons.
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al_pDoS.dat for partial densities of states
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/O_pDoS.dat for partial densities of states
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al_Fn.dat for Fn(omega)
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/O_Fn.dat for Fn(omega)
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al2O3_pDoS_anisotropic.dat for partial densities of states
+Al2O3_pDoS_anisotropic.dat
+/home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al2O3_Fn.npy
+Warning! Al2O3_Fn_anisotropic.npy does not exist! Need to calculate Fn(omega) from DoS. Use the function 'F_n_d_precompute' to produce these files 
+Starting the loop over 1 dark matter masses with 30 pseudoexperiments each
+In the first pseudoexperiment for mass 0.13894954943731375 GeV, we simulated 73350 events
+On mass 1 of 1. E_high is 51.761 eV, E_low is 0.016 eV.
+Total integrated rate for mass 0.13894954943731375 GeV: 2.284e-03 events.
+Optimum interval for mass 0.13894954943731375 GeV: [1.023, 1.553] eV
+Endpoints: 73346, 73350. UL output: 262.884 events
+Cross section upper limit for mass 0.13894954943731375 GeV: 1.151e-31 cm^2
+For masses [0.13894954943731375], the median limits are: [1.10102344e-31]
+Done mass = 0.13894954943731375, sigma = [1.10102344e-31] (mass ID = 25)
+Starting mass ID 2
+Confirming we are in the right directory
+ .... Loading files for Al2O3
+Loaded Al2O3_mermin.dat for epsilon in electron regime
+electronic ELF taken or calculated from Y. Sun, H. Xu, B. Da, S.-f. Mao and Z.-j. Ding, Calculations of Energy-Loss Function for 26 Materials, Chinese Journal of Chemical Physics9(2016) 663.
+phonon ELF taken or calculated from  F. Gervais and B. Piriou, Anharmonicity in several-polar-mode crystals:  adjusting phonon self-energy of LO and TO modes in Al2O3 and TiO2 to fit infrared reflectivity,Journal of Physics C Solid State Physics 7 (1974) 2374 and M. Schubert, T.E. Tiwald and C.M. Herzinger, Infrared dielectric anisotropy and phonon modes of sapphire, Phys. Rev. B61(2000) 8187
+Loaded Al2O3_epsphonon_o.dat for epsilon in phonon regime
+Warning, Al2O3_eps_electron_opticallimit.dat does not exist! dielectric function in optical limit not loaded. Needed for absorption calculations in superconductors.
+Warning! Atomic Migdal calculation not present
+Warning! Momentum dependent Zion for Migdal calculation not loaded. Using Z - number of valence electrons.
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al_pDoS.dat for partial densities of states
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/O_pDoS.dat for partial densities of states
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al_Fn.dat for Fn(omega)
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/O_Fn.dat for Fn(omega)
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al2O3_pDoS_anisotropic.dat for partial densities of states
+Al2O3_pDoS_anisotropic.dat
+/home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al2O3_Fn.npy
+Warning! Al2O3_Fn_anisotropic.npy does not exist! Need to calculate Fn(omega) from DoS. Use the function 'F_n_d_precompute' to produce these files 
+Starting the loop over 1 dark matter masses with 30 pseudoexperiments each
+In the first pseudoexperiment for mass 0.0014839817889675646 GeV, we simulated 73406 events
+On mass 1 of 1. E_high is 0.683 eV, E_low is 0.016 eV.
+Total integrated rate for mass 0.0014839817889675646 GeV: 1.292e-02 events.
+Optimum interval for mass 0.0014839817889675646 GeV: [0.112, 0.114] eV
+Endpoints: 43901, 44643. UL output: 3305.113 events
+Cross section upper limit for mass 0.0014839817889675646 GeV: 2.558e-31 cm^2
+For masses [0.0014839817889675646], the median limits are: [2.47271984e-31]
+Done mass = 0.0014839817889675646, sigma = [2.47271984e-31] (mass ID = 2)
+Starting mass ID 13
+Confirming we are in the right directory
+ .... Loading files for Al2O3
+Loaded Al2O3_mermin.dat for epsilon in electron regime
+electronic ELF taken or calculated from Y. Sun, H. Xu, B. Da, S.-f. Mao and Z.-j. Ding, Calculations of Energy-Loss Function for 26 Materials, Chinese Journal of Chemical Physics9(2016) 663.
+phonon ELF taken or calculated from  F. Gervais and B. Piriou, Anharmonicity in several-polar-mode crystals:  adjusting phonon self-energy of LO and TO modes in Al2O3 and TiO2 to fit infrared reflectivity,Journal of Physics C Solid State Physics 7 (1974) 2374 and M. Schubert, T.E. Tiwald and C.M. Herzinger, Infrared dielectric anisotropy and phonon modes of sapphire, Phys. Rev. B61(2000) 8187
+Loaded Al2O3_epsphonon_o.dat for epsilon in phonon regime
+Warning, Al2O3_eps_electron_opticallimit.dat does not exist! dielectric function in optical limit not loaded. Needed for absorption calculations in superconductors.
+Warning! Atomic Migdal calculation not present
+Warning! Momentum dependent Zion for Migdal calculation not loaded. Using Z - number of valence electrons.
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al_pDoS.dat for partial densities of states
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/O_pDoS.dat for partial densities of states
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al_Fn.dat for Fn(omega)
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/O_Fn.dat for Fn(omega)
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al2O3_pDoS_anisotropic.dat for partial densities of states
+Al2O3_pDoS_anisotropic.dat
+/home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al2O3_Fn.npy
+Warning! Al2O3_Fn_anisotropic.npy does not exist! Need to calculate Fn(omega) from DoS. Use the function 'F_n_d_precompute' to produce these files 
+Starting the loop over 1 dark matter masses with 30 pseudoexperiments each
+In the first pseudoexperiment for mass 0.013010252169108316 GeV, we simulated 73627 events
+On mass 1 of 1. E_high is 0.683 eV, E_low is 0.016 eV.
+Total integrated rate for mass 0.013010252169108316 GeV: 1.789e-03 events.
+Optimum interval for mass 0.013010252169108316 GeV: [0.112, 0.114] eV
+Endpoints: 44190, 44756. UL output: 3259.033 events
+Cross section upper limit for mass 0.013010252169108316 GeV: 1.822e-30 cm^2
+For masses [0.013010252169108316], the median limits are: [1.91496293e-30]
+Done mass = 0.013010252169108316, sigma = [1.91496293e-30] (mass ID = 13)
+Starting mass ID 26
+Confirming we are in the right directory
+ .... Loading files for Al2O3
+Loaded Al2O3_mermin.dat for epsilon in electron regime
+electronic ELF taken or calculated from Y. Sun, H. Xu, B. Da, S.-f. Mao and Z.-j. Ding, Calculations of Energy-Loss Function for 26 Materials, Chinese Journal of Chemical Physics9(2016) 663.
+phonon ELF taken or calculated from  F. Gervais and B. Piriou, Anharmonicity in several-polar-mode crystals:  adjusting phonon self-energy of LO and TO modes in Al2O3 and TiO2 to fit infrared reflectivity,Journal of Physics C Solid State Physics 7 (1974) 2374 and M. Schubert, T.E. Tiwald and C.M. Herzinger, Infrared dielectric anisotropy and phonon modes of sapphire, Phys. Rev. B61(2000) 8187
+Loaded Al2O3_epsphonon_o.dat for epsilon in phonon regime
+Warning, Al2O3_eps_electron_opticallimit.dat does not exist! dielectric function in optical limit not loaded. Needed for absorption calculations in superconductors.
+Warning! Atomic Migdal calculation not present
+Warning! Momentum dependent Zion for Migdal calculation not loaded. Using Z - number of valence electrons.
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al_pDoS.dat for partial densities of states
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/O_pDoS.dat for partial densities of states
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al_Fn.dat for Fn(omega)
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/O_Fn.dat for Fn(omega)
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al2O3_pDoS_anisotropic.dat for partial densities of states
+Al2O3_pDoS_anisotropic.dat
+/home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al2O3_Fn.npy
+Warning! Al2O3_Fn_anisotropic.npy does not exist! Need to calculate Fn(omega) from DoS. Use the function 'F_n_d_precompute' to produce these files 
+Starting the loop over 1 dark matter masses with 30 pseudoexperiments each
+In the first pseudoexperiment for mass 0.1692666615037876 GeV, we simulated 73665 events
+On mass 1 of 1. E_high is 66.711 eV, E_low is 0.016 eV.
+Total integrated rate for mass 0.1692666615037876 GeV: 2.203e-03 events.
+Optimum interval for mass 0.1692666615037876 GeV: [0.964, 1.364] eV
+Endpoints: 73660, 73665. UL output: 194.105 events
+Cross section upper limit for mass 0.1692666615037876 GeV: 8.810e-32 cm^2
+For masses [0.1692666615037876], the median limits are: [8.6098416e-32]
+Done mass = 0.1692666615037876, sigma = [8.6098416e-32] (mass ID = 26)
+Starting mass ID 4
+Confirming we are in the right directory
+ .... Loading files for Al2O3
+Loaded Al2O3_mermin.dat for epsilon in electron regime
+electronic ELF taken or calculated from Y. Sun, H. Xu, B. Da, S.-f. Mao and Z.-j. Ding, Calculations of Energy-Loss Function for 26 Materials, Chinese Journal of Chemical Physics9(2016) 663.
+phonon ELF taken or calculated from  F. Gervais and B. Piriou, Anharmonicity in several-polar-mode crystals:  adjusting phonon self-energy of LO and TO modes in Al2O3 and TiO2 to fit infrared reflectivity,Journal of Physics C Solid State Physics 7 (1974) 2374 and M. Schubert, T.E. Tiwald and C.M. Herzinger, Infrared dielectric anisotropy and phonon modes of sapphire, Phys. Rev. B61(2000) 8187
+Loaded Al2O3_epsphonon_o.dat for epsilon in phonon regime
+Warning, Al2O3_eps_electron_opticallimit.dat does not exist! dielectric function in optical limit not loaded. Needed for absorption calculations in superconductors.
+Warning! Atomic Migdal calculation not present
+Warning! Momentum dependent Zion for Migdal calculation not loaded. Using Z - number of valence electrons.
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al_pDoS.dat for partial densities of states
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/O_pDoS.dat for partial densities of states
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al_Fn.dat for Fn(omega)
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/O_Fn.dat for Fn(omega)
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al2O3_pDoS_anisotropic.dat for partial densities of states
+Al2O3_pDoS_anisotropic.dat
+/home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al2O3_Fn.npy
+Warning! Al2O3_Fn_anisotropic.npy does not exist! Need to calculate Fn(omega) from DoS. Use the function 'F_n_d_precompute' to produce these files 
+Starting the loop over 1 dark matter masses with 30 pseudoexperiments each
+In the first pseudoexperiment for mass 0.0022022019499873756 GeV, we simulated 73738 events
+On mass 1 of 1. E_high is 0.683 eV, E_low is 0.016 eV.
+Total integrated rate for mass 0.0022022019499873756 GeV: 8.545e-03 events.
+Optimum interval for mass 0.0022022019499873756 GeV: [0.111, 0.114] eV
+Endpoints: 43641, 44630. UL output: 3410.015 events
+Cross section upper limit for mass 0.0022022019499873756 GeV: 3.991e-31 cm^2
+For masses [0.0022022019499873756], the median limits are: [3.79522688e-31]
+Done mass = 0.0022022019499873756, sigma = [3.79522688e-31] (mass ID = 4)
+Starting mass ID 16
+Confirming we are in the right directory
+ .... Loading files for Al2O3
+Loaded Al2O3_mermin.dat for epsilon in electron regime
+electronic ELF taken or calculated from Y. Sun, H. Xu, B. Da, S.-f. Mao and Z.-j. Ding, Calculations of Energy-Loss Function for 26 Materials, Chinese Journal of Chemical Physics9(2016) 663.
+phonon ELF taken or calculated from  F. Gervais and B. Piriou, Anharmonicity in several-polar-mode crystals:  adjusting phonon self-energy of LO and TO modes in Al2O3 and TiO2 to fit infrared reflectivity,Journal of Physics C Solid State Physics 7 (1974) 2374 and M. Schubert, T.E. Tiwald and C.M. Herzinger, Infrared dielectric anisotropy and phonon modes of sapphire, Phys. Rev. B61(2000) 8187
+Loaded Al2O3_epsphonon_o.dat for epsilon in phonon regime
+Warning, Al2O3_eps_electron_opticallimit.dat does not exist! dielectric function in optical limit not loaded. Needed for absorption calculations in superconductors.
+Warning! Atomic Migdal calculation not present
+Warning! Momentum dependent Zion for Migdal calculation not loaded. Using Z - number of valence electrons.
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al_pDoS.dat for partial densities of states
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/O_pDoS.dat for partial densities of states
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al_Fn.dat for Fn(omega)
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/O_Fn.dat for Fn(omega)
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al2O3_pDoS_anisotropic.dat for partial densities of states
+Al2O3_pDoS_anisotropic.dat
+/home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al2O3_Fn.npy
+Warning! Al2O3_Fn_anisotropic.npy does not exist! Need to calculate Fn(omega) from DoS. Use the function 'F_n_d_precompute' to produce these files 
+Starting the loop over 1 dark matter masses with 30 pseudoexperiments each
+In the first pseudoexperiment for mass 0.02351952635070959 GeV, we simulated 73664 events
+On mass 1 of 1. E_high is 6.827 eV, E_low is 0.016 eV.
+Total integrated rate for mass 0.02351952635070959 GeV: 1.584e-03 events.
+Optimum interval for mass 0.02351952635070959 GeV: [0.112, 0.115] eV
+Endpoints: 44021, 44810. UL output: 5138.224 events
+Cross section upper limit for mass 0.02351952635070959 GeV: 3.244e-30 cm^2
+For masses [0.02351952635070959], the median limits are: [3.0939968e-30]
+Done mass = 0.02351952635070959, sigma = [3.0939968e-30] (mass ID = 16)
+Starting mass ID 27
+Confirming we are in the right directory
+ .... Loading files for Al2O3
+Loaded Al2O3_mermin.dat for epsilon in electron regime
+electronic ELF taken or calculated from Y. Sun, H. Xu, B. Da, S.-f. Mao and Z.-j. Ding, Calculations of Energy-Loss Function for 26 Materials, Chinese Journal of Chemical Physics9(2016) 663.
+phonon ELF taken or calculated from  F. Gervais and B. Piriou, Anharmonicity in several-polar-mode crystals:  adjusting phonon self-energy of LO and TO modes in Al2O3 and TiO2 to fit infrared reflectivity,Journal of Physics C Solid State Physics 7 (1974) 2374 and M. Schubert, T.E. Tiwald and C.M. Herzinger, Infrared dielectric anisotropy and phonon modes of sapphire, Phys. Rev. B61(2000) 8187
+Loaded Al2O3_epsphonon_o.dat for epsilon in phonon regime
+Warning, Al2O3_eps_electron_opticallimit.dat does not exist! dielectric function in optical limit not loaded. Needed for absorption calculations in superconductors.
+Warning! Atomic Migdal calculation not present
+Warning! Momentum dependent Zion for Migdal calculation not loaded. Using Z - number of valence electrons.
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al_pDoS.dat for partial densities of states
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/O_pDoS.dat for partial densities of states
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al_Fn.dat for Fn(omega)
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/O_Fn.dat for Fn(omega)
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al2O3_pDoS_anisotropic.dat for partial densities of states
+Al2O3_pDoS_anisotropic.dat
+/home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al2O3_Fn.npy
+Warning! Al2O3_Fn_anisotropic.npy does not exist! Need to calculate Fn(omega) from DoS. Use the function 'F_n_d_precompute' to produce these files 
+Starting the loop over 1 dark matter masses with 30 pseudoexperiments each
+In the first pseudoexperiment for mass 0.20619860095022213 GeV, we simulated 74002 events
+On mass 1 of 1. E_high is 86.659 eV, E_low is 0.016 eV.
+Total integrated rate for mass 0.20619860095022213 GeV: 2.135e-03 events.
+Optimum interval for mass 0.20619860095022213 GeV: [1.139, 1.160] eV
+Endpoints: 74001, 74002. UL output: 136.745 events
+Cross section upper limit for mass 0.20619860095022213 GeV: 6.405e-32 cm^2
+For masses [0.20619860095022213], the median limits are: [6.56614452e-32]
+Done mass = 0.20619860095022213, sigma = [6.56614452e-32] (mass ID = 27)
+Starting mass ID 1
+Confirming we are in the right directory
+ .... Loading files for Al2O3
+Loaded Al2O3_mermin.dat for epsilon in electron regime
+electronic ELF taken or calculated from Y. Sun, H. Xu, B. Da, S.-f. Mao and Z.-j. Ding, Calculations of Energy-Loss Function for 26 Materials, Chinese Journal of Chemical Physics9(2016) 663.
+phonon ELF taken or calculated from  F. Gervais and B. Piriou, Anharmonicity in several-polar-mode crystals:  adjusting phonon self-energy of LO and TO modes in Al2O3 and TiO2 to fit infrared reflectivity,Journal of Physics C Solid State Physics 7 (1974) 2374 and M. Schubert, T.E. Tiwald and C.M. Herzinger, Infrared dielectric anisotropy and phonon modes of sapphire, Phys. Rev. B61(2000) 8187
+Loaded Al2O3_epsphonon_o.dat for epsilon in phonon regime
+Warning, Al2O3_eps_electron_opticallimit.dat does not exist! dielectric function in optical limit not loaded. Needed for absorption calculations in superconductors.
+Warning! Atomic Migdal calculation not present
+Warning! Momentum dependent Zion for Migdal calculation not loaded. Using Z - number of valence electrons.
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al_pDoS.dat for partial densities of states
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/O_pDoS.dat for partial densities of states
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al_Fn.dat for Fn(omega)
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/O_Fn.dat for Fn(omega)
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al2O3_pDoS_anisotropic.dat for partial densities of states
+Al2O3_pDoS_anisotropic.dat
+/home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al2O3_Fn.npy
+Warning! Al2O3_Fn_anisotropic.npy does not exist! Need to calculate Fn(omega) from DoS. Use the function 'F_n_d_precompute' to produce these files 
+Starting the loop over 1 dark matter masses with 30 pseudoexperiments each
+In the first pseudoexperiment for mass 0.001218187912010116 GeV, we simulated 73955 events
+On mass 1 of 1. E_high is 0.683 eV, E_low is 0.016 eV.
+Total integrated rate for mass 0.001218187912010116 GeV: 1.606e-02 events.
+Optimum interval for mass 0.001218187912010116 GeV: [0.112, 0.112] eV
+Endpoints: 44353, 44443. UL output: 3235.132 events
+Cross section upper limit for mass 0.001218187912010116 GeV: 2.014e-31 cm^2
+For masses [0.001218187912010116], the median limits are: [2.00876139e-31]
+Done mass = 0.001218187912010116, sigma = [2.00876139e-31] (mass ID = 1)
+Starting mass ID 14
+Confirming we are in the right directory
+ .... Loading files for Al2O3
+Loaded Al2O3_mermin.dat for epsilon in electron regime
+electronic ELF taken or calculated from Y. Sun, H. Xu, B. Da, S.-f. Mao and Z.-j. Ding, Calculations of Energy-Loss Function for 26 Materials, Chinese Journal of Chemical Physics9(2016) 663.
+phonon ELF taken or calculated from  F. Gervais and B. Piriou, Anharmonicity in several-polar-mode crystals:  adjusting phonon self-energy of LO and TO modes in Al2O3 and TiO2 to fit infrared reflectivity,Journal of Physics C Solid State Physics 7 (1974) 2374 and M. Schubert, T.E. Tiwald and C.M. Herzinger, Infrared dielectric anisotropy and phonon modes of sapphire, Phys. Rev. B61(2000) 8187
+Loaded Al2O3_epsphonon_o.dat for epsilon in phonon regime
+Warning, Al2O3_eps_electron_opticallimit.dat does not exist! dielectric function in optical limit not loaded. Needed for absorption calculations in superconductors.
+Warning! Atomic Migdal calculation not present
+Warning! Momentum dependent Zion for Migdal calculation not loaded. Using Z - number of valence electrons.
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al_pDoS.dat for partial densities of states
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/O_pDoS.dat for partial densities of states
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al_Fn.dat for Fn(omega)
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/O_Fn.dat for Fn(omega)
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al2O3_pDoS_anisotropic.dat for partial densities of states
+Al2O3_pDoS_anisotropic.dat
+/home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al2O3_Fn.npy
+Warning! Al2O3_Fn_anisotropic.npy does not exist! Need to calculate Fn(omega) from DoS. Use the function 'F_n_d_precompute' to produce these files 
+Starting the loop over 1 dark matter masses with 30 pseudoexperiments each
+In the first pseudoexperiment for mass 0.015848931924611134 GeV, we simulated 73677 events
+On mass 1 of 1. E_high is 0.683 eV, E_low is 0.016 eV.
+Total integrated rate for mass 0.015848931924611134 GeV: 1.630e-03 events.
+Optimum interval for mass 0.015848931924611134 GeV: [0.111, 0.114] eV
+Endpoints: 43825, 44722. UL output: 3730.181 events
+Cross section upper limit for mass 0.015848931924611134 GeV: 2.288e-30 cm^2
+For masses [0.015848931924611134], the median limits are: [2.22994859e-30]
+Done mass = 0.015848931924611134, sigma = [2.22994859e-30] (mass ID = 14)
+Starting mass ID 28
+Confirming we are in the right directory
+ .... Loading files for Al2O3
+Loaded Al2O3_mermin.dat for epsilon in electron regime
+electronic ELF taken or calculated from Y. Sun, H. Xu, B. Da, S.-f. Mao and Z.-j. Ding, Calculations of Energy-Loss Function for 26 Materials, Chinese Journal of Chemical Physics9(2016) 663.
+phonon ELF taken or calculated from  F. Gervais and B. Piriou, Anharmonicity in several-polar-mode crystals:  adjusting phonon self-energy of LO and TO modes in Al2O3 and TiO2 to fit infrared reflectivity,Journal of Physics C Solid State Physics 7 (1974) 2374 and M. Schubert, T.E. Tiwald and C.M. Herzinger, Infrared dielectric anisotropy and phonon modes of sapphire, Phys. Rev. B61(2000) 8187
+Loaded Al2O3_epsphonon_o.dat for epsilon in phonon regime
+Warning, Al2O3_eps_electron_opticallimit.dat does not exist! dielectric function in optical limit not loaded. Needed for absorption calculations in superconductors.
+Warning! Atomic Migdal calculation not present
+Warning! Momentum dependent Zion for Migdal calculation not loaded. Using Z - number of valence electrons.
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al_pDoS.dat for partial densities of states
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/O_pDoS.dat for partial densities of states
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al_Fn.dat for Fn(omega)
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/O_Fn.dat for Fn(omega)
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al2O3_pDoS_anisotropic.dat for partial densities of states
+Al2O3_pDoS_anisotropic.dat
+/home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al2O3_Fn.npy
+Warning! Al2O3_Fn_anisotropic.npy does not exist! Need to calculate Fn(omega) from DoS. Use the function 'F_n_d_precompute' to produce these files 
+Starting the loop over 1 dark matter masses with 30 pseudoexperiments each
+In the first pseudoexperiment for mass 0.25118864315095796 GeV, we simulated 73559 events
+On mass 1 of 1. E_high is 113.498 eV, E_low is 0.016 eV.
+Total integrated rate for mass 0.25118864315095796 GeV: 2.098e-03 events.
+Optimum interval for mass 0.25118864315095796 GeV: [1.089, 2.813] eV
+Endpoints: 73557, 73559. UL output: 126.070 events
+Cross section upper limit for mass 0.25118864315095796 GeV: 6.010e-32 cm^2
+For masses [0.25118864315095796], the median limits are: [5.90260828e-32]
+Done mass = 0.25118864315095796, sigma = [5.90260828e-32] (mass ID = 28)
+Starting mass ID 8
+Confirming we are in the right directory
+ .... Loading files for Al2O3
+Loaded Al2O3_mermin.dat for epsilon in electron regime
+electronic ELF taken or calculated from Y. Sun, H. Xu, B. Da, S.-f. Mao and Z.-j. Ding, Calculations of Energy-Loss Function for 26 Materials, Chinese Journal of Chemical Physics9(2016) 663.
+phonon ELF taken or calculated from  F. Gervais and B. Piriou, Anharmonicity in several-polar-mode crystals:  adjusting phonon self-energy of LO and TO modes in Al2O3 and TiO2 to fit infrared reflectivity,Journal of Physics C Solid State Physics 7 (1974) 2374 and M. Schubert, T.E. Tiwald and C.M. Herzinger, Infrared dielectric anisotropy and phonon modes of sapphire, Phys. Rev. B61(2000) 8187
+Loaded Al2O3_epsphonon_o.dat for epsilon in phonon regime
+Warning, Al2O3_eps_electron_opticallimit.dat does not exist! dielectric function in optical limit not loaded. Needed for absorption calculations in superconductors.
+Warning! Atomic Migdal calculation not present
+Warning! Momentum dependent Zion for Migdal calculation not loaded. Using Z - number of valence electrons.
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al_pDoS.dat for partial densities of states
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/O_pDoS.dat for partial densities of states
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al_Fn.dat for Fn(omega)
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/O_Fn.dat for Fn(omega)
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al2O3_pDoS_anisotropic.dat for partial densities of states
+Al2O3_pDoS_anisotropic.dat
+/home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al2O3_Fn.npy
+Warning! Al2O3_Fn_anisotropic.npy does not exist! Need to calculate Fn(omega) from DoS. Use the function 'F_n_d_precompute' to produce these files 
+Starting the loop over 1 dark matter masses with 30 pseudoexperiments each
+In the first pseudoexperiment for mass 0.0048496934285282 GeV, we simulated 73426 events
+On mass 1 of 1. E_high is 0.683 eV, E_low is 0.016 eV.
+Total integrated rate for mass 0.0048496934285282 GeV: 3.964e-03 events.
+Optimum interval for mass 0.0048496934285282 GeV: [0.111, 0.115] eV
+Endpoints: 43952, 44866. UL output: 3082.393 events
+Cross section upper limit for mass 0.0048496934285282 GeV: 7.776e-31 cm^2
+For masses [0.0048496934285282], the median limits are: [8.22487004e-31]
+Done mass = 0.0048496934285282, sigma = [8.22487004e-31] (mass ID = 8)
+Starting mass ID 19
+Confirming we are in the right directory
+ .... Loading files for Al2O3
+Loaded Al2O3_mermin.dat for epsilon in electron regime
+electronic ELF taken or calculated from Y. Sun, H. Xu, B. Da, S.-f. Mao and Z.-j. Ding, Calculations of Energy-Loss Function for 26 Materials, Chinese Journal of Chemical Physics9(2016) 663.
+phonon ELF taken or calculated from  F. Gervais and B. Piriou, Anharmonicity in several-polar-mode crystals:  adjusting phonon self-energy of LO and TO modes in Al2O3 and TiO2 to fit infrared reflectivity,Journal of Physics C Solid State Physics 7 (1974) 2374 and M. Schubert, T.E. Tiwald and C.M. Herzinger, Infrared dielectric anisotropy and phonon modes of sapphire, Phys. Rev. B61(2000) 8187
+Loaded Al2O3_epsphonon_o.dat for epsilon in phonon regime
+Warning, Al2O3_eps_electron_opticallimit.dat does not exist! dielectric function in optical limit not loaded. Needed for absorption calculations in superconductors.
+Warning! Atomic Migdal calculation not present
+Warning! Momentum dependent Zion for Migdal calculation not loaded. Using Z - number of valence electrons.
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al_pDoS.dat for partial densities of states
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/O_pDoS.dat for partial densities of states
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al_Fn.dat for Fn(omega)
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/O_Fn.dat for Fn(omega)
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al2O3_pDoS_anisotropic.dat for partial densities of states
+Al2O3_pDoS_anisotropic.dat
+/home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al2O3_Fn.npy
+Warning! Al2O3_Fn_anisotropic.npy does not exist! Need to calculate Fn(omega) from DoS. Use the function 'F_n_d_precompute' to produce these files 
+Starting the loop over 1 dark matter masses with 30 pseudoexperiments each
+In the first pseudoexperiment for mass 0.0425178630338289 GeV, we simulated 73729 events
+On mass 1 of 1. E_high is 12.898 eV, E_low is 0.016 eV.
+Total integrated rate for mass 0.0425178630338289 GeV: 2.081e-03 events.
+Optimum interval for mass 0.0425178630338289 GeV: [0.111, 0.114] eV
+Endpoints: 43737, 44573. UL output: 11033.425 events
+Cross section upper limit for mass 0.0425178630338289 GeV: 5.301e-30 cm^2
+For masses [0.0425178630338289], the median limits are: [5.26730658e-30]
+Done mass = 0.0425178630338289, sigma = [5.26730658e-30] (mass ID = 19)
+Starting mass ID 29
+Confirming we are in the right directory
+ .... Loading files for Al2O3
+Loaded Al2O3_mermin.dat for epsilon in electron regime
+electronic ELF taken or calculated from Y. Sun, H. Xu, B. Da, S.-f. Mao and Z.-j. Ding, Calculations of Energy-Loss Function for 26 Materials, Chinese Journal of Chemical Physics9(2016) 663.
+phonon ELF taken or calculated from  F. Gervais and B. Piriou, Anharmonicity in several-polar-mode crystals:  adjusting phonon self-energy of LO and TO modes in Al2O3 and TiO2 to fit infrared reflectivity,Journal of Physics C Solid State Physics 7 (1974) 2374 and M. Schubert, T.E. Tiwald and C.M. Herzinger, Infrared dielectric anisotropy and phonon modes of sapphire, Phys. Rev. B61(2000) 8187
+Loaded Al2O3_epsphonon_o.dat for epsilon in phonon regime
+Warning, Al2O3_eps_electron_opticallimit.dat does not exist! dielectric function in optical limit not loaded. Needed for absorption calculations in superconductors.
+Warning! Atomic Migdal calculation not present
+Warning! Momentum dependent Zion for Migdal calculation not loaded. Using Z - number of valence electrons.
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al_pDoS.dat for partial densities of states
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/O_pDoS.dat for partial densities of states
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al_Fn.dat for Fn(omega)
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/O_Fn.dat for Fn(omega)
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al2O3_pDoS_anisotropic.dat for partial densities of states
+Al2O3_pDoS_anisotropic.dat
+/home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al2O3_Fn.npy
+Warning! Al2O3_Fn_anisotropic.npy does not exist! Need to calculate Fn(omega) from DoS. Use the function 'F_n_d_precompute' to produce these files 
+Starting the loop over 1 dark matter masses with 30 pseudoexperiments each
+In the first pseudoexperiment for mass 0.30599496872071963 GeV, we simulated 73844 events
+On mass 1 of 1. E_high is 149.889 eV, E_low is 0.016 eV.
+Total integrated rate for mass 0.30599496872071963 GeV: 2.093e-03 events.
+Optimum interval for mass 0.30599496872071963 GeV: [1.056, 1.083] eV
+Endpoints: 73843, 73844. UL output: 63.769 events
+Cross section upper limit for mass 0.30599496872071963 GeV: 3.047e-32 cm^2
+For masses [0.30599496872071963], the median limits are: [5.01991602e-32]
+Done mass = 0.30599496872071963, sigma = [5.01991602e-32] (mass ID = 29)
+Starting mass ID 5
+Confirming we are in the right directory
+ .... Loading files for Al2O3
+Loaded Al2O3_mermin.dat for epsilon in electron regime
+electronic ELF taken or calculated from Y. Sun, H. Xu, B. Da, S.-f. Mao and Z.-j. Ding, Calculations of Energy-Loss Function for 26 Materials, Chinese Journal of Chemical Physics9(2016) 663.
+phonon ELF taken or calculated from  F. Gervais and B. Piriou, Anharmonicity in several-polar-mode crystals:  adjusting phonon self-energy of LO and TO modes in Al2O3 and TiO2 to fit infrared reflectivity,Journal of Physics C Solid State Physics 7 (1974) 2374 and M. Schubert, T.E. Tiwald and C.M. Herzinger, Infrared dielectric anisotropy and phonon modes of sapphire, Phys. Rev. B61(2000) 8187
+Loaded Al2O3_epsphonon_o.dat for epsilon in phonon regime
+Warning, Al2O3_eps_electron_opticallimit.dat does not exist! dielectric function in optical limit not loaded. Needed for absorption calculations in superconductors.
+Warning! Atomic Migdal calculation not present
+Warning! Momentum dependent Zion for Migdal calculation not loaded. Using Z - number of valence electrons.
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al_pDoS.dat for partial densities of states
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/O_pDoS.dat for partial densities of states
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al_Fn.dat for Fn(omega)
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/O_Fn.dat for Fn(omega)
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al2O3_pDoS_anisotropic.dat for partial densities of states
+Al2O3_pDoS_anisotropic.dat
+/home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al2O3_Fn.npy
+Warning! Al2O3_Fn_anisotropic.npy does not exist! Need to calculate Fn(omega) from DoS. Use the function 'F_n_d_precompute' to produce these files 
+Starting the loop over 1 dark matter masses with 30 pseudoexperiments each
+In the first pseudoexperiment for mass 0.002682695795279727 GeV, we simulated 73189 events
+On mass 1 of 1. E_high is 0.683 eV, E_low is 0.016 eV.
+Total integrated rate for mass 0.002682695795279727 GeV: 7.011e-03 events.
+Optimum interval for mass 0.002682695795279727 GeV: [0.111, 0.114] eV
+Endpoints: 43402, 44401. UL output: 3320.062 events
+Cross section upper limit for mass 0.002682695795279727 GeV: 4.736e-31 cm^2
+For masses [0.002682695795279727], the median limits are: [4.61195597e-31]
+Done mass = 0.002682695795279727, sigma = [4.61195597e-31] (mass ID = 5)
+Starting mass ID 17
+Confirming we are in the right directory
+ .... Loading files for Al2O3
+Loaded Al2O3_mermin.dat for epsilon in electron regime
+electronic ELF taken or calculated from Y. Sun, H. Xu, B. Da, S.-f. Mao and Z.-j. Ding, Calculations of Energy-Loss Function for 26 Materials, Chinese Journal of Chemical Physics9(2016) 663.
+phonon ELF taken or calculated from  F. Gervais and B. Piriou, Anharmonicity in several-polar-mode crystals:  adjusting phonon self-energy of LO and TO modes in Al2O3 and TiO2 to fit infrared reflectivity,Journal of Physics C Solid State Physics 7 (1974) 2374 and M. Schubert, T.E. Tiwald and C.M. Herzinger, Infrared dielectric anisotropy and phonon modes of sapphire, Phys. Rev. B61(2000) 8187
+Loaded Al2O3_epsphonon_o.dat for epsilon in phonon regime
+Warning, Al2O3_eps_electron_opticallimit.dat does not exist! dielectric function in optical limit not loaded. Needed for absorption calculations in superconductors.
+Warning! Atomic Migdal calculation not present
+Warning! Momentum dependent Zion for Migdal calculation not loaded. Using Z - number of valence electrons.
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al_pDoS.dat for partial densities of states
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/O_pDoS.dat for partial densities of states
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al_Fn.dat for Fn(omega)
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/O_Fn.dat for Fn(omega)
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al2O3_pDoS_anisotropic.dat for partial densities of states
+Al2O3_pDoS_anisotropic.dat
+/home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al2O3_Fn.npy
+Warning! Al2O3_Fn_anisotropic.npy does not exist! Need to calculate Fn(omega) from DoS. Use the function 'F_n_d_precompute' to produce these files 
+Starting the loop over 1 dark matter masses with 30 pseudoexperiments each
+In the first pseudoexperiment for mass 0.028651202696637804 GeV, we simulated 73661 events
+On mass 1 of 1. E_high is 8.415 eV, E_low is 0.016 eV.
+Total integrated rate for mass 0.028651202696637804 GeV: 1.698e-03 events.
+Optimum interval for mass 0.028651202696637804 GeV: [0.111, 0.113] eV
+Endpoints: 43816, 44360. UL output: 6333.756 events
+Cross section upper limit for mass 0.028651202696637804 GeV: 3.731e-30 cm^2
+For masses [0.028651202696637804], the median limits are: [3.71834056e-30]
+Done mass = 0.028651202696637804, sigma = [3.71834056e-30] (mass ID = 17)
+Starting mass ID 30
+Confirming we are in the right directory
+ .... Loading files for Al2O3
+Loaded Al2O3_mermin.dat for epsilon in electron regime
+electronic ELF taken or calculated from Y. Sun, H. Xu, B. Da, S.-f. Mao and Z.-j. Ding, Calculations of Energy-Loss Function for 26 Materials, Chinese Journal of Chemical Physics9(2016) 663.
+phonon ELF taken or calculated from  F. Gervais and B. Piriou, Anharmonicity in several-polar-mode crystals:  adjusting phonon self-energy of LO and TO modes in Al2O3 and TiO2 to fit infrared reflectivity,Journal of Physics C Solid State Physics 7 (1974) 2374 and M. Schubert, T.E. Tiwald and C.M. Herzinger, Infrared dielectric anisotropy and phonon modes of sapphire, Phys. Rev. B61(2000) 8187
+Loaded Al2O3_epsphonon_o.dat for epsilon in phonon regime
+Warning, Al2O3_eps_electron_opticallimit.dat does not exist! dielectric function in optical limit not loaded. Needed for absorption calculations in superconductors.
+Warning! Atomic Migdal calculation not present
+Warning! Momentum dependent Zion for Migdal calculation not loaded. Using Z - number of valence electrons.
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al_pDoS.dat for partial densities of states
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/O_pDoS.dat for partial densities of states
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al_Fn.dat for Fn(omega)
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/O_Fn.dat for Fn(omega)
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al2O3_pDoS_anisotropic.dat for partial densities of states
+Al2O3_pDoS_anisotropic.dat
+/home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al2O3_Fn.npy
+Warning! Al2O3_Fn_anisotropic.npy does not exist! Need to calculate Fn(omega) from DoS. Use the function 'F_n_d_precompute' to produce these files 
+Starting the loop over 1 dark matter masses with 30 pseudoexperiments each
+In the first pseudoexperiment for mass 0.3727593720314942 GeV, we simulated 73627 events
+On mass 1 of 1. E_high is 199.574 eV, E_low is 0.016 eV.
+Total integrated rate for mass 0.3727593720314942 GeV: 2.148e-03 events.
+Optimum interval for mass 0.3727593720314942 GeV: [1.094, 1.122] eV
+Endpoints: 73626, 73627. UL output: 61.613 events
+Cross section upper limit for mass 0.3727593720314942 GeV: 2.869e-32 cm^2
+For masses [0.3727593720314942], the median limits are: [3.34917906e-32]
+Done mass = 0.3727593720314942, sigma = [3.34917906e-32] (mass ID = 30)
+Starting mass ID 7
+Confirming we are in the right directory
+ .... Loading files for Al2O3
+Loaded Al2O3_mermin.dat for epsilon in electron regime
+electronic ELF taken or calculated from Y. Sun, H. Xu, B. Da, S.-f. Mao and Z.-j. Ding, Calculations of Energy-Loss Function for 26 Materials, Chinese Journal of Chemical Physics9(2016) 663.
+phonon ELF taken or calculated from  F. Gervais and B. Piriou, Anharmonicity in several-polar-mode crystals:  adjusting phonon self-energy of LO and TO modes in Al2O3 and TiO2 to fit infrared reflectivity,Journal of Physics C Solid State Physics 7 (1974) 2374 and M. Schubert, T.E. Tiwald and C.M. Herzinger, Infrared dielectric anisotropy and phonon modes of sapphire, Phys. Rev. B61(2000) 8187
+Loaded Al2O3_epsphonon_o.dat for epsilon in phonon regime
+Warning, Al2O3_eps_electron_opticallimit.dat does not exist! dielectric function in optical limit not loaded. Needed for absorption calculations in superconductors.
+Warning! Atomic Migdal calculation not present
+Warning! Momentum dependent Zion for Migdal calculation not loaded. Using Z - number of valence electrons.
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al_pDoS.dat for partial densities of states
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/O_pDoS.dat for partial densities of states
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al_Fn.dat for Fn(omega)
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/O_Fn.dat for Fn(omega)
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al2O3_pDoS_anisotropic.dat for partial densities of states
+Al2O3_pDoS_anisotropic.dat
+/home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al2O3_Fn.npy
+Warning! Al2O3_Fn_anisotropic.npy does not exist! Need to calculate Fn(omega) from DoS. Use the function 'F_n_d_precompute' to produce these files 
+Starting the loop over 1 dark matter masses with 30 pseudoexperiments each
+In the first pseudoexperiment for mass 0.003981071705534973 GeV, we simulated 73794 events
+On mass 1 of 1. E_high is 0.683 eV, E_low is 0.016 eV.
+Total integrated rate for mass 0.003981071705534973 GeV: 4.776e-03 events.
+Optimum interval for mass 0.003981071705534973 GeV: [0.111, 0.113] eV
+Endpoints: 43872, 44370. UL output: 3159.906 events
+Cross section upper limit for mass 0.003981071705534973 GeV: 6.616e-31 cm^2
+For masses [0.003981071705534973], the median limits are: [6.85139459e-31]
+Done mass = 0.003981071705534973, sigma = [6.85139459e-31] (mass ID = 7)
+Starting mass ID 18
+Confirming we are in the right directory
+ .... Loading files for Al2O3
+Loaded Al2O3_mermin.dat for epsilon in electron regime
+electronic ELF taken or calculated from Y. Sun, H. Xu, B. Da, S.-f. Mao and Z.-j. Ding, Calculations of Energy-Loss Function for 26 Materials, Chinese Journal of Chemical Physics9(2016) 663.
+phonon ELF taken or calculated from  F. Gervais and B. Piriou, Anharmonicity in several-polar-mode crystals:  adjusting phonon self-energy of LO and TO modes in Al2O3 and TiO2 to fit infrared reflectivity,Journal of Physics C Solid State Physics 7 (1974) 2374 and M. Schubert, T.E. Tiwald and C.M. Herzinger, Infrared dielectric anisotropy and phonon modes of sapphire, Phys. Rev. B61(2000) 8187
+Loaded Al2O3_epsphonon_o.dat for epsilon in phonon regime
+Warning, Al2O3_eps_electron_opticallimit.dat does not exist! dielectric function in optical limit not loaded. Needed for absorption calculations in superconductors.
+Warning! Atomic Migdal calculation not present
+Warning! Momentum dependent Zion for Migdal calculation not loaded. Using Z - number of valence electrons.
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al_pDoS.dat for partial densities of states
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/O_pDoS.dat for partial densities of states
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al_Fn.dat for Fn(omega)
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/O_Fn.dat for Fn(omega)
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al2O3_pDoS_anisotropic.dat for partial densities of states
+Al2O3_pDoS_anisotropic.dat
+/home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al2O3_Fn.npy
+Warning! Al2O3_Fn_anisotropic.npy does not exist! Need to calculate Fn(omega) from DoS. Use the function 'F_n_d_precompute' to produce these files 
+Starting the loop over 1 dark matter masses with 30 pseudoexperiments each
+In the first pseudoexperiment for mass 0.03490254878959581 GeV, we simulated 73177 events
+On mass 1 of 1. E_high is 10.401 eV, E_low is 0.016 eV.
+Total integrated rate for mass 0.03490254878959581 GeV: 1.878e-03 events.
+Optimum interval for mass 0.03490254878959581 GeV: [0.111, 0.112] eV
+Endpoints: 43385, 43589. UL output: 8237.947 events
+Cross section upper limit for mass 0.03490254878959581 GeV: 4.387e-30 cm^2
+For masses [0.03490254878959581], the median limits are: [4.36232029e-30]
+Done mass = 0.03490254878959581, sigma = [4.36232029e-30] (mass ID = 18)
+Starting mass ID 31
+Confirming we are in the right directory
+ .... Loading files for Al2O3
+Loaded Al2O3_mermin.dat for epsilon in electron regime
+electronic ELF taken or calculated from Y. Sun, H. Xu, B. Da, S.-f. Mao and Z.-j. Ding, Calculations of Energy-Loss Function for 26 Materials, Chinese Journal of Chemical Physics9(2016) 663.
+phonon ELF taken or calculated from  F. Gervais and B. Piriou, Anharmonicity in several-polar-mode crystals:  adjusting phonon self-energy of LO and TO modes in Al2O3 and TiO2 to fit infrared reflectivity,Journal of Physics C Solid State Physics 7 (1974) 2374 and M. Schubert, T.E. Tiwald and C.M. Herzinger, Infrared dielectric anisotropy and phonon modes of sapphire, Phys. Rev. B61(2000) 8187
+Loaded Al2O3_epsphonon_o.dat for epsilon in phonon regime
+Warning, Al2O3_eps_electron_opticallimit.dat does not exist! dielectric function in optical limit not loaded. Needed for absorption calculations in superconductors.
+Warning! Atomic Migdal calculation not present
+Warning! Momentum dependent Zion for Migdal calculation not loaded. Using Z - number of valence electrons.
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al_pDoS.dat for partial densities of states
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/O_pDoS.dat for partial densities of states
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al_Fn.dat for Fn(omega)
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/O_Fn.dat for Fn(omega)
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al2O3_pDoS_anisotropic.dat for partial densities of states
+Al2O3_pDoS_anisotropic.dat
+/home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al2O3_Fn.npy
+Warning! Al2O3_Fn_anisotropic.npy does not exist! Need to calculate Fn(omega) from DoS. Use the function 'F_n_d_precompute' to produce these files 
+Starting the loop over 1 dark matter masses with 30 pseudoexperiments each
+In the first pseudoexperiment for mass 0.45409096109724745 GeV, we simulated 73668 events
+On mass 1 of 1. E_high is 267.883 eV, E_low is 0.016 eV.
+Total integrated rate for mass 0.45409096109724745 GeV: 2.261e-03 events.
+Optimum interval for mass 0.45409096109724745 GeV: [1.094, 1.129] eV
+Endpoints: 73667, 73668. UL output: 57.985 events
+Cross section upper limit for mass 0.45409096109724745 GeV: 2.565e-32 cm^2
+For masses [0.45409096109724745], the median limits are: [2.82861758e-32]
+Done mass = 0.45409096109724745, sigma = [2.82861758e-32] (mass ID = 31)
+Starting mass ID 10
+Confirming we are in the right directory
+ .... Loading files for Al2O3
+Loaded Al2O3_mermin.dat for epsilon in electron regime
+electronic ELF taken or calculated from Y. Sun, H. Xu, B. Da, S.-f. Mao and Z.-j. Ding, Calculations of Energy-Loss Function for 26 Materials, Chinese Journal of Chemical Physics9(2016) 663.
+phonon ELF taken or calculated from  F. Gervais and B. Piriou, Anharmonicity in several-polar-mode crystals:  adjusting phonon self-energy of LO and TO modes in Al2O3 and TiO2 to fit infrared reflectivity,Journal of Physics C Solid State Physics 7 (1974) 2374 and M. Schubert, T.E. Tiwald and C.M. Herzinger, Infrared dielectric anisotropy and phonon modes of sapphire, Phys. Rev. B61(2000) 8187
+Loaded Al2O3_epsphonon_o.dat for epsilon in phonon regime
+Warning, Al2O3_eps_electron_opticallimit.dat does not exist! dielectric function in optical limit not loaded. Needed for absorption calculations in superconductors.
+Warning! Atomic Migdal calculation not present
+Warning! Momentum dependent Zion for Migdal calculation not loaded. Using Z - number of valence electrons.
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al_pDoS.dat for partial densities of states
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/O_pDoS.dat for partial densities of states
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al_Fn.dat for Fn(omega)
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/O_Fn.dat for Fn(omega)
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al2O3_pDoS_anisotropic.dat for partial densities of states
+Al2O3_pDoS_anisotropic.dat
+/home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al2O3_Fn.npy
+Warning! Al2O3_Fn_anisotropic.npy does not exist! Need to calculate Fn(omega) from DoS. Use the function 'F_n_d_precompute' to produce these files 
+Starting the loop over 1 dark matter masses with 30 pseudoexperiments each
+In the first pseudoexperiment for mass 0.0071968567300115215 GeV, we simulated 73281 events
+On mass 1 of 1. E_high is 0.683 eV, E_low is 0.016 eV.
+Total integrated rate for mass 0.0071968567300115215 GeV: 2.779e-03 events.
+Optimum interval for mass 0.0071968567300115215 GeV: [0.112, 0.114] eV
+Endpoints: 43859, 44397. UL output: 3148.137 events
+Cross section upper limit for mass 0.0071968567300115215 GeV: 1.133e-30 cm^2
+For masses [0.0071968567300115215], the median limits are: [1.16584229e-30]
+Done mass = 0.0071968567300115215, sigma = [1.16584229e-30] (mass ID = 10)
+Starting mass ID 21
+Confirming we are in the right directory
+ .... Loading files for Al2O3
+Loaded Al2O3_mermin.dat for epsilon in electron regime
+electronic ELF taken or calculated from Y. Sun, H. Xu, B. Da, S.-f. Mao and Z.-j. Ding, Calculations of Energy-Loss Function for 26 Materials, Chinese Journal of Chemical Physics9(2016) 663.
+phonon ELF taken or calculated from  F. Gervais and B. Piriou, Anharmonicity in several-polar-mode crystals:  adjusting phonon self-energy of LO and TO modes in Al2O3 and TiO2 to fit infrared reflectivity,Journal of Physics C Solid State Physics 7 (1974) 2374 and M. Schubert, T.E. Tiwald and C.M. Herzinger, Infrared dielectric anisotropy and phonon modes of sapphire, Phys. Rev. B61(2000) 8187
+Loaded Al2O3_epsphonon_o.dat for epsilon in phonon regime
+Warning, Al2O3_eps_electron_opticallimit.dat does not exist! dielectric function in optical limit not loaded. Needed for absorption calculations in superconductors.
+Warning! Atomic Migdal calculation not present
+Warning! Momentum dependent Zion for Migdal calculation not loaded. Using Z - number of valence electrons.
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al_pDoS.dat for partial densities of states
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/O_pDoS.dat for partial densities of states
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al_Fn.dat for Fn(omega)
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/O_Fn.dat for Fn(omega)
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al2O3_pDoS_anisotropic.dat for partial densities of states
+Al2O3_pDoS_anisotropic.dat
+/home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al2O3_Fn.npy
+Warning! Al2O3_Fn_anisotropic.npy does not exist! Need to calculate Fn(omega) from DoS. Use the function 'F_n_d_precompute' to produce these files 
+Starting the loop over 1 dark matter masses with 30 pseudoexperiments each
+In the first pseudoexperiment for mass 0.06309573444801933 GeV, we simulated 73553 events
+On mass 1 of 1. E_high is 20.066 eV, E_low is 0.016 eV.
+Total integrated rate for mass 0.06309573444801933 GeV: 2.382e-03 events.
+Optimum interval for mass 0.06309573444801933 GeV: [0.980, 1.084] eV
+Endpoints: 73548, 73552. UL output: 2398.583 events
+Cross section upper limit for mass 0.06309573444801933 GeV: 1.007e-30 cm^2
+For masses [0.06309573444801933], the median limits are: [1.06443845e-30]
+Done mass = 0.06309573444801933, sigma = [1.06443845e-30] (mass ID = 21)
+Starting mass ID 33
+Confirming we are in the right directory
+ .... Loading files for Al2O3
+Loaded Al2O3_mermin.dat for epsilon in electron regime
+electronic ELF taken or calculated from Y. Sun, H. Xu, B. Da, S.-f. Mao and Z.-j. Ding, Calculations of Energy-Loss Function for 26 Materials, Chinese Journal of Chemical Physics9(2016) 663.
+phonon ELF taken or calculated from  F. Gervais and B. Piriou, Anharmonicity in several-polar-mode crystals:  adjusting phonon self-energy of LO and TO modes in Al2O3 and TiO2 to fit infrared reflectivity,Journal of Physics C Solid State Physics 7 (1974) 2374 and M. Schubert, T.E. Tiwald and C.M. Herzinger, Infrared dielectric anisotropy and phonon modes of sapphire, Phys. Rev. B61(2000) 8187
+Loaded Al2O3_epsphonon_o.dat for epsilon in phonon regime
+Warning, Al2O3_eps_electron_opticallimit.dat does not exist! dielectric function in optical limit not loaded. Needed for absorption calculations in superconductors.
+Warning! Atomic Migdal calculation not present
+Warning! Momentum dependent Zion for Migdal calculation not loaded. Using Z - number of valence electrons.
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al_pDoS.dat for partial densities of states
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/O_pDoS.dat for partial densities of states
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al_Fn.dat for Fn(omega)
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/O_Fn.dat for Fn(omega)
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al2O3_pDoS_anisotropic.dat for partial densities of states
+Al2O3_pDoS_anisotropic.dat
+/home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al2O3_Fn.npy
+Warning! Al2O3_Fn_anisotropic.npy does not exist! Need to calculate Fn(omega) from DoS. Use the function 'F_n_d_precompute' to produce these files 
+Starting the loop over 1 dark matter masses with 30 pseudoexperiments each
+In the first pseudoexperiment for mass 0.6738627168030948 GeV, we simulated 73810 events
+On mass 1 of 1. E_high is 493.002 eV, E_low is 0.016 eV.
+Total integrated rate for mass 0.6738627168030948 GeV: 2.689e-03 events.
+Optimum interval for mass 0.6738627168030948 GeV: [1.057, 1.175] eV
+Endpoints: 73809, 73810. UL output: 54.082 events
+Cross section upper limit for mass 0.6738627168030948 GeV: 2.011e-32 cm^2
+For masses [0.6738627168030948], the median limits are: [2.13471129e-32]
+Done mass = 0.6738627168030948, sigma = [2.13471129e-32] (mass ID = 33)
+Starting mass ID 6
+Confirming we are in the right directory
+ .... Loading files for Al2O3
+Loaded Al2O3_mermin.dat for epsilon in electron regime
+electronic ELF taken or calculated from Y. Sun, H. Xu, B. Da, S.-f. Mao and Z.-j. Ding, Calculations of Energy-Loss Function for 26 Materials, Chinese Journal of Chemical Physics9(2016) 663.
+phonon ELF taken or calculated from  F. Gervais and B. Piriou, Anharmonicity in several-polar-mode crystals:  adjusting phonon self-energy of LO and TO modes in Al2O3 and TiO2 to fit infrared reflectivity,Journal of Physics C Solid State Physics 7 (1974) 2374 and M. Schubert, T.E. Tiwald and C.M. Herzinger, Infrared dielectric anisotropy and phonon modes of sapphire, Phys. Rev. B61(2000) 8187
+Loaded Al2O3_epsphonon_o.dat for epsilon in phonon regime
+Warning, Al2O3_eps_electron_opticallimit.dat does not exist! dielectric function in optical limit not loaded. Needed for absorption calculations in superconductors.
+Warning! Atomic Migdal calculation not present
+Warning! Momentum dependent Zion for Migdal calculation not loaded. Using Z - number of valence electrons.
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al_pDoS.dat for partial densities of states
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/O_pDoS.dat for partial densities of states
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al_Fn.dat for Fn(omega)
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/O_Fn.dat for Fn(omega)
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al2O3_pDoS_anisotropic.dat for partial densities of states
+Al2O3_pDoS_anisotropic.dat
+/home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al2O3_Fn.npy
+Warning! Al2O3_Fn_anisotropic.npy does not exist! Need to calculate Fn(omega) from DoS. Use the function 'F_n_d_precompute' to produce these files 
+Starting the loop over 1 dark matter masses with 30 pseudoexperiments each
+In the first pseudoexperiment for mass 0.0032680275894101255 GeV, we simulated 73244 events
+On mass 1 of 1. E_high is 0.683 eV, E_low is 0.016 eV.
+Total integrated rate for mass 0.0032680275894101255 GeV: 5.776e-03 events.
+Optimum interval for mass 0.0032680275894101255 GeV: [0.112, 0.114] eV
+Endpoints: 43826, 44488. UL output: 3262.196 events
+Cross section upper limit for mass 0.0032680275894101255 GeV: 5.648e-31 cm^2
+For masses [0.0032680275894101255], the median limits are: [5.51576877e-31]
+Done mass = 0.0032680275894101255, sigma = [5.51576877e-31] (mass ID = 6)
+Starting mass ID 20
+Confirming we are in the right directory
+ .... Loading files for Al2O3
+Loaded Al2O3_mermin.dat for epsilon in electron regime
+electronic ELF taken or calculated from Y. Sun, H. Xu, B. Da, S.-f. Mao and Z.-j. Ding, Calculations of Energy-Loss Function for 26 Materials, Chinese Journal of Chemical Physics9(2016) 663.
+phonon ELF taken or calculated from  F. Gervais and B. Piriou, Anharmonicity in several-polar-mode crystals:  adjusting phonon self-energy of LO and TO modes in Al2O3 and TiO2 to fit infrared reflectivity,Journal of Physics C Solid State Physics 7 (1974) 2374 and M. Schubert, T.E. Tiwald and C.M. Herzinger, Infrared dielectric anisotropy and phonon modes of sapphire, Phys. Rev. B61(2000) 8187
+Loaded Al2O3_epsphonon_o.dat for epsilon in phonon regime
+Warning, Al2O3_eps_electron_opticallimit.dat does not exist! dielectric function in optical limit not loaded. Needed for absorption calculations in superconductors.
+Warning! Atomic Migdal calculation not present
+Warning! Momentum dependent Zion for Migdal calculation not loaded. Using Z - number of valence electrons.
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al_pDoS.dat for partial densities of states
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/O_pDoS.dat for partial densities of states
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al_Fn.dat for Fn(omega)
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/O_Fn.dat for Fn(omega)
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al2O3_pDoS_anisotropic.dat for partial densities of states
+Al2O3_pDoS_anisotropic.dat
+/home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al2O3_Fn.npy
+Warning! Al2O3_Fn_anisotropic.npy does not exist! Need to calculate Fn(omega) from DoS. Use the function 'F_n_d_precompute' to produce these files 
+Starting the loop over 1 dark matter masses with 30 pseudoexperiments each
+In the first pseudoexperiment for mass 0.05179474679231213 GeV, we simulated 73564 events
+On mass 1 of 1. E_high is 16.053 eV, E_low is 0.016 eV.
+Total integrated rate for mass 0.05179474679231213 GeV: 2.258e-03 events.
+Optimum interval for mass 0.05179474679231213 GeV: [0.905, 1.187] eV
+Endpoints: 73551, 73564. UL output: 7213.938 events
+Cross section upper limit for mass 0.05179474679231213 GeV: 3.195e-30 cm^2
+For masses [0.05179474679231213], the median limits are: [3.06807664e-30]
+Done mass = 0.05179474679231213, sigma = [3.06807664e-30] (mass ID = 20)
+Starting mass ID 32
+Confirming we are in the right directory
+ .... Loading files for Al2O3
+Loaded Al2O3_mermin.dat for epsilon in electron regime
+electronic ELF taken or calculated from Y. Sun, H. Xu, B. Da, S.-f. Mao and Z.-j. Ding, Calculations of Energy-Loss Function for 26 Materials, Chinese Journal of Chemical Physics9(2016) 663.
+phonon ELF taken or calculated from  F. Gervais and B. Piriou, Anharmonicity in several-polar-mode crystals:  adjusting phonon self-energy of LO and TO modes in Al2O3 and TiO2 to fit infrared reflectivity,Journal of Physics C Solid State Physics 7 (1974) 2374 and M. Schubert, T.E. Tiwald and C.M. Herzinger, Infrared dielectric anisotropy and phonon modes of sapphire, Phys. Rev. B61(2000) 8187
+Loaded Al2O3_epsphonon_o.dat for epsilon in phonon regime
+Warning, Al2O3_eps_electron_opticallimit.dat does not exist! dielectric function in optical limit not loaded. Needed for absorption calculations in superconductors.
+Warning! Atomic Migdal calculation not present
+Warning! Momentum dependent Zion for Migdal calculation not loaded. Using Z - number of valence electrons.
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al_pDoS.dat for partial densities of states
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/O_pDoS.dat for partial densities of states
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al_Fn.dat for Fn(omega)
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/O_Fn.dat for Fn(omega)
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al2O3_pDoS_anisotropic.dat for partial densities of states
+Al2O3_pDoS_anisotropic.dat
+/home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al2O3_Fn.npy
+Warning! Al2O3_Fn_anisotropic.npy does not exist! Need to calculate Fn(omega) from DoS. Use the function 'F_n_d_precompute' to produce these files 
+Starting the loop over 1 dark matter masses with 30 pseudoexperiments each
+In the first pseudoexperiment for mass 0.5531681197617228 GeV, we simulated 74074 events
+On mass 1 of 1. E_high is 362.207 eV, E_low is 0.016 eV.
+Total integrated rate for mass 0.5531681197617228 GeV: 2.433e-03 events.
+Optimum interval for mass 0.5531681197617228 GeV: [1.088, 1.120] eV
+Endpoints: 74073, 74074. UL output: 53.790 events
+Cross section upper limit for mass 0.5531681197617228 GeV: 2.211e-32 cm^2
+For masses [0.5531681197617228], the median limits are: [2.85416185e-32]
+Done mass = 0.5531681197617228, sigma = [2.85416185e-32] (mass ID = 32)
+Starting mass ID 11
+Confirming we are in the right directory
+ .... Loading files for Al2O3
+Loaded Al2O3_mermin.dat for epsilon in electron regime
+electronic ELF taken or calculated from Y. Sun, H. Xu, B. Da, S.-f. Mao and Z.-j. Ding, Calculations of Energy-Loss Function for 26 Materials, Chinese Journal of Chemical Physics9(2016) 663.
+phonon ELF taken or calculated from  F. Gervais and B. Piriou, Anharmonicity in several-polar-mode crystals:  adjusting phonon self-energy of LO and TO modes in Al2O3 and TiO2 to fit infrared reflectivity,Journal of Physics C Solid State Physics 7 (1974) 2374 and M. Schubert, T.E. Tiwald and C.M. Herzinger, Infrared dielectric anisotropy and phonon modes of sapphire, Phys. Rev. B61(2000) 8187
+Loaded Al2O3_epsphonon_o.dat for epsilon in phonon regime
+Warning, Al2O3_eps_electron_opticallimit.dat does not exist! dielectric function in optical limit not loaded. Needed for absorption calculations in superconductors.
+Warning! Atomic Migdal calculation not present
+Warning! Momentum dependent Zion for Migdal calculation not loaded. Using Z - number of valence electrons.
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al_pDoS.dat for partial densities of states
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/O_pDoS.dat for partial densities of states
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al_Fn.dat for Fn(omega)
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/O_Fn.dat for Fn(omega)
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al2O3_pDoS_anisotropic.dat for partial densities of states
+Al2O3_pDoS_anisotropic.dat
+/home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al2O3_Fn.npy
+Warning! Al2O3_Fn_anisotropic.npy does not exist! Need to calculate Fn(omega) from DoS. Use the function 'F_n_d_precompute' to produce these files 
+Starting the loop over 1 dark matter masses with 30 pseudoexperiments each
+In the first pseudoexperiment for mass 0.008767123872968687 GeV, we simulated 73583 events
+On mass 1 of 1. E_high is 0.683 eV, E_low is 0.016 eV.
+Total integrated rate for mass 0.008767123872968687 GeV: 2.357e-03 events.
+Optimum interval for mass 0.008767123872968687 GeV: [0.111, 0.114] eV
+Endpoints: 43980, 44768. UL output: 3329.861 events
+Cross section upper limit for mass 0.008767123872968687 GeV: 1.413e-30 cm^2
+For masses [0.008767123872968687], the median limits are: [1.40520319e-30]
+Done mass = 0.008767123872968687, sigma = [1.40520319e-30] (mass ID = 11)
+Starting mass ID 22
+Confirming we are in the right directory
+ .... Loading files for Al2O3
+Loaded Al2O3_mermin.dat for epsilon in electron regime
+electronic ELF taken or calculated from Y. Sun, H. Xu, B. Da, S.-f. Mao and Z.-j. Ding, Calculations of Energy-Loss Function for 26 Materials, Chinese Journal of Chemical Physics9(2016) 663.
+phonon ELF taken or calculated from  F. Gervais and B. Piriou, Anharmonicity in several-polar-mode crystals:  adjusting phonon self-energy of LO and TO modes in Al2O3 and TiO2 to fit infrared reflectivity,Journal of Physics C Solid State Physics 7 (1974) 2374 and M. Schubert, T.E. Tiwald and C.M. Herzinger, Infrared dielectric anisotropy and phonon modes of sapphire, Phys. Rev. B61(2000) 8187
+Loaded Al2O3_epsphonon_o.dat for epsilon in phonon regime
+Warning, Al2O3_eps_electron_opticallimit.dat does not exist! dielectric function in optical limit not loaded. Needed for absorption calculations in superconductors.
+Warning! Atomic Migdal calculation not present
+Warning! Momentum dependent Zion for Migdal calculation not loaded. Using Z - number of valence electrons.
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al_pDoS.dat for partial densities of states
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/O_pDoS.dat for partial densities of states
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al_Fn.dat for Fn(omega)
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/O_Fn.dat for Fn(omega)
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al2O3_pDoS_anisotropic.dat for partial densities of states
+Al2O3_pDoS_anisotropic.dat
+/home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al2O3_Fn.npy
+Warning! Al2O3_Fn_anisotropic.npy does not exist! Need to calculate Fn(omega) from DoS. Use the function 'F_n_d_precompute' to produce these files 
+Starting the loop over 1 dark matter masses with 30 pseudoexperiments each
+In the first pseudoexperiment for mass 0.07686246100397738 GeV, we simulated 73651 events
+On mass 1 of 1. E_high is 25.203 eV, E_low is 0.016 eV.
+Total integrated rate for mass 0.07686246100397738 GeV: 2.428e-03 events.
+Optimum interval for mass 0.07686246100397738 GeV: [0.901, 1.603] eV
+Endpoints: 73639, 73651. UL output: 1184.889 events
+Cross section upper limit for mass 0.07686246100397738 GeV: 4.879e-31 cm^2
+For masses [0.07686246100397738], the median limits are: [4.46453823e-31]
+Done mass = 0.07686246100397738, sigma = [4.46453823e-31] (mass ID = 22)
+Starting mass ID 35
+Confirming we are in the right directory
+ .... Loading files for Al2O3
+Loaded Al2O3_mermin.dat for epsilon in electron regime
+electronic ELF taken or calculated from Y. Sun, H. Xu, B. Da, S.-f. Mao and Z.-j. Ding, Calculations of Energy-Loss Function for 26 Materials, Chinese Journal of Chemical Physics9(2016) 663.
+phonon ELF taken or calculated from  F. Gervais and B. Piriou, Anharmonicity in several-polar-mode crystals:  adjusting phonon self-energy of LO and TO modes in Al2O3 and TiO2 to fit infrared reflectivity,Journal of Physics C Solid State Physics 7 (1974) 2374 and M. Schubert, T.E. Tiwald and C.M. Herzinger, Infrared dielectric anisotropy and phonon modes of sapphire, Phys. Rev. B61(2000) 8187
+Loaded Al2O3_epsphonon_o.dat for epsilon in phonon regime
+Warning, Al2O3_eps_electron_opticallimit.dat does not exist! dielectric function in optical limit not loaded. Needed for absorption calculations in superconductors.
+Warning! Atomic Migdal calculation not present
+Warning! Momentum dependent Zion for Migdal calculation not loaded. Using Z - number of valence electrons.
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al_pDoS.dat for partial densities of states
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/O_pDoS.dat for partial densities of states
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al_Fn.dat for Fn(omega)
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/O_Fn.dat for Fn(omega)
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al2O3_pDoS_anisotropic.dat for partial densities of states
+Al2O3_pDoS_anisotropic.dat
+/home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al2O3_Fn.npy
+Warning! Al2O3_Fn_anisotropic.npy does not exist! Need to calculate Fn(omega) from DoS. Use the function 'F_n_d_precompute' to produce these files 
+Starting the loop over 1 dark matter masses with 30 pseudoexperiments each
+In the first pseudoexperiment for mass 1.0 GeV, we simulated 73688 events
+On mass 1 of 1. E_high is 927.587 eV, E_low is 0.016 eV.
+Total integrated rate for mass 1.0 GeV: 3.766e-03 events.
+Optimum interval for mass 1.0 GeV: [1.041, 1.089] eV
+Endpoints: 73687, 73688. UL output: 47.466 events
+Cross section upper limit for mass 1.0 GeV: 1.261e-32 cm^2
+For masses [1.0], the median limits are: [1.64984345e-32]
+Done mass = 1.0, sigma = [1.64984345e-32] (mass ID = 35)
+Starting mass ID 9
+Confirming we are in the right directory
+ .... Loading files for Al2O3
+Loaded Al2O3_mermin.dat for epsilon in electron regime
+electronic ELF taken or calculated from Y. Sun, H. Xu, B. Da, S.-f. Mao and Z.-j. Ding, Calculations of Energy-Loss Function for 26 Materials, Chinese Journal of Chemical Physics9(2016) 663.
+phonon ELF taken or calculated from  F. Gervais and B. Piriou, Anharmonicity in several-polar-mode crystals:  adjusting phonon self-energy of LO and TO modes in Al2O3 and TiO2 to fit infrared reflectivity,Journal of Physics C Solid State Physics 7 (1974) 2374 and M. Schubert, T.E. Tiwald and C.M. Herzinger, Infrared dielectric anisotropy and phonon modes of sapphire, Phys. Rev. B61(2000) 8187
+Loaded Al2O3_epsphonon_o.dat for epsilon in phonon regime
+Warning, Al2O3_eps_electron_opticallimit.dat does not exist! dielectric function in optical limit not loaded. Needed for absorption calculations in superconductors.
+Warning! Atomic Migdal calculation not present
+Warning! Momentum dependent Zion for Migdal calculation not loaded. Using Z - number of valence electrons.
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al_pDoS.dat for partial densities of states
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/O_pDoS.dat for partial densities of states
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al_Fn.dat for Fn(omega)
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/O_Fn.dat for Fn(omega)
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al2O3_pDoS_anisotropic.dat for partial densities of states
+Al2O3_pDoS_anisotropic.dat
+/home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al2O3_Fn.npy
+Warning! Al2O3_Fn_anisotropic.npy does not exist! Need to calculate Fn(omega) from DoS. Use the function 'F_n_d_precompute' to produce these files 
+Starting the loop over 1 dark matter masses with 30 pseudoexperiments each
+In the first pseudoexperiment for mass 0.005907837911587943 GeV, we simulated 73521 events
+On mass 1 of 1. E_high is 0.683 eV, E_low is 0.016 eV.
+Total integrated rate for mass 0.005907837911587943 GeV: 3.307e-03 events.
+Optimum interval for mass 0.005907837911587943 GeV: [0.112, 0.114] eV
+Endpoints: 43790, 44210. UL output: 3273.276 events
+Cross section upper limit for mass 0.005907837911587943 GeV: 9.899e-31 cm^2
+For masses [0.005907837911587943], the median limits are: [9.75165896e-31]
+Done mass = 0.005907837911587943, sigma = [9.75165896e-31] (mass ID = 9)
+Starting mass ID 23
+Confirming we are in the right directory
+ .... Loading files for Al2O3
+Loaded Al2O3_mermin.dat for epsilon in electron regime
+electronic ELF taken or calculated from Y. Sun, H. Xu, B. Da, S.-f. Mao and Z.-j. Ding, Calculations of Energy-Loss Function for 26 Materials, Chinese Journal of Chemical Physics9(2016) 663.
+phonon ELF taken or calculated from  F. Gervais and B. Piriou, Anharmonicity in several-polar-mode crystals:  adjusting phonon self-energy of LO and TO modes in Al2O3 and TiO2 to fit infrared reflectivity,Journal of Physics C Solid State Physics 7 (1974) 2374 and M. Schubert, T.E. Tiwald and C.M. Herzinger, Infrared dielectric anisotropy and phonon modes of sapphire, Phys. Rev. B61(2000) 8187
+Loaded Al2O3_epsphonon_o.dat for epsilon in phonon regime
+Warning, Al2O3_eps_electron_opticallimit.dat does not exist! dielectric function in optical limit not loaded. Needed for absorption calculations in superconductors.
+Warning! Atomic Migdal calculation not present
+Warning! Momentum dependent Zion for Migdal calculation not loaded. Using Z - number of valence electrons.
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al_pDoS.dat for partial densities of states
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/O_pDoS.dat for partial densities of states
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al_Fn.dat for Fn(omega)
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/O_Fn.dat for Fn(omega)
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al2O3_pDoS_anisotropic.dat for partial densities of states
+Al2O3_pDoS_anisotropic.dat
+/home/vvelan/Test/DarkELF/darkelf/../data/Al2O3/Al2O3_Fn.npy
+Warning! Al2O3_Fn_anisotropic.npy does not exist! Need to calculate Fn(omega) from DoS. Use the function 'F_n_d_precompute' to produce these files 
+Starting the loop over 1 dark matter masses with 30 pseudoexperiments each
+In the first pseudoexperiment for mass 0.09363292088239417 GeV, we simulated 73550 events
+On mass 1 of 1. E_high is 31.832 eV, E_low is 0.016 eV.
+Total integrated rate for mass 0.09363292088239417 GeV: 2.414e-03 events.
+Optimum interval for mass 0.09363292088239417 GeV: [1.087, 1.233] eV
+Endpoints: 73548, 73550. UL output: 595.308 events
+Cross section upper limit for mass 0.09363292088239417 GeV: 2.466e-31 cm^2
+For masses [0.09363292088239417], the median limits are: [2.20047867e-31]
+Done mass = 0.09363292088239417, sigma = [2.20Full scan took 20.37 minutes.

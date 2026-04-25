@@ -1,0 +1,538 @@
+Target mass = 57.46 g
+Confirming we are in the right directory
+ .... Loading files for GaAs
+Loaded GaAs_mermin.dat for epsilon in electron regime
+electronic ELF taken or calculated from Y. Tu, C. Kwei and C. Tung,Angular and energy dependences of the surface excitation parameter for semiconducting iii–v compounds, Surface Science601(2007) 865.
+phonon ELF taken or calculated from H.M. Lawler and E.L. Shirley, Anharmonic effects on infrared spectra of GaAs and gap:  First-principles calculations, Phys. Rev. B70(2004) 245209 and E.D. Palik, Gallium arsenide (gaas), in Handbook of Optical Constants of Solids, E.D. Palik, ed.,pp. 429–443, Elsevier (1985).
+Loaded GaAs_epsphonon_data10K.dat for epsilon in phonon regime
+Warning, GaAs_eps_electron_opticallimit.dat does not exist! dielectric function in optical limit not loaded. Needed for absorption calculations in superconductors.
+Warning! Atomic Migdal calculation not present
+Warning! Momentum dependent Zion for Migdal calculation not loaded. Using Z - number of valence electrons.
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/GaAs/Ga_pDoS.dat for partial densities of states
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/GaAs/As_pDoS.dat for partial densities of states
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/GaAs/Ga_Fn.dat for Fn(omega)
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/GaAs/As_Fn.dat for Fn(omega)
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/GaAs/GaAs_pDoS_anisotropic.dat for partial densities of states
+GaAs_pDoS_anisotropic.dat
+/home/vvelan/Test/DarkELF/darkelf/../data/GaAs/GaAs_Fn.npy
+Warning! GaAs_Fn_anisotropic.npy does not exist! Need to calculate Fn(omega) from DoS. Use the function 'F_n_d_precompute' to produce these files 
+Starting the loop over 1 dark matter masses with 1000 pseudoexperiments each
+Skipping mass 0.001 GeV as the total rate is zero
+For masses [0.001], the median limits are: [inf]
+Done mass = 0.001, sigma = [inf]
+Confirming we are in the right directory
+ .... Loading files for GaAs
+Loaded GaAs_mermin.dat for epsilon in electron regime
+electronic ELF taken or calculated from Y. Tu, C. Kwei and C. Tung,Angular and energy dependences of the surface excitation parameter for semiconducting iii–v compounds, Surface Science601(2007) 865.
+phonon ELF taken or calculated from H.M. Lawler and E.L. Shirley, Anharmonic effects on infrared spectra of GaAs and gap:  First-principles calculations, Phys. Rev. B70(2004) 245209 and E.D. Palik, Gallium arsenide (gaas), in Handbook of Optical Constants of Solids, E.D. Palik, ed.,pp. 429–443, Elsevier (1985).
+Loaded GaAs_epsphonon_data10K.dat for epsilon in phonon regime
+Warning, GaAs_eps_electron_opticallimit.dat does not exist! dielectric function in optical limit not loaded. Needed for absorption calculations in superconductors.
+Warning! Atomic Migdal calculation not present
+Warning! Momentum dependent Zion for Migdal calculation not loaded. Using Z - number of valence electrons.
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/GaAs/Ga_pDoS.dat for partial densities of states
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/GaAs/As_pDoS.dat for partial densities of states
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/GaAs/Ga_Fn.dat for Fn(omega)
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/GaAs/As_Fn.dat for Fn(omega)
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/GaAs/GaAs_pDoS_anisotropic.dat for partial densities of states
+GaAs_pDoS_anisotropic.dat
+/home/vvelan/Test/DarkELF/darkelf/../data/GaAs/GaAs_Fn.npy
+Warning! GaAs_Fn_anisotropic.npy does not exist! Need to calculate Fn(omega) from DoS. Use the function 'F_n_d_precompute' to produce these files 
+Starting the loop over 1 dark matter masses with 1000 pseudoexperiments each
+In the first pseudoexperiment for mass 0.010680004325145754 GeV, we simulated 5 events
+On mass 1 of 1. E_high is 32.286 eV, E_low is 3.000 eV.
+Total integrated rate for mass 0.010680004325145754 GeV: 3.366e+02 events.
+Optimum interval for mass 0.010680004325145754 GeV: [3.401, 7.348] eV
+Endpoints: 1, 2. UL output: 5.472 events
+Cross section upper limit for mass 0.010680004325145754 GeV: 1.626e-39 cm^2
+For masses [0.010680004325145754], the median limits are: [1.42896451e-39]
+Done mass = 0.010680004325145754, sigma = [1.42896451e-39]
+Confirming we are in the right directory
+ .... Loading files for GaAs
+Loaded GaAs_mermin.dat for epsilon in electron regime
+electronic ELF taken or calculated from Y. Tu, C. Kwei and C. Tung,Angular and energy dependences of the surface excitation parameter for semiconducting iii–v compounds, Surface Science601(2007) 865.
+phonon ELF taken or calculated from H.M. Lawler and E.L. Shirley, Anharmonic effects on infrared spectra of GaAs and gap:  First-principles calculations, Phys. Rev. B70(2004) 245209 and E.D. Palik, Gallium arsenide (gaas), in Handbook of Optical Constants of Solids, E.D. Palik, ed.,pp. 429–443, Elsevier (1985).
+Loaded GaAs_epsphonon_data10K.dat for epsilon in phonon regime
+Warning, GaAs_eps_electron_opticallimit.dat does not exist! dielectric function in optical limit not loaded. Needed for absorption calculations in superconductors.
+Warning! Atomic Migdal calculation not present
+Warning! Momentum dependent Zion for Migdal calculation not loaded. Using Z - number of valence electrons.
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/GaAs/Ga_pDoS.dat for partial densities of states
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/GaAs/As_pDoS.dat for partial densities of states
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/GaAs/Ga_Fn.dat for Fn(omega)
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/GaAs/As_Fn.dat for Fn(omega)
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/GaAs/GaAs_pDoS_anisotropic.dat for partial densities of states
+GaAs_pDoS_anisotropic.dat
+/home/vvelan/Test/DarkELF/darkelf/../data/GaAs/GaAs_Fn.npy
+Warning! GaAs_Fn_anisotropic.npy does not exist! Need to calculate Fn(omega) from DoS. Use the function 'F_n_d_precompute' to produce these files 
+Starting the loop over 1 dark matter masses with 1000 pseudoexperiments each
+In the first pseudoexperiment for mass 0.11406249238513202 GeV, we simulated 14 events
+On mass 1 of 1. E_high is 80.619 eV, E_low is 3.000 eV.
+Total integrated rate for mass 0.11406249238513202 GeV: 1.039e+02 events.
+Optimum interval for mass 0.11406249238513202 GeV: [4.528, 20.626] eV
+Endpoints: 1, 2. UL output: 4.503 events
+Cross section upper limit for mass 0.11406249238513202 GeV: 4.335e-39 cm^2
+For masses [0.11406249238513202], the median limits are: [6.56640025e-39]
+Done mass = 0.11406249238513202, sigma = [6.56640025e-39]
+Confirming we are in the right directory
+ .... Loading files for GaAs
+Loaded GaAs_mermin.dat for epsilon in electron regime
+electronic ELF taken or calculated from Y. Tu, C. Kwei and C. Tung,Angular and energy dependences of the surface excitation parameter for semiconducting iii–v compounds, Surface Science601(2007) 865.
+phonon ELF taken or calculated from H.M. Lawler and E.L. Shirley, Anharmonic effects on infrared spectra of GaAs and gap:  First-principles calculations, Phys. Rev. B70(2004) 245209 and E.D. Palik, Gallium arsenide (gaas), in Handbook of Optical Constants of Solids, E.D. Palik, ed.,pp. 429–443, Elsevier (1985).
+Loaded GaAs_epsphonon_data10K.dat for epsilon in phonon regime
+Warning, GaAs_eps_electron_opticallimit.dat does not exist! dielectric function in optical limit not loaded. Needed for absorption calculations in superconductors.
+Warning! Atomic Migdal calculation not present
+Warning! Momentum dependent Zion for Migdal calculation not loaded. Using Z - number of valence electrons.
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/GaAs/Ga_pDoS.dat for partial densities of states
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/GaAs/As_pDoS.dat for partial densities of states
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/GaAs/Ga_Fn.dat for Fn(omega)
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/GaAs/As_Fn.dat for Fn(omega)
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/GaAs/GaAs_pDoS_anisotropic.dat for partial densities of states
+GaAs_pDoS_anisotropic.dat
+/home/vvelan/Test/DarkELF/darkelf/../data/GaAs/GaAs_Fn.npy
+Warning! GaAs_Fn_anisotropic.npy does not exist! Need to calculate Fn(omega) from DoS. Use the function 'F_n_d_precompute' to produce these files 
+Starting the loop over 1 dark matter masses with 1000 pseudoexperiments each
+Skipping mass 0.001218187912010116 GeV as the total rate is zero
+For masses [0.001218187912010116], the median limits are: [inf]
+Done mass = 0.001218187912010116, sigma = [inf]
+Confirming we are in the right directory
+ .... Loading files for GaAs
+Loaded GaAs_mermin.dat for epsilon in electron regime
+electronic ELF taken or calculated from Y. Tu, C. Kwei and C. Tung,Angular and energy dependences of the surface excitation parameter for semiconducting iii–v compounds, Surface Science601(2007) 865.
+phonon ELF taken or calculated from H.M. Lawler and E.L. Shirley, Anharmonic effects on infrared spectra of GaAs and gap:  First-principles calculations, Phys. Rev. B70(2004) 245209 and E.D. Palik, Gallium arsenide (gaas), in Handbook of Optical Constants of Solids, E.D. Palik, ed.,pp. 429–443, Elsevier (1985).
+Loaded GaAs_epsphonon_data10K.dat for epsilon in phonon regime
+Warning, GaAs_eps_electron_opticallimit.dat does not exist! dielectric function in optical limit not loaded. Needed for absorption calculations in superconductors.
+Warning! Atomic Migdal calculation not present
+Warning! Momentum dependent Zion for Migdal calculation not loaded. Using Z - number of valence electrons.
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/GaAs/Ga_pDoS.dat for partial densities of states
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/GaAs/As_pDoS.dat for partial densities of states
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/GaAs/Ga_Fn.dat for Fn(omega)
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/GaAs/As_Fn.dat for Fn(omega)
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/GaAs/GaAs_pDoS_anisotropic.dat for partial densities of states
+GaAs_pDoS_anisotropic.dat
+/home/vvelan/Test/DarkELF/darkelf/../data/GaAs/GaAs_Fn.npy
+Warning! GaAs_Fn_anisotropic.npy does not exist! Need to calculate Fn(omega) from DoS. Use the function 'F_n_d_precompute' to produce these files 
+Starting the loop over 1 dark matter masses with 1000 pseudoexperiments each
+In the first pseudoexperiment for mass 0.013010252169108316 GeV, we simulated 8 events
+On mass 1 of 1. E_high is 37.818 eV, E_low is 3.000 eV.
+Total integrated rate for mass 0.013010252169108316 GeV: 3.494e+02 events.
+Optimum interval for mass 0.013010252169108316 GeV: [4.240, 17.263] eV
+Endpoints: 1, 2. UL output: 4.412 events
+Cross section upper limit for mass 0.013010252169108316 GeV: 1.263e-39 cm^2
+For masses [0.013010252169108316], the median limits are: [1.42738489e-39]
+Done mass = 0.013010252169108316, sigma = [1.42738489e-39]
+Confirming we are in the right directory
+ .... Loading files for GaAs
+Loaded GaAs_mermin.dat for epsilon in electron regime
+electronic ELF taken or calculated from Y. Tu, C. Kwei and C. Tung,Angular and energy dependences of the surface excitation parameter for semiconducting iii–v compounds, Surface Science601(2007) 865.
+phonon ELF taken or calculated from H.M. Lawler and E.L. Shirley, Anharmonic effects on infrared spectra of GaAs and gap:  First-principles calculations, Phys. Rev. B70(2004) 245209 and E.D. Palik, Gallium arsenide (gaas), in Handbook of Optical Constants of Solids, E.D. Palik, ed.,pp. 429–443, Elsevier (1985).
+Loaded GaAs_epsphonon_data10K.dat for epsilon in phonon regime
+Warning, GaAs_eps_electron_opticallimit.dat does not exist! dielectric function in optical limit not loaded. Needed for absorption calculations in superconductors.
+Warning! Atomic Migdal calculation not present
+Warning! Momentum dependent Zion for Migdal calculation not loaded. Using Z - number of valence electrons.
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/GaAs/Ga_pDoS.dat for partial densities of states
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/GaAs/As_pDoS.dat for partial densities of states
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/GaAs/Ga_Fn.dat for Fn(omega)
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/GaAs/As_Fn.dat for Fn(omega)
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/GaAs/GaAs_pDoS_anisotropic.dat for partial densities of states
+GaAs_pDoS_anisotropic.dat
+/home/vvelan/Test/DarkELF/darkelf/../data/GaAs/GaAs_Fn.npy
+Warning! GaAs_Fn_anisotropic.npy does not exist! Need to calculate Fn(omega) from DoS. Use the function 'F_n_d_precompute' to produce these files 
+Starting the loop over 1 dark matter masses with 1000 pseudoexperiments each
+In the first pseudoexperiment for mass 0.13894954943731375 GeV, we simulated 8 events
+On mass 1 of 1. E_high is 79.510 eV, E_low is 3.000 eV.
+Total integrated rate for mass 0.13894954943731375 GeV: 8.708e+01 events.
+Optimum interval for mass 0.13894954943731375 GeV: [3.356, 9.110] eV
+Endpoints: 1, 2. UL output: 6.892 events
+Cross section upper limit for mass 0.13894954943731375 GeV: 7.915e-39 cm^2
+For masses [0.13894954943731375], the median limits are: [7.87324828e-39]
+Done mass = 0.13894954943731375, sigma = [7.87324828e-39]
+Confirming we are in the right directory
+ .... Loading files for GaAs
+Loaded GaAs_mermin.dat for epsilon in electron regime
+electronic ELF taken or calculated from Y. Tu, C. Kwei and C. Tung,Angular and energy dependences of the surface excitation parameter for semiconducting iii–v compounds, Surface Science601(2007) 865.
+phonon ELF taken or calculated from H.M. Lawler and E.L. Shirley, Anharmonic effects on infrared spectra of GaAs and gap:  First-principles calculations, Phys. Rev. B70(2004) 245209 and E.D. Palik, Gallium arsenide (gaas), in Handbook of Optical Constants of Solids, E.D. Palik, ed.,pp. 429–443, Elsevier (1985).
+Loaded GaAs_epsphonon_data10K.dat for epsilon in phonon regime
+Warning, GaAs_eps_electron_opticallimit.dat does not exist! dielectric function in optical limit not loaded. Needed for absorption calculations in superconductors.
+Warning! Atomic Migdal calculation not present
+Warning! Momentum dependent Zion for Migdal calculation not loaded. Using Z - number of valence electrons.
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/GaAs/Ga_pDoS.dat for partial densities of states
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/GaAs/As_pDoS.dat for partial densities of states
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/GaAs/Ga_Fn.dat for Fn(omega)
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/GaAs/As_Fn.dat for Fn(omega)
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/GaAs/GaAs_pDoS_anisotropic.dat for partial densities of states
+GaAs_pDoS_anisotropic.dat
+/home/vvelan/Test/DarkELF/darkelf/../data/GaAs/GaAs_Fn.npy
+Warning! GaAs_Fn_anisotropic.npy does not exist! Need to calculate Fn(omega) from DoS. Use the function 'F_n_d_precompute' to produce these files 
+Starting the loop over 1 dark matter masses with 1000 pseudoexperiments each
+In the first pseudoexperiment for mass 0.0014839817889675646 GeV, we simulated 1 events
+On mass 1 of 1. E_high is 4.011 eV, E_low is 3.000 eV.
+Total integrated rate for mass 0.0014839817889675646 GeV: 1.922e-03 events.
+Optimum interval for mass 0.0014839817889675646 GeV: [3.000, 3.148] eV
+Endpoints: 0, 1. UL output: 3.789 events
+Cross section upper limit for mass 0.0014839817889675646 GeV: 1.971e-34 cm^2
+For masses [0.0014839817889675646], the median limits are: [1.19786486e-34]
+Done mass = 0.0014839817889675646, sigma = [1.19786486e-34]
+Confirming we are in the right directory
+ .... Loading files for GaAs
+Loaded GaAs_mermin.dat for epsilon in electron regime
+electronic ELF taken or calculated from Y. Tu, C. Kwei and C. Tung,Angular and energy dependences of the surface excitation parameter for semiconducting iii–v compounds, Surface Science601(2007) 865.
+phonon ELF taken or calculated from H.M. Lawler and E.L. Shirley, Anharmonic effects on infrared spectra of GaAs and gap:  First-principles calculations, Phys. Rev. B70(2004) 245209 and E.D. Palik, Gallium arsenide (gaas), in Handbook of Optical Constants of Solids, E.D. Palik, ed.,pp. 429–443, Elsevier (1985).
+Loaded GaAs_epsphonon_data10K.dat for epsilon in phonon regime
+Warning, GaAs_eps_electron_opticallimit.dat does not exist! dielectric function in optical limit not loaded. Needed for absorption calculations in superconductors.
+Warning! Atomic Migdal calculation not present
+Warning! Momentum dependent Zion for Migdal calculation not loaded. Using Z - number of valence electrons.
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/GaAs/Ga_pDoS.dat for partial densities of states
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/GaAs/As_pDoS.dat for partial densities of states
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/GaAs/Ga_Fn.dat for Fn(omega)
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/GaAs/As_Fn.dat for Fn(omega)
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/GaAs/GaAs_pDoS_anisotropic.dat for partial densities of states
+GaAs_pDoS_anisotropic.dat
+/home/vvelan/Test/DarkELF/darkelf/../data/GaAs/GaAs_Fn.npy
+Warning! GaAs_Fn_anisotropic.npy does not exist! Need to calculate Fn(omega) from DoS. Use the function 'F_n_d_precompute' to produce these files 
+Starting the loop over 1 dark matter masses with 1000 pseudoexperiments each
+In the first pseudoexperiment for mass 0.015848931924611134 GeV, we simulated 8 events
+On mass 1 of 1. E_high is 42.191 eV, E_low is 3.000 eV.
+Total integrated rate for mass 0.015848931924611134 GeV: 3.485e+02 events.
+Optimum interval for mass 0.015848931924611134 GeV: [4.093, 22.500] eV
+Endpoints: 3, 6. UL output: 9.374 events
+Cross section upper limit for mass 0.015848931924611134 GeV: 2.689e-39 cm^2
+For masses [0.015848931924611134], the median limits are: [1.45795016e-39]
+Done mass = 0.015848931924611134, sigma = [1.45795016e-39]
+Confirming we are in the right directory
+ .... Loading files for GaAs
+Loaded GaAs_mermin.dat for epsilon in electron regime
+electronic ELF taken or calculated from Y. Tu, C. Kwei and C. Tung,Angular and energy dependences of the surface excitation parameter for semiconducting iii–v compounds, Surface Science601(2007) 865.
+phonon ELF taken or calculated from H.M. Lawler and E.L. Shirley, Anharmonic effects on infrared spectra of GaAs and gap:  First-principles calculations, Phys. Rev. B70(2004) 245209 and E.D. Palik, Gallium arsenide (gaas), in Handbook of Optical Constants of Solids, E.D. Palik, ed.,pp. 429–443, Elsevier (1985).
+Loaded GaAs_epsphonon_data10K.dat for epsilon in phonon regime
+Warning, GaAs_eps_electron_opticallimit.dat does not exist! dielectric function in optical limit not loaded. Needed for absorption calculations in superconductors.
+Warning! Atomic Migdal calculation not present
+Warning! Momentum dependent Zion for Migdal calculation not loaded. Using Z - number of valence electrons.
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/GaAs/Ga_pDoS.dat for partial densities of states
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/GaAs/As_pDoS.dat for partial densities of states
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/GaAs/Ga_Fn.dat for Fn(omega)
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/GaAs/As_Fn.dat for Fn(omega)
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/GaAs/GaAs_pDoS_anisotropic.dat for partial densities of states
+GaAs_pDoS_anisotropic.dat
+/home/vvelan/Test/DarkELF/darkelf/../data/GaAs/GaAs_Fn.npy
+Warning! GaAs_Fn_anisotropic.npy does not exist! Need to calculate Fn(omega) from DoS. Use the function 'F_n_d_precompute' to produce these files 
+Starting the loop over 1 dark matter masses with 1000 pseudoexperiments each
+In the first pseudoexperiment for mass 0.1692666615037876 GeV, we simulated 11 events
+On mass 1 of 1. E_high is 79.314 eV, E_low is 3.000 eV.
+Total integrated rate for mass 0.1692666615037876 GeV: 7.277e+01 events.
+Optimum interval for mass 0.1692666615037876 GeV: [4.027, 27.502] eV
+Endpoints: 1, 2. UL output: 3.105 events
+Cross section upper limit for mass 0.1692666615037876 GeV: 4.267e-39 cm^2
+For masses [0.1692666615037876], the median limits are: [9.46428833e-39]
+Done mass = 0.1692666615037876, sigma = [9.46428833e-39]
+Confirming we are in the right directory
+ .... Loading files for GaAs
+Loaded GaAs_mermin.dat for epsilon in electron regime
+electronic ELF taken or calculated from Y. Tu, C. Kwei and C. Tung,Angular and energy dependences of the surface excitation parameter for semiconducting iii–v compounds, Surface Science601(2007) 865.
+phonon ELF taken or calculated from H.M. Lawler and E.L. Shirley, Anharmonic effects on infrared spectra of GaAs and gap:  First-principles calculations, Phys. Rev. B70(2004) 245209 and E.D. Palik, Gallium arsenide (gaas), in Handbook of Optical Constants of Solids, E.D. Palik, ed.,pp. 429–443, Elsevier (1985).
+Loaded GaAs_epsphonon_data10K.dat for epsilon in phonon regime
+Warning, GaAs_eps_electron_opticallimit.dat does not exist! dielectric function in optical limit not loaded. Needed for absorption calculations in superconductors.
+Warning! Atomic Migdal calculation not present
+Warning! Momentum dependent Zion for Migdal calculation not loaded. Using Z - number of valence electrons.
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/GaAs/Ga_pDoS.dat for partial densities of states
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/GaAs/As_pDoS.dat for partial densities of states
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/GaAs/Ga_Fn.dat for Fn(omega)
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/GaAs/As_Fn.dat for Fn(omega)
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/GaAs/GaAs_pDoS_anisotropic.dat for partial densities of states
+GaAs_pDoS_anisotropic.dat
+/home/vvelan/Test/DarkELF/darkelf/../data/GaAs/GaAs_Fn.npy
+Warning! GaAs_Fn_anisotropic.npy does not exist! Need to calculate Fn(omega) from DoS. Use the function 'F_n_d_precompute' to produce these files 
+Starting the loop over 1 dark matter masses with 1000 pseudoexperiments each
+In the first pseudoexperiment for mass 0.0018077686769634343 GeV, we simulated 1 events
+On mass 1 of 1. E_high is 5.211 eV, E_low is 3.000 eV.
+Total integrated rate for mass 0.0018077686769634343 GeV: 3.159e-01 events.
+Optimum interval for mass 0.0018077686769634343 GeV: [3.000, 3.592] eV
+Endpoints: 0, 1. UL output: 2.781 events
+Cross section upper limit for mass 0.0018077686769634343 GeV: 8.804e-37 cm^2
+For masses [0.0018077686769634343], the median limits are: [7.3507916e-37]
+Done mass = 0.0018077686769634343, sigma = [7.3507916e-37]
+Confirming we are in the right directory
+ .... Loading files for GaAs
+Loaded GaAs_mermin.dat for epsilon in electron regime
+electronic ELF taken or calculated from Y. Tu, C. Kwei and C. Tung,Angular and energy dependences of the surface excitation parameter for semiconducting iii–v compounds, Surface Science601(2007) 865.
+phonon ELF taken or calculated from H.M. Lawler and E.L. Shirley, Anharmonic effects on infrared spectra of GaAs and gap:  First-principles calculations, Phys. Rev. B70(2004) 245209 and E.D. Palik, Gallium arsenide (gaas), in Handbook of Optical Constants of Solids, E.D. Palik, ed.,pp. 429–443, Elsevier (1985).
+Loaded GaAs_epsphonon_data10K.dat for epsilon in phonon regime
+Warning, GaAs_eps_electron_opticallimit.dat does not exist! dielectric function in optical limit not loaded. Needed for absorption calculations in superconductors.
+Warning! Atomic Migdal calculation not present
+Warning! Momentum dependent Zion for Migdal calculation not loaded. Using Z - number of valence electrons.
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/GaAs/Ga_pDoS.dat for partial densities of states
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/GaAs/As_pDoS.dat for partial densities of states
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/GaAs/Ga_Fn.dat for Fn(omega)
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/GaAs/As_Fn.dat for Fn(omega)
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/GaAs/GaAs_pDoS_anisotropic.dat for partial densities of states
+GaAs_pDoS_anisotropic.dat
+/home/vvelan/Test/DarkELF/darkelf/../data/GaAs/GaAs_Fn.npy
+Warning! GaAs_Fn_anisotropic.npy does not exist! Need to calculate Fn(omega) from DoS. Use the function 'F_n_d_precompute' to produce these files 
+Starting the loop over 1 dark matter masses with 1000 pseudoexperiments each
+In the first pseudoexperiment for mass 0.019306977288832506 GeV, we simulated 11 events
+On mass 1 of 1. E_high is 52.197 eV, E_low is 3.000 eV.
+Total integrated rate for mass 0.019306977288832506 GeV: 3.357e+02 events.
+Optimum interval for mass 0.019306977288832506 GeV: [3.008, 8.483] eV
+Endpoints: 1, 3. UL output: 7.972 events
+Cross section upper limit for mass 0.019306977288832506 GeV: 2.375e-39 cm^2
+For masses [0.019306977288832506], the median limits are: [1.62019512e-39]
+Done mass = 0.019306977288832506, sigma = [1.62019512e-39]
+Confirming we are in the right directory
+ .... Loading files for GaAs
+Loaded GaAs_mermin.dat for epsilon in electron regime
+electronic ELF taken or calculated from Y. Tu, C. Kwei and C. Tung,Angular and energy dependences of the surface excitation parameter for semiconducting iii–v compounds, Surface Science601(2007) 865.
+phonon ELF taken or calculated from H.M. Lawler and E.L. Shirley, Anharmonic effects on infrared spectra of GaAs and gap:  First-principles calculations, Phys. Rev. B70(2004) 245209 and E.D. Palik, Gallium arsenide (gaas), in Handbook of Optical Constants of Solids, E.D. Palik, ed.,pp. 429–443, Elsevier (1985).
+Loaded GaAs_epsphonon_data10K.dat for epsilon in phonon regime
+Warning, GaAs_eps_electron_opticallimit.dat does not exist! dielectric function in optical limit not loaded. Needed for absorption calculations in superconductors.
+Warning! Atomic Migdal calculation not present
+Warning! Momentum dependent Zion for Migdal calculation not loaded. Using Z - number of valence electrons.
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/GaAs/Ga_pDoS.dat for partial densities of states
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/GaAs/As_pDoS.dat for partial densities of states
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/GaAs/Ga_Fn.dat for Fn(omega)
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/GaAs/As_Fn.dat for Fn(omega)
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/GaAs/GaAs_pDoS_anisotropic.dat for partial densities of states
+GaAs_pDoS_anisotropic.dat
+/home/vvelan/Test/DarkELF/darkelf/../data/GaAs/GaAs_Fn.npy
+Warning! GaAs_Fn_anisotropic.npy does not exist! Need to calculate Fn(omega) from DoS. Use the function 'F_n_d_precompute' to produce these files 
+Starting the loop over 1 dark matter masses with 1000 pseudoexperiments each
+In the first pseudoexperiment for mass 0.20619860095022213 GeV, we simulated 17 events
+On mass 1 of 1. E_high is 80.063 eV, E_low is 3.000 eV.
+Total integrated rate for mass 0.20619860095022213 GeV: 6.061e+01 events.
+Optimum interval for mass 0.20619860095022213 GeV: [3.000, 17.714] eV
+Endpoints: 0, 5. UL output: 11.369 events
+Cross section upper limit for mass 0.20619860095022213 GeV: 1.876e-38 cm^2
+For masses [0.20619860095022213], the median limits are: [1.15816084e-38]
+Done mass = 0.20619860095022213, sigma = [1.15816084e-38]
+Confirming we are in the right directory
+ .... Loading files for GaAs
+Loaded GaAs_mermin.dat for epsilon in electron regime
+electronic ELF taken or calculated from Y. Tu, C. Kwei and C. Tung,Angular and energy dependences of the surface excitation parameter for semiconducting iii–v compounds, Surface Science601(2007) 865.
+phonon ELF taken or calculated from H.M. Lawler and E.L. Shirley, Anharmonic effects on infrared spectra of GaAs and gap:  First-principles calculations, Phys. Rev. B70(2004) 245209 and E.D. Palik, Gallium arsenide (gaas), in Handbook of Optical Constants of Solids, E.D. Palik, ed.,pp. 429–443, Elsevier (1985).
+Loaded GaAs_epsphonon_data10K.dat for epsilon in phonon regime
+Warning, GaAs_eps_electron_opticallimit.dat does not exist! dielectric function in optical limit not loaded. Needed for absorption calculations in superconductors.
+Warning! Atomic Migdal calculation not present
+Warning! Momentum dependent Zion for Migdal calculation not loaded. Using Z - number of valence electrons.
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/GaAs/Ga_pDoS.dat for partial densities of states
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/GaAs/As_pDoS.dat for partial densities of states
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/GaAs/Ga_Fn.dat for Fn(omega)
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/GaAs/As_Fn.dat for Fn(omega)
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/GaAs/GaAs_pDoS_anisotropic.dat for partial densities of states
+GaAs_pDoS_anisotropic.dat
+/home/vvelan/Test/DarkELF/darkelf/../data/GaAs/GaAs_Fn.npy
+Warning! GaAs_Fn_anisotropic.npy does not exist! Need to calculate Fn(omega) from DoS. Use the function 'F_n_d_precompute' to produce these files 
+Starting the loop over 1 dark matter masses with 1000 pseudoexperiments each
+In the first pseudoexperiment for mass 0.0032680275894101255 GeV, we simulated 4 events
+On mass 1 of 1. E_high is 10.069 eV, E_low is 3.000 eV.
+Total integrated rate for mass 0.0032680275894101255 GeV: 4.454e+01 events.
+Optimum interval for mass 0.0032680275894101255 GeV: [3.042, 5.905] eV
+Endpoints: 1, 3. UL output: 4.907 events
+Cross section upper limit for mass 0.0032680275894101255 GeV: 1.102e-38 cm^2
+For masses [0.0032680275894101255], the median limits are: [8.08278259e-39]
+Done mass = 0.0032680275894101255, sigma = [8.08278259e-39]
+Confirming we are in the right directory
+ .... Loading files for GaAs
+Loaded GaAs_mermin.dat for epsilon in electron regime
+electronic ELF taken or calculated from Y. Tu, C. Kwei and C. Tung,Angular and energy dependences of the surface excitation parameter for semiconducting iii–v compounds, Surface Science601(2007) 865.
+phonon ELF taken or calculated from H.M. Lawler and E.L. Shirley, Anharmonic effects on infrared spectra of GaAs and gap:  First-principles calculations, Phys. Rev. B70(2004) 245209 and E.D. Palik, Gallium arsenide (gaas), in Handbook of Optical Constants of Solids, E.D. Palik, ed.,pp. 429–443, Elsevier (1985).
+Loaded GaAs_epsphonon_data10K.dat for epsilon in phonon regime
+Warning, GaAs_eps_electron_opticallimit.dat does not exist! dielectric function in optical limit not loaded. Needed for absorption calculations in superconductors.
+Warning! Atomic Migdal calculation not present
+Warning! Momentum dependent Zion for Migdal calculation not loaded. Using Z - number of valence electrons.
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/GaAs/Ga_pDoS.dat for partial densities of states
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/GaAs/As_pDoS.dat for partial densities of states
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/GaAs/Ga_Fn.dat for Fn(omega)
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/GaAs/As_Fn.dat for Fn(omega)
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/GaAs/GaAs_pDoS_anisotropic.dat for partial densities of states
+GaAs_pDoS_anisotropic.dat
+/home/vvelan/Test/DarkELF/darkelf/../data/GaAs/GaAs_Fn.npy
+Warning! GaAs_Fn_anisotropic.npy does not exist! Need to calculate Fn(omega) from DoS. Use the function 'F_n_d_precompute' to produce these files 
+Starting the loop over 1 dark matter masses with 1000 pseudoexperiments each
+In the first pseudoexperiment for mass 0.03490254878959581 GeV, we simulated 14 events
+On mass 1 of 1. E_high is 67.355 eV, E_low is 3.000 eV.
+Total integrated rate for mass 0.03490254878959581 GeV: 2.571e+02 events.
+Optimum interval for mass 0.03490254878959581 GeV: [4.371, 12.398] eV
+Endpoints: 2, 3. UL output: 6.124 events
+Cross section upper limit for mass 0.03490254878959581 GeV: 2.382e-39 cm^2
+For masses [0.03490254878959581], the median limits are: [2.42771574e-39]
+Done mass = 0.03490254878959581, sigma = [2.42771574e-39]
+Confirming we are in the right directory
+ .... Loading files for GaAs
+Loaded GaAs_mermin.dat for epsilon in electron regime
+electronic ELF taken or calculated from Y. Tu, C. Kwei and C. Tung,Angular and energy dependences of the surface excitation parameter for semiconducting iii–v compounds, Surface Science601(2007) 865.
+phonon ELF taken or calculated from H.M. Lawler and E.L. Shirley, Anharmonic effects on infrared spectra of GaAs and gap:  First-principles calculations, Phys. Rev. B70(2004) 245209 and E.D. Palik, Gallium arsenide (gaas), in Handbook of Optical Constants of Solids, E.D. Palik, ed.,pp. 429–443, Elsevier (1985).
+Loaded GaAs_epsphonon_data10K.dat for epsilon in phonon regime
+Warning, GaAs_eps_electron_opticallimit.dat does not exist! dielectric function in optical limit not loaded. Needed for absorption calculations in superconductors.
+Warning! Atomic Migdal calculation not present
+Warning! Momentum dependent Zion for Migdal calculation not loaded. Using Z - number of valence electrons.
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/GaAs/Ga_pDoS.dat for partial densities of states
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/GaAs/As_pDoS.dat for partial densities of states
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/GaAs/Ga_Fn.dat for Fn(omega)
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/GaAs/As_Fn.dat for Fn(omega)
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/GaAs/GaAs_pDoS_anisotropic.dat for partial densities of states
+GaAs_pDoS_anisotropic.dat
+/home/vvelan/Test/DarkELF/darkelf/../data/GaAs/GaAs_Fn.npy
+Warning! GaAs_Fn_anisotropic.npy does not exist! Need to calculate Fn(omega) from DoS. Use the function 'F_n_d_precompute' to produce these files 
+Starting the loop over 1 dark matter masses with 1000 pseudoexperiments each
+In the first pseudoexperiment for mass 0.3727593720314942 GeV, we simulated 8 events
+On mass 1 of 1. E_high is 83.384 eV, E_low is 3.000 eV.
+Total integrated rate for mass 0.3727593720314942 GeV: 3.460e+01 events.
+Optimum interval for mass 0.3727593720314942 GeV: [3.000, 16.128] eV
+Endpoints: 0, 4. UL output: 10.168 events
+Cross section upper limit for mass 0.3727593720314942 GeV: 2.939e-38 cm^2
+For masses [0.3727593720314942], the median limits are: [1.9919944e-38]
+Done mass = 0.3727593720314942, sigma = [1.9919944e-38]
+Confirming we are in the right directory
+ .... Loading files for GaAs
+Loaded GaAs_mermin.dat for epsilon in electron regime
+electronic ELF taken or calculated from Y. Tu, C. Kwei and C. Tung,Angular and energy dependences of the surface excitation parameter for semiconducting iii–v compounds, Surface Science601(2007) 865.
+phonon ELF taken or calculated from H.M. Lawler and E.L. Shirley, Anharmonic effects on infrared spectra of GaAs and gap:  First-principles calculations, Phys. Rev. B70(2004) 245209 and E.D. Palik, Gallium arsenide (gaas), in Handbook of Optical Constants of Solids, E.D. Palik, ed.,pp. 429–443, Elsevier (1985).
+Loaded GaAs_epsphonon_data10K.dat for epsilon in phonon regime
+Warning, GaAs_eps_electron_opticallimit.dat does not exist! dielectric function in optical limit not loaded. Needed for absorption calculations in superconductors.
+Warning! Atomic Migdal calculation not present
+Warning! Momentum dependent Zion for Migdal calculation not loaded. Using Z - number of valence electrons.
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/GaAs/Ga_pDoS.dat for partial densities of states
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/GaAs/As_pDoS.dat for partial densities of states
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/GaAs/Ga_Fn.dat for Fn(omega)
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/GaAs/As_Fn.dat for Fn(omega)
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/GaAs/GaAs_pDoS_anisotropic.dat for partial densities of states
+GaAs_pDoS_anisotropic.dat
+/home/vvelan/Test/DarkELF/darkelf/../data/GaAs/GaAs_Fn.npy
+Warning! GaAs_Fn_anisotropic.npy does not exist! Need to calculate Fn(omega) from DoS. Use the function 'F_n_d_precompute' to produce these files 
+Starting the loop over 1 dark matter masses with 1000 pseudoexperiments each
+In the first pseudoexperiment for mass 0.002682695795279727 GeV, we simulated 2 events
+On mass 1 of 1. E_high is 8.145 eV, E_low is 3.000 eV.
+Total integrated rate for mass 0.002682695795279727 GeV: 1.628e+01 events.
+Optimum interval for mass 0.002682695795279727 GeV: [3.000, 8.145] eV
+Endpoints: 0, 3. UL output: 5.888 events
+Cross section upper limit for mass 0.002682695795279727 GeV: 3.618e-38 cm^2
+For masses [0.002682695795279727], the median limits are: [2.04529228e-38]
+Done mass = 0.002682695795279727, sigma = [2.04529228e-38]
+Confirming we are in the right directory
+ .... Loading files for GaAs
+Loaded GaAs_mermin.dat for epsilon in electron regime
+electronic ELF taken or calculated from Y. Tu, C. Kwei and C. Tung,Angular and energy dependences of the surface excitation parameter for semiconducting iii–v compounds, Surface Science601(2007) 865.
+phonon ELF taken or calculated from H.M. Lawler and E.L. Shirley, Anharmonic effects on infrared spectra of GaAs and gap:  First-principles calculations, Phys. Rev. B70(2004) 245209 and E.D. Palik, Gallium arsenide (gaas), in Handbook of Optical Constants of Solids, E.D. Palik, ed.,pp. 429–443, Elsevier (1985).
+Loaded GaAs_epsphonon_data10K.dat for epsilon in phonon regime
+Warning, GaAs_eps_electron_opticallimit.dat does not exist! dielectric function in optical limit not loaded. Needed for absorption calculations in superconductors.
+Warning! Atomic Migdal calculation not present
+Warning! Momentum dependent Zion for Migdal calculation not loaded. Using Z - number of valence electrons.
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/GaAs/Ga_pDoS.dat for partial densities of states
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/GaAs/As_pDoS.dat for partial densities of states
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/GaAs/Ga_Fn.dat for Fn(omega)
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/GaAs/As_Fn.dat for Fn(omega)
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/GaAs/GaAs_pDoS_anisotropic.dat for partial densities of states
+GaAs_pDoS_anisotropic.dat
+/home/vvelan/Test/DarkELF/darkelf/../data/GaAs/GaAs_Fn.npy
+Warning! GaAs_Fn_anisotropic.npy does not exist! Need to calculate Fn(omega) from DoS. Use the function 'F_n_d_precompute' to produce these files 
+Starting the loop over 1 dark matter masses with 1000 pseudoexperiments each
+In the first pseudoexperiment for mass 0.028651202696637804 GeV, we simulated 8 events
+On mass 1 of 1. E_high is 60.190 eV, E_low is 3.000 eV.
+Total integrated rate for mass 0.028651202696637804 GeV: 2.876e+02 events.
+Optimum interval for mass 0.028651202696637804 GeV: [3.214, 9.931] eV
+Endpoints: 1, 2. UL output: 4.607 events
+Cross section upper limit for mass 0.028651202696637804 GeV: 1.602e-39 cm^2
+For masses [0.028651202696637804], the median limits are: [2.14691671e-39]
+Done mass = 0.028651202696637804, sigma = [2.14691671e-39]
+Confirming we are in the right directory
+ .... Loading files for GaAs
+Loaded GaAs_mermin.dat for epsilon in electron regime
+electronic ELF taken or calculated from Y. Tu, C. Kwei and C. Tung,Angular and energy dependences of the surface excitation parameter for semiconducting iii–v compounds, Surface Science601(2007) 865.
+phonon ELF taken or calculated from H.M. Lawler and E.L. Shirley, Anharmonic effects on infrared spectra of GaAs and gap:  First-principles calculations, Phys. Rev. B70(2004) 245209 and E.D. Palik, Gallium arsenide (gaas), in Handbook of Optical Constants of Solids, E.D. Palik, ed.,pp. 429–443, Elsevier (1985).
+Loaded GaAs_epsphonon_data10K.dat for epsilon in phonon regime
+Warning, GaAs_eps_electron_opticallimit.dat does not exist! dielectric function in optical limit not loaded. Needed for absorption calculations in superconductors.
+Warning! Atomic Migdal calculation not present
+Warning! Momentum dependent Zion for Migdal calculation not loaded. Using Z - number of valence electrons.
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/GaAs/Ga_pDoS.dat for partial densities of states
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/GaAs/As_pDoS.dat for partial densities of states
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/GaAs/Ga_Fn.dat for Fn(omega)
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/GaAs/As_Fn.dat for Fn(omega)
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/GaAs/GaAs_pDoS_anisotropic.dat for partial densities of states
+GaAs_pDoS_anisotropic.dat
+/home/vvelan/Test/DarkELF/darkelf/../data/GaAs/GaAs_Fn.npy
+Warning! GaAs_Fn_anisotropic.npy does not exist! Need to calculate Fn(omega) from DoS. Use the function 'F_n_d_precompute' to produce these files 
+Starting the loop over 1 dark matter masses with 1000 pseudoexperiments each
+In the first pseudoexperiment for mass 0.25118864315095796 GeV, we simulated 13 events
+On mass 1 of 1. E_high is 83.283 eV, E_low is 3.000 eV.
+Total integrated rate for mass 0.25118864315095796 GeV: 5.039e+01 events.
+Optimum interval for mass 0.25118864315095796 GeV: [3.492, 16.181] eV
+Endpoints: 1, 2. UL output: 3.465 events
+Cross section upper limit for mass 0.25118864315095796 GeV: 6.877e-39 cm^2
+For masses [0.25118864315095796], the median limits are: [1.38732302e-38]
+Done mass = 0.25118864315095796, sigma = [1.38732302e-38]
+Confirming we are in the right directory
+ .... Loading files for GaAs
+Loaded GaAs_mermin.dat for epsilon in electron regime
+electronic ELF taken or calculated from Y. Tu, C. Kwei and C. Tung,Angular and energy dependences of the surface excitation parameter for semiconducting iii–v compounds, Surface Science601(2007) 865.
+phonon ELF taken or calculated from H.M. Lawler and E.L. Shirley, Anharmonic effects on infrared spectra of GaAs and gap:  First-principles calculations, Phys. Rev. B70(2004) 245209 and E.D. Palik, Gallium arsenide (gaas), in Handbook of Optical Constants of Solids, E.D. Palik, ed.,pp. 429–443, Elsevier (1985).
+Loaded GaAs_epsphonon_data10K.dat for epsilon in phonon regime
+Warning, GaAs_eps_electron_opticallimit.dat does not exist! dielectric function in optical limit not loaded. Needed for absorption calculations in superconductors.
+Warning! Atomic Migdal calculation not present
+Warning! Momentum dependent Zion for Migdal calculation not loaded. Using Z - number of valence electrons.
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/GaAs/Ga_pDoS.dat for partial densities of states
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/GaAs/As_pDoS.dat for partial densities of states
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/GaAs/Ga_Fn.dat for Fn(omega)
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/GaAs/As_Fn.dat for Fn(omega)
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/GaAs/GaAs_pDoS_anisotropic.dat for partial densities of states
+GaAs_pDoS_anisotropic.dat
+/home/vvelan/Test/DarkELF/darkelf/../data/GaAs/GaAs_Fn.npy
+Warning! GaAs_Fn_anisotropic.npy does not exist! Need to calculate Fn(omega) from DoS. Use the function 'F_n_d_precompute' to produce these files 
+Starting the loop over 1 dark matter masses with 1000 pseudoexperiments each
+In the first pseudoexperiment for mass 0.0022022019499873756 GeV, we simulated 0 events
+On mass 1 of 1. E_high is 6.767 eV, E_low is 3.000 eV.
+Total integrated rate for mass 0.0022022019499873756 GeV: 3.622e+00 events.
+Optimum interval for mass 0.0022022019499873756 GeV: [3.000, 6.767] eV
+Endpoints: 0, 0. UL output: 2.303 events
+Cross section upper limit for mass 0.0022022019499873756 GeV: 6.357e-38 cm^2
+For masses [0.0022022019499873756], the median limits are: [8.20529244e-38]
+Done mass = 0.0022022019499873756, sigma = [8.20529244e-38]
+Confirming we are in the right directory
+ .... Loading files for GaAs
+Loaded GaAs_mermin.dat for epsilon in electron regime
+electronic ELF taken or calculated from Y. Tu, C. Kwei and C. Tung,Angular and energy dependences of the surface excitation parameter for semiconducting iii–v compounds, Surface Science601(2007) 865.
+phonon ELF taken or calculated from H.M. Lawler and E.L. Shirley, Anharmonic effects on infrared spectra of GaAs and gap:  First-principles calculations, Phys. Rev. B70(2004) 245209 and E.D. Palik, Gallium arsenide (gaas), in Handbook of Optical Constants of Solids, E.D. Palik, ed.,pp. 429–443, Elsevier (1985).
+Loaded GaAs_epsphonon_data10K.dat for epsilon in phonon regime
+Warning, GaAs_eps_electron_opticallimit.dat does not exist! dielectric function in optical limit not loaded. Needed for absorption calculations in superconductors.
+Warning! Atomic Migdal calculation not present
+Warning! Momentum dependent Zion for Migdal calculation not loaded. Using Z - number of valence electrons.
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/GaAs/Ga_pDoS.dat for partial densities of states
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/GaAs/As_pDoS.dat for partial densities of states
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/GaAs/Ga_Fn.dat for Fn(omega)
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/GaAs/As_Fn.dat for Fn(omega)
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/GaAs/GaAs_pDoS_anisotropic.dat for partial densities of states
+GaAs_pDoS_anisotropic.dat
+/home/vvelan/Test/DarkELF/darkelf/../data/GaAs/GaAs_Fn.npy
+Warning! GaAs_Fn_anisotropic.npy does not exist! Need to calculate Fn(omega) from DoS. Use the function 'F_n_d_precompute' to produce these files 
+Starting the loop over 1 dark matter masses with 1000 pseudoexperiments each
+In the first pseudoexperiment for mass 0.02351952635070959 GeV, we simulated 13 events
+On mass 1 of 1. E_high is 61.379 eV, E_low is 3.000 eV.
+Total integrated rate for mass 0.02351952635070959 GeV: 3.139e+02 events.
+Optimum interval for mass 0.02351952635070959 GeV: [3.557, 8.186] eV
+Endpoints: 2, 5. UL output: 14.515 events
+Cross section upper limit for mass 0.02351952635070959 GeV: 4.624e-39 cm^2
+For masses [0.02351952635070959], the median limits are: [1.79548757e-39]
+Done mass = 0.02351952635070959, sigma = [1.79548757e-39]
+Confirming we are in the right directory
+ .... Loading files for GaAs
+Loaded GaAs_mermin.dat for epsilon in electron regime
+electronic ELF taken or calculated from Y. Tu, C. Kwei and C. Tung,Angular and energy dependences of the surface excitation parameter for semiconducting iii–v compounds, Surface Science601(2007) 865.
+phonon ELF taken or calculated from H.M. Lawler and E.L. Shirley, Anharmonic effects on infrared spectra of GaAs and gap:  First-principles calculations, Phys. Rev. B70(2004) 245209 and E.D. Palik, Gallium arsenide (gaas), in Handbook of Optical Constants of Solids, E.D. Palik, ed.,pp. 429–443, Elsevier (1985).
+Loaded GaAs_epsphonon_data10K.dat for epsilon in phonon regime
+Warning, GaAs_eps_electron_opticallimit.dat does not exist! dielectric function in optical limit not loaded. Needed for absorption calculations in superconductors.
+Warning! Atomic Migdal calculation not present
+Warning! Momentum dependent Zion for Migdal calculation not loaded. Using Z - number of valence electrons.
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/GaAs/Ga_pDoS.dat for partial densities of states
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/GaAs/As_pDoS.dat for partial densities of states
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/GaAs/Ga_Fn.dat for Fn(omega)
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/GaAs/As_Fn.dat for Fn(omega)
+Loaded /home/vvelan/Test/DarkELF/darkelf/../data/GaAs/GaAs_pDoS_anisotropic.dat for partial densities of states
+GaAs_pDoS_anisotropic.dat
+/home/vvelan/Test/DarkELF/darkelf/../data/GaAs/GaAs_Fn.npy
+Warning! GaAs_Fn_anisotropic.npy does not exist! Need to calculate Fn(omega) from DoS. Use the function 'F_n_d_precompute' to produce these files 
+Starting the loop over 1 dark matter masses with 1000 pseudoexperiments each
+In the first pseudoexperiment for mass 0.30599496872071963 GeV, we simulated 18 events
+On mass 1 of 1. E_high is 85.431 eV, E_low is 3.000 eV.
+Total integrated rate for mass 0.30599496872071963 GeV: 4.183e+01 events.
+Optimum interval for mass 0.30599496872071963 GeV: [3.000, 19.512] eV
+Endpoints: 0, 4. UL output: 9.246 events
+Cross section upper limit for mass 0.30599496872071963 GeV: 2.210e-38 cm^2
+For masses [0.30599496872071963], the median limits are: [1.68115505e-38]
+Done mass = 0.30599496872071963, sigma = [1.68115505e-38]
+Full scan took 1.41 minutes.

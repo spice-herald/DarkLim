@@ -523,7 +523,7 @@ def optimuminterval(eventenergies, effenergies, effs, masslist, exposure,
         else:
             rate = rate_interp[ii]
  
-        integ_rate = integrate.cumtrapz(rate, x=en_interp, initial=0)
+        integ_rate = integrate.cumulative_trapezoid(rate, x=en_interp, initial=0)
 
         tot_rate = integ_rate[-1]
         if verbose:
@@ -610,7 +610,7 @@ def fc_limits(known_bkg_func, eventenergies, effenergies, effs, masslist, exposu
             init_rate = gauss_smear(en_interp, init_rate, res, gauss_width=gauss_width)
             
         rate = init_rate * curr_exp(en_interp)
-        integ_rate = integrate.cumtrapz(rate, x=en_interp, initial=0)
+        integ_rate = integrate.cumulative_trapezoid(rate, x=en_interp, initial=0)
         tot_rate = integ_rate[-1]
         
         if verbose:
@@ -703,7 +703,7 @@ def get_signal_rate(effenergies, effs, masslist, exposure,
             
         raw_signal_rates[ii] = np.trapz(init_rate*exposure, x=en_interp)
         rate = init_rate * curr_exp(en_interp)
-        integ_rate = integrate.cumtrapz(rate, x=en_interp, initial=0)
+        integ_rate = integrate.cumulative_trapezoid(rate, x=en_interp, initial=0)
         tot_rate = integ_rate[-1]
         signal_rates[ii] = tot_rate
         
