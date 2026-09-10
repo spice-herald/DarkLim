@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 from scipy import stats, special, integrate
 from scipy.interpolate import interp1d
 
+
 import mendeleev
 from darklim import constants
 from darklim.limit._limit import drde, optimuminterval, fc_limits, get_fc_ul, get_signal_rate, gauss_smear
@@ -1185,7 +1186,7 @@ class SensEst(object):
 
         drde_total = tot_bkgd_func(en_interp) * self.exposure
         N_evts_above_threshold = \
-            -1 * np.flip(integrate.cumtrapz(np.flip(drde_total), np.flip(en_interp)))
+            -1 * np.flip(integrate.cumulative_trapezoid(np.flip(drde_total), np.flip(en_interp)))
         N_evts_above_threshold = np.append(N_evts_above_threshold, 0)
 
         return N_evts_above_threshold
