@@ -349,7 +349,7 @@ class SensEst(object):
         self._backgrounds.append(nfold_lee)
         self._background_labels.append('{:d}-fold LEE in {:d} devices'.format(n,m))
 
-    def add_nfold_powerlaw_lee_bkgd(self,m=1,n=1,w=100e-6):
+    def add_nfold_powerlaw_lee_bkgd(self,file_pattern,m=1,n=1,w=100e-6):
         """
         Method for adding n-fold coincidence bkg assuming 
         power-law distributed LEE. loads in pregenerated templates.
@@ -363,7 +363,8 @@ class SensEst(object):
         w : float
             Coincidence window length in seconds. 
         """
-        fin = '/global/cfs/cdirs/lz/users/haselsco/TESSERACT_Limits/DarkLim_vetriupdate/examples/LEE_templates/LEE_bkg_{:d}device_{:d}fold_{:0.0f}mus.txt'.format(m,n,w/1e-6)
+        #fin = '/global/cfs/cdirs/lz/users/haselsco/TESSERACT_Limits/DarkLim_vetriupdate/examples/LEE_templates/LEE_bkg_{:d}device_{:d}fold_{:0.0f}mus.txt'.format(m,n,w/1e-6)
+        fin = file_pattern.format(m,n,w/1e-6)
         template = np.loadtxt(fin,skiprows=1)
         interp_func = interp1d(template[:,0],template[:,1],
                                fill_value='extrapolate',
@@ -508,7 +509,7 @@ class SensEst(object):
             The dark matter masses in GeV/c^2 that upper limit was set
             at.
         sig : ndarray
-            The cross section in cm^2 that the upper limit was
+            The cross section in cm^2 that the median upper limit was
             determined to be.
 
         """
