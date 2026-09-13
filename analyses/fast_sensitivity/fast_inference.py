@@ -234,6 +234,7 @@ class FastInference_He(FastInference):
         TODO replace LEE assignment
         """
 
+        print("self.parameters",self.parameters)
         SE = darklim.sensitivity.SensEst(self.parameters["target_mass_kg"],
                                          self.parameters["t_days"],
                                          tm=self.parameters["target"],
@@ -249,6 +250,7 @@ class FastInference_He(FastInference):
 
         SE.add_flat_bkgd(self.parameters["flat_rate_DRU"])
         SE.add_nfold_powerlaw_lee_bkgd(m=self.parameters["n_sensors"],
+                                       file_pattern = get_cache_path(self.parameters["LEE_filename"]),
                                                          n=self.parameters["coincidence"],
                                                          w=self.parameters["window_s"])
         
@@ -260,7 +262,7 @@ class FastInference_He(FastInference):
                 e_high=50e-3,
                 #e_low=1e-6,
                 m_dms=[self.parameters["wimp_mass"]],
-                nexp=[self.parameters["nexp"]],
+                nexp=self.parameters["nexp"],
                 #npts=100000,
                 plot_bkgd=False,
                 #res=args.baseline_res_eV*1e-3,
