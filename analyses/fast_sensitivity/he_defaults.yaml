@@ -1,0 +1,17 @@
+gain : 0.15 
+target_mass_kg : 0.0123 #CDR
+t_days : 1
+wimp_mass : 10 #GeV
+flat_rate_DRU : 10
+n_sensors : 4
+coincidence : 4
+window_s : 100.e-6
+nsigma : 6
+per_device_threshold_keV : 1.e-3
+baseline_res_eV : 0.2 
+nexp : 100 
+elf_model : "NR"
+sigma0 : 1.e-43
+elf_params : dict()
+LEE_filename : "data/Run57_LEE_templates/combined_spectra_shared57_CRESST_extrap.txt"
+

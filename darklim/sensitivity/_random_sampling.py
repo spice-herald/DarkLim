@@ -59,7 +59,7 @@ def pdf_sampling(function, xrange, nsamples=1000, npoints=10000, normalize_cdf=T
     x = np.linspace(xrange[0], xrange[1], num=npoints)
     pdf = function(x)
 
-    cdf = integrate.cumtrapz(pdf, x=x, initial=0.0)
+    cdf = integrate.cumulative_trapezoid(pdf, x=x, initial=0.0)
 
     if normalize_cdf:
         cdf /= cdf[-1]

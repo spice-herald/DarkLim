@@ -1,0 +1,30 @@
+#CDR parameters
+PD_energy_resolution: 0.089 #eV (ER)
+GaAs_energy_resolution: 0.156 #eV (ER)
+target_mass_kg: 0.00156 #kg, ER required
+E_max_GaAs: 100
+E_max_PD: 30 #eV
+E_th_GaAs: 5.0
+E_th_PD: 1.0
+LEE_file: data/Run57_LEE_templates/combined_spectra_shared57_CRESST_extrap.txt
+LEE_improvement_GaAs: 1.0
+LEE_improvement_PD: 1.0
+LEE_volume_scale_GaAs: 0.245
+LEE_volume_scale_PD: 0.147
+base_energy_resolution: 0.3977
+filter_file: data/filter_file.hdf5
+template_channel: Mv3025pcBigFinsLeft|Mv3025pcBigFinsRight
+nsigma: 5
+rate_Hz_GaAs: 50 # Event rate in Hz (for the simulation--this should be as high as possible without inducing pileup)
+rate_Hz_PD: 50 # Event rate in Hz (for the simulation--this should be as high as possible without inducing pileup)
+run_length_hours: 0.5 #for simulation
+sigma0: 1.0e-37 #cm2, reference x-section
+simulation_dir: output_260424/
+t_days: 300
+volume_cm3: 10.8
+E_cutoff_PD: 0.85 # eV for simulation energy range
+E_cutoff_GaAs: 10. # eV for simulation energy range
+LEE_scale: 1. #reduction factor in LEE 
+collection_efficiency: 0.25 #photon collection
+n_PDs:1 #number of photodetectors
+
