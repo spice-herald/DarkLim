@@ -45,18 +45,20 @@ class FastInference():
         filename = file_pattern.format(**self.parameters)
         np.savetxt(filename, results)
 
-    @staticmethod
-    def run_fast_inference():
+    @classmethod
+    def run_fast_inference(cls):
 
-        args = FastInference.read_command_line_arguments()
+        args = cls.read_command_line_arguments()
 
-        constant_file = args.pop(constant_file, None)
-        output_pattern = args.pop(output_pattern,None)
+        constant_file = args.pop("constant_file", None)
 
-        fi_object = FastInference(constant_file, **args)
+        fi_object = cls(constant_file, **args)
+        print("hello!")
+        print(fi_object.parameters)
 
         results = fi_object.process_inference()
 
+        output_pattern = fi_object.parameters["output_pattern"]
         fi_object.write_inference_results(output_pattern, results)
     @staticmethod
     def read_command_line_arguments():  
@@ -75,20 +77,22 @@ class FastInference_GaAs(FastInference):
     parameters = dict(
             target = "GaAs",
             )
-    def read_command_line_arguments(self):
+    @staticmethod
+    def read_command_line_arguments():
         parser = ArgumentParser("run a GaAs fast inference run")
         
-        parser.add_argument("--wimp_mass", type=float, required=True, help="wimp mass in GeV")
-        parser.add_argument("--nexp", type=int, default=goal_GaAs_params.nexp)
+        parser.add_argument("--wimp_mass", type=float, required=False, help="wimp mass in GeV", default=1)
+        parser.add_argument("--nexp", type=int, default=10)
 
         parser.add_argument("--LEE_improvement", type=float, default=None)
         parser.add_argument("--t_days", type=float, default=None)
         parser.add_argument("--flat_rate_DRU", type=float, default=None)
+        parser.add_argument("--constant_file", type=str, default=None)
 
 
 
-        parsed_args = dict(parser.parse_args())
-        return parsed_args
+        parsed_args = parser.parse_args()
+        return vars(parsed_args)
     
     def process_inference(self):
         """
@@ -119,7 +123,7 @@ class FastInference_GaAs(FastInference):
 
         threshold_keV = gaas_params['E_th_GaAs']
 
-        _, sigma = SE.run_sim(
+        _, sigmas, sigmas_fc, sig, sig_fc= SE.run_sim(
                 threshold_keV,
                 e_high=self.parameters["e_high_keV"],
                 #e_low=1e-6,
@@ -136,10 +140,11 @@ class FastInference_GaAs(FastInference):
                 return_only_drde=False,
                 gaas_params=gaas_params,
                 adjust_threshold=False,
+                return_fc = True,
         )
 
 
-        return sigma
+        return sigmas
         
 
 
@@ -185,7 +190,7 @@ class FastInference_Al2O3(FastInference):
 
         per_device_threshold_keV = self.parameters["nsigma"] * self.parameters["baseline_res_eV"] * 1e-3
         threshold_keV = args.coincidence * per_device_threshold_keV
-        _, sigma = SE.run_sim(
+        _, sigmas, sigmas_fc, sig, sig_fc= SE.run_sim(
             threshold_keV,
             e_high=self.parameters["e_high_keV"],
             #e_low=1e-6,
@@ -201,9 +206,9 @@ class FastInference_Al2O3(FastInference):
             elf_params=self.parameters["elf_params"],
             return_only_drde=False,
             adjust_threshold=True,
-#            gaas_params=None
+            return_fc = True,
         )
-        return sigma
+        return sigmas
 
 class FastInference_He(FastInference):
     """
@@ -257,7 +262,7 @@ class FastInference_He(FastInference):
         per_device_threshold_keV = self.parameters["nsigma"] * self.parameters["baseline_res_eV"] * 1e-3
         threshold_keV = self.parameters["coincidence"] * per_device_threshold_keV
 
-        _, sigma = SE.run_sim(
+        _, sigmas, sigmas_fc, sig, sig_fc= SE.run_sim(
                 threshold_keV,
                 e_high=50e-3,
                 #e_low=1e-6,
@@ -273,7 +278,14 @@ class FastInference_He(FastInference):
                 elf_target=self.parameters["target"],
                 elf_params=self.parameters["elf_params"],
                 return_only_drde=False,
-#                gaas_params=None
+                return_fc = True,
         )
 
-        return sigma
+        return sigmas
+
+
+def main():
+    FastInference_GaAs.run_fast_inference()
+
+if __name__=="__main__":
+    main()
